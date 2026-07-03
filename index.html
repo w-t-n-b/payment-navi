@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>決済ナビ｜個店のための中立キャッシュレス端末診断</title>
+<meta name="description" content="広告なし・完全中立。あなたの店の条件を入力するだけで、対面決済に最適な決済端末・包括事業者を年間コスト付きで診断します。">
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#1a2233; --sub:#5b6577; --line:#e5e9f0;
+    --brand:#2563eb; --brand-ink:#1d4ed8; --brand-soft:#eff4ff;
+    --good:#0f9d58; --warn:#e8890c; --gold:#b8860b;
+    --shadow:0 1px 3px rgba(20,30,60,.06),0 8px 24px rgba(20,30,60,.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+  header.site{text-align:center;padding:28px 0 8px}
+  .logo{font-size:1.55rem;font-weight:800;letter-spacing:.02em}
+  .logo b{color:var(--brand)}
+  .tagline{color:var(--sub);font-size:.92rem;margin-top:4px}
+  .neutral-badge{
+    display:inline-flex;align-items:center;gap:6px;margin-top:14px;
+    background:var(--brand-soft);color:var(--brand-ink);font-size:.8rem;font-weight:700;
+    padding:6px 14px;border-radius:999px;border:1px solid #d7e3ff;
+  }
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 22px;margin-top:20px}
+  /* progress */
+  .progress{display:flex;gap:6px;margin-bottom:22px}
+  .progress i{flex:1;height:6px;border-radius:99px;background:var(--line);transition:.3s}
+  .progress i.on{background:var(--brand)}
+  .step-count{font-size:.8rem;color:var(--sub);font-weight:700;letter-spacing:.05em;margin-bottom:6px}
+  .q-title{font-size:1.24rem;font-weight:800;margin:0 0 4px}
+  .q-note{color:var(--sub);font-size:.86rem;margin:0 0 18px}
+  /* options */
+  .opts{display:grid;gap:10px}
+  .opts.two{grid-template-columns:1fr 1fr}
+  .opt{
+    display:flex;align-items:center;gap:12px;text-align:left;width:100%;
+    background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;
+    font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s;
+  }
+  .opt:hover{border-color:#c3d3f5;background:#fbfcff}
+  .opt .em{font-size:1.3rem;line-height:1}
+  .opt .lbl small{display:block;font-weight:500;color:var(--sub);font-size:.78rem;margin-top:2px}
+  .opt.sel{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+  .opt.sel::after{content:"✓";margin-left:auto;color:var(--brand);font-weight:900}
+  .multi-hint{font-size:.78rem;color:var(--sub);margin:0 0 14px;font-weight:600}
+  /* nav */
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
+  .btn{border:none;border-radius:12px;padding:13px 24px;font-size:1rem;font-weight:800;cursor:pointer;transition:.15s}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-ink)}
+  .btn-primary:disabled{background:#c3cde0;cursor:not-allowed}
+  .btn-ghost{background:transparent;color:var(--sub)}
+  .btn-ghost:hover{color:var(--ink)}
+  /* result */
+  .result-head{text-align:center;margin-bottom:6px}
+  .result-head h2{font-size:1.35rem;margin:0 0 6px}
+  .result-head p{color:var(--sub);font-size:.9rem;margin:0}
+  .rank{position:relative;border:1.5px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-top:16px;background:#fff}
+  .rank.top{border-color:#f2d98b;box-shadow:0 0 0 3px rgba(184,134,11,.08)}
+  .rank-badge{position:absolute;top:-11px;left:16px;font-size:.72rem;font-weight:800;padding:3px 12px;border-radius:99px;background:#eef2f9;color:var(--sub)}
+  .rank.top .rank-badge{background:linear-gradient(90deg,#f6d365,#d4a017);color:#4a3600}
+  .rank-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:4px}
+  .rank-name{font-size:1.18rem;font-weight:800}
+  .rank-score{font-size:.82rem;font-weight:800;color:var(--brand)}
+  .rank-score b{font-size:1.15rem}
+  .cost{background:var(--brand-soft);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:.86rem}
+  .cost .big{font-size:1.45rem;font-weight:800;color:var(--brand-ink);letter-spacing:-.01em}
+  .cost .brk{color:var(--sub);font-size:.76rem;margin-top:2px}
+  .facts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+  .facts span{font-size:.76rem;background:#f2f5fa;border-radius:7px;padding:3px 9px;color:#3d485c;font-weight:600}
+  .why{font-size:.85rem;margin:8px 0 0}
+  .why .pro{color:var(--good);font-weight:700}
+  .why .con{color:var(--warn);font-weight:700}
+  .why ul{margin:6px 0 0;padding-left:18px}
+  .why li{margin:2px 0}
+  .official{display:inline-block;margin-top:10px;font-size:.82rem;font-weight:700;color:var(--brand)}
+  /* table */
+  details.compare{margin-top:22px}
+  details.compare summary{cursor:pointer;font-weight:800;color:var(--brand);font-size:.92rem}
+  .tbl-scroll{overflow-x:auto;margin-top:12px}
+  table{border-collapse:collapse;width:100%;font-size:.8rem;min-width:560px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:center}
+  th{background:#f2f5fa;font-weight:700}
+  td.name{text-align:left;font-weight:700;white-space:nowrap}
+  .disc{font-size:.76rem;color:var(--sub);margin-top:22px;background:#fbfcfe;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
+  .disc b{color:#3d485c}
+  footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:34px}
+  .restart{margin-top:20px;text-align:center}
+  .hidden{display:none}
+  @media(max-width:520px){.opts.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <div class="logo">決済<b>ナビ</b></div>
+    <div class="tagline">個店のための、対面キャッシュレス端末 中立診断</div>
+    <div class="neutral-badge">🛡 広告なし・優先表示なし｜スコアはあなたの条件のみで決定</div>
+  </header>
+
+  <!-- 診断カード -->
+  <div class="card" id="quizCard">
+    <div class="progress" id="progress"></div>
+    <div class="step-count" id="stepCount"></div>
+    <h2 class="q-title" id="qTitle"></h2>
+    <p class="q-note" id="qNote"></p>
+    <div id="qBody"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" id="backBtn">← 戻る</button>
+      <button class="btn btn-primary" id="nextBtn">次へ →</button>
+    </div>
+  </div>
+
+  <!-- 結果カード -->
+  <div class="card hidden" id="resultCard"></div>
+
+  <footer>
+    決済ナビ（MVP）｜このツールは特定の決済事業者から報酬を受け取らず、中立に診断します。<br>
+    掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   決済サービス データ（対面BtoC向け・主要6社）
+   ※ 料率/費用は変動します。この1オブジェクトを更新すれば全診断に反映されます。
+   ※ 参考値：2026年7月時点。契約前に各公式で要確認。
+   ========================================================================= */
+const DATA_UPDATED = "2026年7月時点・参考値";
+
+// 決済手段キー: credit(クレカ) touch(タッチ) qr(QRコード) transit(交通系IC) emoney(iD/QUICPay)
+// 端末形態キー: mobile(持ち運び) counter(据置) pos(レジ一体POS)  値=適合度0〜1
+const SERVICES = [
+  {
+    id:"square", name:"Square（スクエア）",
+    device:4980, monthly:0, cardRate:0.0325, qrRate:0.0325,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:1,counter:.9,pos:.9},
+    payout:.95, brands:.9, pos:.9, soloOk:true,
+    devLabel:"Reader ¥4,980〜",
+    pros:["端末が最安クラスで導入しやすい","入金が最短翌営業日と速い","無料POSレジアプリ内蔵"],
+    cons:["カード料率(3.25%)はやや高め"],
+    url:"https://squareup.com/jp/ja"
+  },
+  {
+    id:"airpay", name:"Airペイ（リクルート）",
+    device:20167, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.9,counter:.9,pos:1},
+    payout:.6, brands:1, pos:.95, soloOk:true,
+    devLabel:"カードリーダー（0円ｷｬﾝﾍﾟｰﾝ多い）",
+    pros:["対応ブランド数が最多クラス","Airレジ/Airシリーズと強力連携","端末0円キャンペーンが頻繁"],
+    cons:["入金は月6回で速さは中程度","iPad/iPhoneが別途必要"],
+    url:"https://airregi.jp/payment/"
+  },
+  {
+    id:"stores", name:"STORES決済",
+    device:19800, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.95,counter:.85,pos:.8},
+    payout:.8, brands:.85, pos:.8, soloOk:true,
+    devLabel:"カードリーダー（0円ｷｬﾝﾍﾟｰﾝ有）",
+    pros:["手動申請なら入金が翌営業日と速い","交通系ICが低率(1.98%)","STORESレジ/ネットショップと連携"],
+    cons:["自動入金だと月1回になる"],
+    url:"https://stores.jp/payments"
+  },
+  {
+    id:"stera", name:"stera pack（三井住友カード）",
+    device:0, monthly:3300, cardRate:0.027, qrRate:0.027,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.3,counter:1,pos:.95},
+    payout:.55, brands:.95, pos:.85, soloOk:true,
+    devLabel:"オールインワン据置端末（初期0円）",
+    pros:["カード料率が2.70%と低い","レシートプリンタ内蔵のオールインワン据置","主要ブランド/QRを全網羅"],
+    cons:["月額3,300円がかかる","持ち運び用途には不向き"],
+    url:"https://www.smbc-card.com/nyukai/merchant/stera/"
+  },
+  {
+    id:"rakuten", name:"楽天ペイ（実店舗）",
+    device:19800, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.9,counter:.85,pos:.5},
+    payout:.7, brands:.8, pos:.5, soloOk:true,
+    devLabel:"カードリーダー/ターミナル（0円ｷｬﾝﾍﾟｰﾝ有）",
+    pros:["楽天ポイントが使えて集客に有利","楽天銀行なら入金が翌日","楽天ペイQRの利用者が多い"],
+    cons:["外部POS連携はやや弱い"],
+    url:"https://checkout.rakuten.co.jp/"
+  },
+  {
+    id:"paypay", name:"PayPay（QR専用）",
+    device:0, monthly:0, cardRate:null, qrRate:0.0198,
+    methods:{credit:0,touch:0,qr:1,transit:0,emoney:0},
+    terminal:{mobile:.9,counter:.8,pos:.4},
+    payout:.7, brands:.3, pos:.4, soloOk:true,
+    devLabel:"端末不要（店頭QR/スマホ）",
+    pros:["端末費用0円・QR利用者数が国内最大","QR決済率が最安クラス(1.98%〜)","小規模・移動販売でも即導入"],
+    cons:["クレカ/電子マネーは非対応（QRのみ）"],
+    url:"https://paypay.ne.jp/store/"
+  }
+];
+
+/* ===================== 診断質問 ===================== */
+const QUESTIONS = [
+  {
+    key:"industry", title:"どんな業種のお店ですか？", note:"診断の傾向づけに使います", type:"single",
+    opts:[
+      {v:"food",em:"🍽",l:"飲食店",s:"居酒屋・カフェ・レストラン"},
+      {v:"retail",em:"🛍",l:"小売・物販",s:"雑貨・アパレル・食品販売"},
+      {v:"beauty",em:"💇",l:"美容・サロン",s:"美容室・ネイル・エステ"},
+      {v:"health",em:"🩺",l:"医療・治療院",s:"整体・接骨・クリニック"},
+      {v:"mobile",em:"🚚",l:"移動販売・イベント",s:"キッチンカー・催事・出張"},
+      {v:"other",em:"🏪",l:"その他の対面店",s:""}
+    ]
+  },
+  {
+    key:"volume", title:"月間のキャッシュレス決済額の見込みは？", note:"手数料の実額試算と、料率の重要度に反映します", type:"single",
+    opts:[
+      {v:15,em:"🌱",l:"〜30万円",s:"月商 目安15万円で試算"},
+      {v:65,em:"📈",l:"30〜100万円",s:"月商 目安65万円で試算"},
+      {v:200,em:"🚀",l:"100〜300万円",s:"月商 目安200万円で試算"},
+      {v:400,em:"🏢",l:"300万円〜",s:"月商 目安400万円で試算"}
+    ]
+  },
+  {
+    key:"methods", title:"使いたい決済手段は？", note:"複数選択できます", type:"multi",
+    opts:[
+      {v:"credit",em:"💳",l:"クレジットカード",s:"VISA/Master/JCB等"},
+      {v:"touch",em:"📲",l:"タッチ決済",s:"NFC非接触"},
+      {v:"qr",em:"📱",l:"QRコード決済",s:"PayPay・楽天ペイ等"},
+      {v:"transit",em:"🚃",l:"交通系IC",s:"Suica・PASMO等"},
+      {v:"emoney",em:"🔑",l:"iD・QUICPay",s:"電子マネー"}
+    ]
+  },
+  {
+    key:"terminal", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
+    opts:[
+      {v:"mobile",em:"🤳",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
+      {v:"counter",em:"🏬",l:"カウンター据置",s:"レジ横に固定して使う"},
+      {v:"pos",em:"🧾",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
+    ]
+  },
+  {
+    key:"priorities", title:"特に重視したいのは？", note:"複数選択可。選んだ項目の重みが上がります", type:"multi",
+    opts:[
+      {v:"fee",em:"💰",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
+      {v:"initial",em:"🎁",l:"初期費用の安さ",s:"端末・月額を抑えたい"},
+      {v:"payout",em:"⚡️",l:"入金の速さ",s:"資金繰りを重視"},
+      {v:"brands",em:"🌐",l:"対応ブランドの多さ",s:"あらゆる支払いに対応したい"}
+    ]
+  },
+  {
+    key:"pos", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
+    opts:[
+      {v:"yes",em:"🔗",l:"必要",s:"POSレジ・売上管理と繋げたい"},
+      {v:"no",em:"➖",l:"特に不要",s:"決済ができれば十分"}
+    ]
+  }
+];
+
+/* ===================== 状態 ===================== */
+const answers = {};
+let step = 0;
+
+const $ = id => document.getElementById(id);
+
+function render(){
+  const q = QUESTIONS[step];
+  // progress
+  $("progress").innerHTML = QUESTIONS.map((_,i)=>`<i class="${i<=step?'on':''}"></i>`).join("");
+  $("stepCount").textContent = `STEP ${step+1} / ${QUESTIONS.length}`;
+  $("qTitle").textContent = q.title;
+  $("qNote").textContent = q.note;
+  const cur = answers[q.key];
+  const two = q.opts.length<=2 ? "two":"";
+  let html = q.type==="multi" ? `<p class="multi-hint">✓ 当てはまるものをすべて選択</p>`:"";
+  html += `<div class="opts ${two}">` + q.opts.map(o=>{
+    let sel=false;
+    if(q.type==="multi") sel = Array.isArray(cur)&&cur.includes(o.v);
+    else sel = cur===o.v;
+    return `<button class="opt ${sel?'sel':''}" data-v="${o.v}">
+      <span class="em">${o.em}</span>
+      <span class="lbl">${o.l}${o.s?`<small>${o.s}</small>`:""}</span>
+    </button>`;
+  }).join("") + `</div>`;
+  $("qBody").innerHTML = html;
+
+  $("qBody").querySelectorAll(".opt").forEach(btn=>{
+    btn.onclick = ()=>choose(q, btn.dataset.v);
+  });
+
+  $("backBtn").style.visibility = step===0 ? "hidden":"visible";
+  $("nextBtn").textContent = step===QUESTIONS.length-1 ? "診断する 🔎":"次へ →";
+  updateNext(q);
+}
+
+function choose(q, rawV){
+  const v = (q.key==="volume") ? Number(rawV) : rawV;
+  if(q.type==="multi"){
+    const arr = Array.isArray(answers[q.key]) ? answers[q.key].slice() : [];
+    const i = arr.indexOf(v);
+    if(i>=0) arr.splice(i,1); else arr.push(v);
+    answers[q.key]=arr;
+  }else{
+    answers[q.key]=v;
+  }
+  render();
+  // 単一選択は自動で次へ（最終ステップ以外）
+  if(q.type==="single" && step<QUESTIONS.length-1){
+    setTimeout(()=>{ step++; render(); }, 180);
+  }
+}
+
+function updateNext(q){
+  const cur = answers[q.key];
+  const ok = q.type==="multi" ? (Array.isArray(cur)&&cur.length>0) : (cur!==undefined);
+  $("nextBtn").disabled = !ok;
+}
+
+$("nextBtn").onclick = ()=>{
+  const q = QUESTIONS[step];
+  const cur = answers[q.key];
+  const ok = q.type==="multi" ? (Array.isArray(cur)&&cur.length>0) : (cur!==undefined);
+  if(!ok) return;
+  if(step<QUESTIONS.length-1){ step++; render(); }
+  else showResult();
+};
+$("backBtn").onclick = ()=>{ if(step>0){ step--; render(); } };
+
+/* ===================== スコアリング ===================== */
+function scoreServices(){
+  const volume = answers.volume;             // 万円
+  const methods = answers.methods||[];
+  const term = answers.terminal;
+  const pris = answers.priorities||[];
+  const needPos = answers.pos==="yes";
+
+  // 月商が大きいほど手数料の重みを上げる（中立ロジック）
+  const volFeeFactor = {15:0, 65:.3, 200:.8, 400:1.5}[volume] || 0;
+
+  // 重み（base + 重視点ブースト）
+  const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
+  pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
+
+  // 正規化用の生データ収集
+  const raw = SERVICES.map(s=>{
+    // 端末サービスのカード料率が無い(PayPay)場合はQR率で代用
+    const rate = s.cardRate!=null ? s.cardRate : s.qrRate;
+    const annualFee = volume*10000*rate*12;             // 手数料 年額
+    const annualCost = s.device + s.monthly*12 + annualFee; // 総保有コスト 年額
+    return {s, rate, annualFee, annualCost};
+  });
+
+  const min=(f)=>Math.min(...raw.map(f)), max=(f)=>Math.max(...raw.map(f));
+  const norm=(x,lo,hi)=> hi===lo?1:(x-lo)/(hi-lo);
+  const invnorm=(x,lo,hi)=> hi===lo?1:1-(x-lo)/(hi-lo);
+
+  const feeLo=min(r=>r.rate), feeHi=max(r=>r.rate);
+  const initLo=min(r=>r.s.device+r.s.monthly*12), initHi=max(r=>r.s.device+r.s.monthly*12);
+
+  const scored = raw.map(r=>{
+    const s=r.s;
+    // 各次元 0〜1
+    const feeS = invnorm(r.rate, feeLo, feeHi);
+    const initS= invnorm(s.device+s.monthly*12, initLo, initHi);
+    const payS = s.payout;
+    const brandS = s.brands;
+    const posS = s.pos;
+
+    // 適合フィルタ（乗算）：端末形態と決済手段カバレッジ
+    const termFit = s.terminal[term] ?? .5;
+    let cover = 1;
+    if(methods.length){
+      const hit = methods.filter(m=>s.methods[m]>0).length;
+      cover = hit/methods.length;      // 手段カバー率
+    }
+    // カバー率は強めに効かせる（0のとき大幅減点）
+    const coverMult = 0.25 + 0.75*cover;
+    const fitMult = (0.35 + 0.65*termFit) * coverMult;
+
+    const base = w.fee*feeS + w.initial*initS + w.payout*payS + w.brands*brandS + w.pos*posS;
+    const total = base * fitMult;
+
+    return {...r, feeS, initS, cover, termFit, total};
+  });
+
+  const maxTotal = Math.max(...scored.map(x=>x.total));
+  scored.forEach(x=> x.pct = Math.round(x.total/maxTotal*100));
+  scored.sort((a,b)=> b.total-a.total);
+  return {scored, w, volFeeFactor, needPos, term, methods, pris, volume};
+}
+
+/* ===================== 結果表示 ===================== */
+const yen = n => "¥"+Math.round(n).toLocaleString("ja-JP");
+const TERM_LABEL={mobile:"持ち運び",counter:"据置",pos:"レジ一体POS"};
+const METHOD_LABEL={credit:"クレカ",touch:"タッチ",qr:"QR",transit:"交通系",emoney:"iD/QUICPay"};
+const PRI_LABEL={fee:"手数料の安さ",initial:"初期費用の安さ",payout:"入金の速さ",brands:"対応ブランド"};
+
+function showResult(){
+  const R = scoreServices();
+  $("quizCard").classList.add("hidden");
+  const rc = $("resultCard");
+  rc.classList.remove("hidden");
+
+  const reasonBits = [];
+  reasonBits.push(`端末は「${TERM_LABEL[R.term]}」向け`);
+  if(R.methods.length) reasonBits.push(R.methods.map(m=>METHOD_LABEL[m]).join("・")+"に対応");
+  if(R.pris.length) reasonBits.push("重視点＝"+R.pris.map(p=>PRI_LABEL[p]).join("・"));
+  if(R.volFeeFactor>0) reasonBits.push("決済額が大きいため手数料の比重UP");
+  if(R.needPos) reasonBits.push("レジ連携を優先");
+
+  let html = `
+    <div class="result-head">
+      <h2>あなたの店に合う決済はこれ 🎯</h2>
+      <p>月間決済額 <b>${R.volume}万円</b>の条件で年間コストを試算・${R.scored.length}社を中立採点</p>
+    </div>
+    <p class="q-note" style="text-align:center;margin-top:10px">診断の観点：${reasonBits.join(" ／ ")}</p>
+  `;
+
+  R.scored.forEach((x,i)=>{
+    const s=x.s;
+    const top = i===0;
+    const rank = ["🥇 総合1位","🥈 2位","🥉 3位","4位","5位","6位"][i];
+    const rateTxt = s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%` : `QR ${(s.qrRate*100).toFixed(2)}%`;
+    const facts = [
+      s.devLabel,
+      s.monthly>0?`月額 ${yen(s.monthly)}`:"月額 0円",
+      rateTxt,
+      `入金 ${payoutTxt(s.payout)}`
+    ];
+    // このユーザー条件に対する注意（選んだ手段の非対応など）
+    const missing = (R.methods||[]).filter(m=>!(s.methods[m]>0)).map(m=>METHOD_LABEL[m]);
+    const cons = s.cons.slice();
+    if(missing.length) cons.unshift(`選択した「${missing.join("・")}」は非対応`);
+
+    html += `
+    <div class="rank ${top?'top':''}">
+      <span class="rank-badge">${rank}</span>
+      <div class="rank-top">
+        <span class="rank-name">${s.name}</span>
+        <span class="rank-score">適合 <b>${x.pct}</b>%</span>
+      </div>
+      <div class="cost">
+        年間コスト目安 <span class="big">${yen(x.annualCost)}</span>
+        <div class="brk">＝ 端末${yen(s.device)} ＋ 月額${yen(s.monthly*12)} ＋ 手数料${yen(x.annualFee)}（決済額${R.volume}万×12ヶ月×${(x.rate*100).toFixed(2)}%）</div>
+      </div>
+      <div class="facts">${facts.map(f=>`<span>${f}</span>`).join("")}</div>
+      <div class="why">
+        <span class="pro">◎ 強み</span>
+        <ul>${s.pros.map(p=>`<li>${p}</li>`).join("")}</ul>
+        <span class="con">△ 注意</span>
+        <ul>${cons.map(c=>`<li>${c}</li>`).join("")}</ul>
+      </div>
+      <a class="official" href="${s.url}" target="_blank" rel="noopener">公式サイトで最新条件を確認 ↗</a>
+    </div>`;
+  });
+
+  // 比較表
+  html += `
+  <details class="compare">
+    <summary>📊 全${R.scored.length}社を表で比較する</summary>
+    <div class="tbl-scroll">
+      <table>
+        <tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr>
+        ${R.scored.map(x=>{
+          const s=x.s;
+          const rateTxt = s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%" : (s.qrRate*100).toFixed(2)+"%(QR)";
+          return `<tr>
+            <td class="name">${s.name}</td>
+            <td>${yen(s.device)}</td>
+            <td>${s.monthly>0?yen(s.monthly):"0"}</td>
+            <td>${rateTxt}</td>
+            <td>${yen(x.annualCost)}</td>
+            <td>${payoutTxt(s.payout)}</td>
+            <td>${x.pct}%</td>
+          </tr>`;
+        }).join("")}
+      </table>
+    </div>
+  </details>
+
+  <div class="disc">
+    <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。
+    スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と決済額に応じて重みづけし、
+    端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの月間決済額を基にした試算です。<br><br>
+    料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランドや契約プランで異なります。契約前に必ず各社公式でご確認ください。
+  </div>
+
+  <div class="restart">
+    <button class="btn btn-ghost" onclick="restart()">↺ もう一度診断する</button>
+  </div>`;
+
+  rc.innerHTML = html;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function payoutTxt(p){
+  if(p>=.9) return "最短翌営業日";
+  if(p>=.75) return "翌営業日〜";
+  if(p>=.65) return "翌日/月1〜";
+  if(p>=.55) return "月2回程度";
+  return "月6回";
+}
+
+function restart(){
+  step=0;
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  $("resultCard").classList.add("hidden");
+  $("quizCard").classList.remove("hidden");
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+render();
+</script>
+</body>
+</html>
