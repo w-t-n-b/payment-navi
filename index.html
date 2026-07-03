@@ -39,9 +39,9 @@
   "mainEntity":[
     {"@type":"Question","name":"このツールはなぜ中立だと言えるの？","acceptedAnswer":{"@type":"Answer","text":"特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。"}},
     {"@type":"Question","name":"料率・費用のデータはいつ時点のもの？","acceptedAnswer":{"@type":"Answer","text":"2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。"}},
-    {"@type":"Question","name":"診断結果の順位はどうやって決まるの？","acceptedAnswer":{"@type":"Answer","text":"手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と月間決済額で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同一の計算式で採点しています。"}},
+    {"@type":"Question","name":"診断結果の順位はどうやって決まるの？","acceptedAnswer":{"@type":"Answer","text":"手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と年間取扱高で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同一の計算式で採点しています。"}},
     {"@type":"Question","name":"個人情報は登録・保存されますか？","acceptedAnswer":{"@type":"Answer","text":"登録は不要です。入力内容は診断の計算にのみ使い、サーバーや端末には保存しません。"}},
-    {"@type":"Question","name":"年間コスト目安はどう計算していますか？","acceptedAnswer":{"@type":"Answer","text":"「端末費用＋月額×12ヶ月＋月間決済額×12ヶ月×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。"}}
+    {"@type":"Question","name":"年間コスト目安はどう計算していますか？","acceptedAnswer":{"@type":"Answer","text":"「端末費用＋月額×12ヶ月＋年間取扱高×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。"}}
   ]
 }
 </script>
@@ -288,6 +288,37 @@ tr.hl td.name{color:var(--gold)}
 .disc{font-size:.77rem;color:var(--sub);margin-top:var(--s6);background:#fbfcfe;border:1px solid var(--line);border-radius:var(--r);padding:var(--s4)}
 .disc b{color:#3d485c}
 .restart{margin-top:var(--s6);text-align:center}
+/* route banner */
+.route-banner{display:flex;gap:14px;align-items:flex-start;border-radius:var(--r-lg);padding:16px 18px;margin-top:var(--s5)}
+.route-banner.aggregator{background:var(--brand-soft);border:1px solid var(--brand-line)}
+.route-banner.consult{background:var(--gold-soft);border:1px solid var(--gold-line)}
+.route-banner .rb-ic{flex:none;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:#fff}
+.route-banner.aggregator .rb-ic{background:var(--brand)}
+.route-banner.consult .rb-ic{background:var(--gold)}
+.route-banner .rb-ic .ic{width:22px;height:22px}
+.route-banner .rb-title{font-weight:800;font-size:1.06rem}
+.route-banner .rb-desc{font-size:.85rem;color:#3a445a;margin-top:3px}
+/* チラ見せゲート */
+.lock-wrap{position:relative;margin-top:var(--s2)}
+.lock-wrap.lock-locked .lock-body{filter:blur(7px);opacity:.5;pointer-events:none;user-select:none;max-height:600px;overflow:hidden}
+.lock-gate{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:70px var(--s4) 0;background:linear-gradient(180deg,rgba(245,247,251,0) 0%,rgba(245,247,251,.72) 26%,var(--bg) 58%)}
+.lock-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:var(--s6) var(--s5);max-width:420px;width:100%;text-align:center}
+.lock-ic{width:48px;height:48px;border-radius:13px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin:0 auto var(--s3)}
+.lock-ic .ic{width:26px;height:26px}
+.lock-title{font-size:1.22rem;font-weight:800}
+.lock-sub{font-size:.86rem;color:var(--sub);margin:6px 0 var(--s5);line-height:1.7}
+.lead-form{text-align:left}
+.lf-row{margin-bottom:10px}
+.lead-form input:not([type=checkbox]){width:100%;border:1.5px solid var(--line);border-radius:var(--r);padding:13px 14px;font-size:1rem;font-family:inherit;background:#fff;color:var(--ink)}
+.lead-form input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(21,88,214,.12)}
+.lf-consent{display:flex;align-items:flex-start;gap:8px;font-size:.8rem;color:var(--sub);margin:8px 0 var(--s4)}
+.lf-consent input{margin-top:3px;flex:none}
+.lead-form button[type=submit]{width:100%;justify-content:center;font-size:1.05rem;padding:15px}
+.lf-note{font-size:.74rem;color:var(--faint);margin:12px 0 0;text-align:center;line-height:1.6}
+.unlock-note{display:flex;gap:8px;align-items:center;background:var(--good-soft);color:var(--good);border-radius:var(--r);padding:12px 14px;font-size:.86rem;font-weight:700;margin-bottom:var(--s4)}
+.unlock-note .ic{flex:none;width:1.15em;height:1.15em}
+.apply-cta{text-align:left}
+.apply-cta .btn-primary{width:100%;justify-content:center}
 
 /* FAQ */
 .faq details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-top:var(--s2);overflow:hidden}
@@ -400,7 +431,7 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;margin:var(--s10) 0
     <div class="how">
       <h2>診断のしくみ</h2>
       <div class="steps">
-        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></div><b>条件を入力</b><small>業種・決済額・使いたい手段など6問に答えるだけ</small></div>
+        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></div><b>条件を入力</b><small>導入状況・年間取扱高・使いたい手段などに答えるだけ</small></div>
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>中立スコアリング</b><small>5観点をあなたの重視点で重みづけし全社を採点</small></div>
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></div><b>年間コスト試算</b><small>あなたの決済額でいくらかかるかを金額で提示</small></div>
       </div>
@@ -437,15 +468,17 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;margin:var(--s10) 0
     <div class="section-lead"><h2>よくある質問</h2><p>中立性の担保とデータの考え方について</p></div>
     <details><summary><span class="q">Q</span>このツールはなぜ中立だと言えるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。</div></details>
     <details><summary><span class="q">Q</span>料率・費用のデータはいつ時点のもの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。</div></details>
-    <details><summary><span class="q">Q</span>診断結果の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と月間決済額で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同じ計算式で採点しています。</div></details>
-    <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">登録は不要です。入力内容は診断の計算にのみ使い、サーバーや端末には保存しません。</div></details>
-    <details><summary><span class="q">Q</span>年間コスト目安はどう計算していますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">「端末費用＋月額×12ヶ月＋月間決済額×12ヶ月×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。</div></details>
+    <details><summary><span class="q">Q</span>診断結果の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と年間取扱高で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同じ計算式で採点しています。</div></details>
+    <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">診断そのものは登録不要・匿名でご利用いただけます。詳細な結果やご相談をご希望の場合のみ、任意で連絡先をご入力いただきます。いただいた情報は<a href="#privacy">プライバシーポリシー</a>に基づき、結果の詳細表示とご相談対応にのみ利用し、第三者には提供しません。</div></details>
+    <details><summary><span class="q">Q</span>年間コスト目安はどう計算していますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">「端末費用＋月額×12ヶ月＋年間取扱高×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。</div></details>
   </section>
 
   <!-- ===== 運営者・免責 ===== -->
   <div class="about">
     <h3>運営者情報・免責事項</h3>
     <p>「決済ナビ」は個人店・小規模店舗向けに、対面キャッシュレス決済端末を中立に比較する情報提供ツールです（運営者情報は準備中）。</p>
+    <h3 id="privacy" style="margin-top:var(--s4)">プライバシーポリシー</h3>
+    <p>診断のご利用に登録は不要です。詳細結果の表示・ご相談対応のために任意でご入力いただく連絡先（店舗・会社名／お名前／メールアドレス／電話番号）および診断結果は、当該目的の範囲でのみ利用し、ご本人の同意なく第三者へ提供しません。利用停止・削除のご希望には速やかに対応します。診断の入力条件は結果の算出に使うのみで、連絡先を入力されない限り送信・保存されません。</p>
     <p>掲載の料率・費用・キャンペーン内容は2026年7月時点で各社公式サイトを参照した参考値であり、正確性・最新性を保証するものではありません。実際の契約条件は決済ブランド・プラン・審査結果により異なります。契約の判断は、必ず各社公式サイトの最新情報をご確認のうえ、お客様ご自身の責任で行ってください。本ツールの利用により生じたいかなる損害についても、運営者は責任を負いかねます。</p>
   </div>
 
@@ -581,6 +614,15 @@ const SERVICES = [
 /* ===================== 診断質問 ===================== */
 const QUESTIONS = [
   {
+    key:"status", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため、最初に伺います", type:"single",
+    opts:[
+      {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだ決済端末を持っていない"},
+      {v:"exist_hokatsu",ic:"i-card",l:"導入済み・包括事業者と契約",s:"Square・Airペイ・stera 等と契約中"},
+      {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別契約",s:"カード会社／アクワイアラと直接契約"},
+      {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
+    ]
+  },
+  {
     key:"industry", title:"どんな業種のお店ですか？", note:"診断の傾向づけに使います", type:"single",
     opts:[
       {v:"food",ic:"i-food",l:"飲食店",s:"居酒屋・カフェ・レストラン"},
@@ -592,13 +634,15 @@ const QUESTIONS = [
     ]
   },
   {
-    key:"volume", title:"月間のキャッシュレス決済額の見込みは？",
-    note:"手数料の実額試算に使います", help:"現金を含む月商の3〜5割が目安", type:"single",
+    key:"volume", title:"年間の取扱高（キャッシュレス決済額）は？",
+    note:"手数料の試算と、最適な契約形態の判定に使います", help:"これから導入の方は見込みでOK", type:"single",
     opts:[
-      {v:15,ic:"i-yen",l:"〜30万円",s:"月あたり約15万円で試算"},
-      {v:65,ic:"i-yen",l:"30〜100万円",s:"月あたり約65万円で試算"},
-      {v:200,ic:"i-yen",l:"100〜300万円",s:"月あたり約200万円で試算"},
-      {v:400,ic:"i-yen",l:"300万円〜",s:"月あたり約400万円で試算"}
+      {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
+      {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
+      {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
+      {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
+      {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
+      {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
     ]
   },
   {
@@ -747,13 +791,13 @@ $("backBtn").onclick = ()=> goToHero();
 function scoreServices(){
   const volume = answers.volume, methods = answers.methods||[], term = answers.terminal;
   const pris = answers.priorities||[], needPos = answers.pos==="yes";
-  const volFeeFactor = {15:0, 65:.3, 200:.8, 400:1.5}[volume] || 0;
+  const volFeeFactor = {500:0, 3000:.3, 7500:.5, 15000:.8, 35000:1.2, 70000:1.6}[volume] || 0;
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
 
   const raw = SERVICES.map(s=>{
     const rate = s.cardRate!=null ? s.cardRate : s.qrRate;
-    const annualFee = volume*10000*rate*12;
+    const annualFee = volume*10000*rate;   // volume は万円/年（年間取扱高）
     const annualCost = s.device + s.monthly*12 + annualFee;
     return {s, rate, annualFee, annualCost};
   });
@@ -787,6 +831,33 @@ const yen = n => "¥"+Math.round(n).toLocaleString("ja-JP");
 const TERM_LABEL={mobile:"持ち運び",counter:"据置",pos:"レジ一体POS"};
 const METHOD_LABEL={credit:"クレカ",touch:"タッチ",qr:"QR",transit:"交通系",emoney:"iD/QUICPay"};
 const PRI_LABEL={fee:"手数料の安さ",initial:"初期費用の安さ",payout:"入金の速さ",brands:"対応ブランド"};
+const STATUS_LABEL={new:"新規（これから導入）",exist_hokatsu:"既存・包括事業者と契約",exist_kobetsu:"既存・個別契約",exist_unknown:"既存・契約形態は不明"};
+const BORDER = 20000; // 年間取扱高2億円 = 20,000万円（このラインで包括→個別/コンサルに分岐）
+function scaleYen(vman){ if(vman>=10000){ const oku=vman/10000; return (Number.isInteger(oku)?oku:oku.toFixed(1))+"億円"; } return vman.toLocaleString("ja-JP")+"万円"; }
+
+/* ▼ リード送信先：GASウェブアプリのURLを貼ってください（未設定でも動作＝送信スキップ） */
+const LEAD_ENDPOINT = ""; // 例: "https://script.google.com/macros/s/XXXXXXXX/exec"
+
+/* 導入状況＋年間取扱高から最適ルートを判定（個別契約=常にコンサル／包括は2億で申込↔コンサル） */
+function decideRoute(R){
+  const status=answers.status, over2 = R.volume>=BORDER;
+  if(status==="exist_kobetsu"){
+    return {route:"consult", title:"「個別契約の最適化（専門コンサル）」がおすすめ",
+      desc:"すでに個別契約（カード会社・アクワイアラ直契約）をお持ちのため、料率やプランの見直しは専門コンサルの領域です。今の条件が適正か、無料で診断できます。"};
+  }
+  if(status==="new"){
+    return over2
+      ? {route:"consult", title:"「個別契約＋専門コンサル」がおすすめ",
+         desc:"新規導入でも年間取扱高が2億円規模になると、包括事業者より個別契約の方が手数料を大きく下げられる可能性があります。最適な契約設計を専門コンサルがご提案します。"}
+      : {route:"aggregator", title:"「包括事業者での導入」がおすすめ",
+         desc:"年間取扱高が2億円未満の新規導入なら、初期費用ゼロで手軽に始められる包括事業者が最適です。あなたの条件で最もお得な包括事業者はこちら。"};
+  }
+  return over2
+    ? {route:"consult", title:"「個別契約への切り替え（専門コンサル）」がおすすめ",
+       desc:"年間取扱高が2億円を超える規模では、包括事業者の手数料は割高になりがちです。個別契約への切り替えでコストを下げられる可能性が高く、専門コンサルが無料で試算します。"}
+    : {route:"aggregator", title:"現状は「包括事業者」で十分です",
+       desc:"年間取扱高が2億円未満なら包括事業者で問題ありません。今より条件の良い包括への乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。"};
+}
 function payoutTxt(p){
   if(p>=.9) return "最短翌営業日";
   if(p>=.8) return "翌日〜";
@@ -839,6 +910,7 @@ function costChartSVG(R){
 }
 function escapeXml(s){return s.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));}
 
+let LAST=null;
 function showResult(){
   const R = scoreServices();
   $("quizCard").classList.add("hidden");
@@ -846,27 +918,30 @@ function showResult(){
   $("resultSection").classList.remove("hidden");
   const rc = $("resultCard");
 
-  const reasonBits=[];
-  reasonBits.push(`端末は「${TERM_LABEL[R.term]}」向け`);
-  if(R.methods.length) reasonBits.push(R.methods.map(m=>METHOD_LABEL[m]).join("・")+"に対応");
-  if(R.pris.length) reasonBits.push("重視＝"+R.pris.map(p=>PRI_LABEL[p]).join("・"));
-  if(R.volFeeFactor>0) reasonBits.push("決済額が大きく手数料の比重UP");
-  if(R.needPos) reasonBits.push("レジ連携を優先");
-
+  const rt = decideRoute(R);
   const top=R.scored[0], s0=top.s;
+  LAST = {R, rt, top};
+  const isConsult = rt.route==="consult";
   const C=44, r=38, circ=2*Math.PI*r, off=circ*(1-top.pct/100);
+  const gateLead = isConsult
+    ? `詳細な診断結果に加え、あなたの規模に最適な<b>個別契約を専門コンサルが無料でご提案</b>します。`
+    : `<b>全${R.scored.length}社の詳細比較・年間コスト・各社の申込条件</b>がすべて見られます。`;
+  const ctaLabel = isConsult ? "結果を見て無料相談する" : "詳細な比較結果を見る";
 
   let html=`
   <div class="result-head">
     <div class="eyebrow">DIAGNOSIS RESULT</div>
-    <h2>あなたの店に合う決済はこれ</h2>
-    <p>月間決済額 <b class="num">${R.volume}万円</b>の条件で年間コストを試算・${R.scored.length}社を中立採点</p>
-    <div class="reason-line">${ICON("i-scale")} <b>診断の観点：</b>${reasonBits.join(" ／ ")}</div>
+    <h2>診断結果</h2>
+    <p>導入状況「${STATUS_LABEL[answers.status]}」／年間取扱高 <b class="num">${scaleYen(R.volume)}</b>の条件で${R.scored.length}社を中立採点</p>
   </div>
 
-  <!-- 1位：おすすめ -->
+  <div class="route-banner ${isConsult?'consult':'aggregator'}">
+    <div class="rb-ic">${ICON(isConsult?"i-scale":"i-card")}</div>
+    <div><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
+  </div>
+
   <div class="pick">
-    <span class="pick-badge">🏆 総合1位・あなたへのおすすめ</span>
+    <span class="pick-badge">🏆 ${isConsult?'比較上の総合1位':'総合1位・あなたへのおすすめ'}</span>
     <div class="pick-head">
       <div class="gauge">
         <svg viewBox="0 0 ${C*2} ${C*2}"><circle class="track" cx="${C}" cy="${C}" r="${r}" fill="none" stroke-width="8"/><circle class="fill" cx="${C}" cy="${C}" r="${r}" fill="none" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-off="${off}"/></svg>
@@ -877,100 +952,127 @@ function showResult(){
         <span class="pick-tag">${s0.devLabel}</span>
       </div>
     </div>
-
     <div class="pick-cost">
       <div class="lab">年間コスト目安</div>
       <div class="big num">${yen(top.annualCost)}</div>
-      <div class="brk">＝ 端末 <span class="num">${yen(s0.device)}</span> ＋ 月額 <span class="num">${yen(s0.monthly*12)}</span> ＋ 手数料 <span class="num">${yen(top.annualFee)}</span>（決済額${R.volume}万×12ヶ月×<span class="num">${(top.rate*100).toFixed(2)}%</span>）</div>
+      <div class="brk">＝ 端末 <span class="num">${yen(s0.device)}</span> ＋ 月額 <span class="num">${yen(s0.monthly*12)}</span> ＋ 手数料 <span class="num">${yen(top.annualFee)}</span>（年間取扱高 ${scaleYen(R.volume)} × <span class="num">${(top.rate*100).toFixed(2)}%</span>）</div>
     </div>
+  </div>
 
-    <div class="why">
-      <div class="wh">${ICON("i-scale")}なぜこの順位？ ― あなたの条件がこう効きました</div>
-      <ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul>
-    </div>
+  <div class="lock-wrap lock-locked" id="lockWrap">
+    <div class="lock-body" id="lockBody">
+      <div class="why" style="margin-top:var(--s6)">
+        <div class="wh">${ICON("i-scale")}なぜこの順位？ ― あなたの条件がこう効きました</div>
+        <ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul>
+      </div>
+      <div class="facts">
+        <span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span>
+        <span>${rateText(s0)}</span>
+        <span>入金 ${payoutTxt(s0.payout)}</span>
+      </div>
+      <div class="pc-grid">
+        <div class="pc pro"><div class="h">${ICON("i-check")}強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>
+        <div class="pc con"><div class="h">! 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div>
+      </div>
 
-    <div class="facts">
-      <span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span>
-      <span>${rateText(s0)}</span>
-      <span>入金 ${payoutTxt(s0.payout)}</span>
-    </div>
+      <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `
+        <div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
 
-    <div class="pc-grid">
-      <div class="pc pro"><div class="h">${ICON("i-check")}強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>
-      <div class="pc con"><div class="h">! 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div>
-    </div>
+      <div class="chart-card card" style="margin-top:var(--s6)">
+        <h3>${ICON("i-chart")} 年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3>
+        <div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>
+        ${costChartSVG(R)}
+      </div>
 
-    <!-- CTA区（将来ここが「無料相談」CTAに差し替わる想定） -->
-    <div class="pick-cta">
-      <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">公式サイトで最新条件を確認${ICON("i-ext")}</a>
-      <div class="sub-links">
-        <a href="#compareSec">▼ 全${R.scored.length}社を比較する</a>
-        <a href="#" onclick="restart();return false;">条件を変えて再診断</a>
+      <div class="compare card" id="compareSec" style="margin-top:var(--s6)">
+        <h3>📊 全${R.scored.length}社 比較表</h3>
+        <div class="tbl-scroll"><table>
+          <thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead>
+          <tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${i===0?'★ ':''}${s.name}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody>
+        </table></div>
+      </div>
+
+      ${isConsult ? "" : `<div class="apply-cta card" style="margin-top:var(--s6)">
+        <div class="wh" style="color:var(--brand)">${ICON("i-ext")}申込・公式サイト</div>
+        <p style="font-size:.85rem;color:var(--sub);margin:.3em 0 1em">条件が最も合う上位社の公式サイトから申し込めます（掲載順は診断スコア順・報酬による優遇なし）。</p>
+        <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">${s0.name} の公式サイトへ${ICON("i-ext")}</a>
+      </div>`}
+
+      <div class="disc">
+        <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と取扱高に応じて重みづけし、端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの年間取扱高を基にした試算です。<br><br>
+        料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランドや契約プランで異なります。契約前に必ず各社公式でご確認ください。
+      </div>
+
+      <div class="restart">
+        <button class="btn btn-ghost" onclick="copyResult()" id="copyBtn">${ICON("i-copy")}診断結果をコピー</button>
+        <button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button>
       </div>
     </div>
-  </div>
 
-  <!-- 2位以下 -->
-  <div class="runners">`;
-
-  R.scored.slice(1).forEach((x,i)=>{
-    const s=x.s;
-    html+=`
-    <div class="runner">
-      <div class="rk">${i+2}</div>
-      <div>
-        <div class="rn">${s.name}</div>
-        <div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div>
+    <div class="lock-gate" id="lockGate">
+      <div class="lock-card">
+        <div class="lock-ic">${ICON("i-shield")}</div>
+        <div class="lock-title">続きは無料で全部見られます</div>
+        <p class="lock-sub">${gateLead}</p>
+        <form id="leadForm" class="lead-form" autocomplete="on">
+          <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
+          <div class="lf-row"><input name="name" placeholder="お名前" required></div>
+          <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
+          <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
+          <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="#privacy">プライバシーポリシー</a>に同意して送信します</span></label>
+          <button type="submit" class="btn btn-primary">${ctaLabel}${ICON("i-arrow")}</button>
+          <p class="lf-note">診断は無料・中立です。入力情報は結果の詳細表示とご相談対応にのみ利用し、第三者へ提供しません。</p>
+        </form>
       </div>
-      <div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div>
-    </div>`;
-  });
-  html+=`</div>`;
-
-  /* 年間コスト比較チャート */
-  html+=`
-  <div class="chart-card card" style="margin-top:var(--s6)">
-    <h3>${ICON("i-chart")} 年間コスト比較（${R.volume}万円/月の場合）</h3>
-    <div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>
-    ${costChartSVG(R)}
-  </div>`;
-
-  /* 常設比較表 */
-  html+=`
-  <div class="compare card" id="compareSec" style="margin-top:var(--s6)">
-    <h3>📊 全${R.scored.length}社 比較表</h3>
-    <div class="tbl-scroll">
-      <table>
-        <thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead>
-        <tbody>
-        ${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}">
-          <td class="name">${i===0?'★ ':''}${s.name}</td>
-          <td class="num">${yen(s.device)}</td>
-          <td class="num">${s.monthly>0?yen(s.monthly):"0"}</td>
-          <td class="num">${rateShort(s)}</td>
-          <td class="num">${yen(x.annualCost)}</td>
-          <td>${payoutTxt(s.payout)}</td>
-          <td class="num">${x.pct}%</td>
-        </tr>`;}).join("")}
-        </tbody>
-      </table>
     </div>
-  </div>
-
-  <div class="disc">
-    <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と決済額に応じて重みづけし、端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの月間決済額を基にした試算です。<br><br>
-    料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランドや契約プランで異なります。契約前に必ず各社公式でご確認ください。
-  </div>
-
-  <div class="restart">
-    <button class="btn btn-ghost" onclick="copyResult()" id="copyBtn">${ICON("i-copy")}診断結果をコピー</button>
-    <button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button>
   </div>`;
 
   rc.innerHTML = html;
-  // ゲージのアニメーション発火
   requestAnimationFrame(()=>{ const f=rc.querySelector(".gauge .fill"); if(f) f.style.strokeDashoffset=f.dataset.off; });
+  const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
   $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* 連絡先送信 → 解除（GASへPOST、未設定なら送信スキップして解除） */
+function submitLead(e){
+  e.preventDefault();
+  const f=e.target;
+  if(!f.consent.checked) return;
+  const {R, rt, top}=LAST;
+  const payload={
+    タイムスタンプ:new Date().toISOString(),
+    店舗会社名:f.company.value.trim(),
+    お名前:f.name.value.trim(),
+    メール:f.email.value.trim(),
+    電話:f.phone.value.trim(),
+    導入状況:STATUS_LABEL[answers.status],
+    年間取扱高:scaleYen(R.volume),
+    業種:(QUESTIONS[1].opts.find(o=>o.v===answers.industry)||{}).l||"",
+    推奨ルート: rt.route==="consult" ? "個別/コンサル" : "包括/申込",
+    第1位:top.s.name, 適合スコア:top.pct, 年間コスト目安:Math.round(top.annualCost),
+    参照元:location.href
+  };
+  const btn=f.querySelector('button[type="submit"]');
+  btn.disabled=true; btn.textContent="送信中…";
+  const done=()=>unlockResults(rt);
+  if(LEAD_ENDPOINT){
+    fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
+  }else{
+    console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップして解除します。", payload);
+    done();
+  }
+}
+function unlockResults(rt){
+  const wrap=$("lockWrap"); if(!wrap) return;
+  wrap.classList.remove("lock-locked");
+  const gate=$("lockGate"); if(gate) gate.remove();
+  const note=document.createElement("div");
+  note.className="unlock-note";
+  note.innerHTML = rt.route==="consult"
+    ? `${ICON("i-check")}送信ありがとうございます。専門コンサルより2営業日以内にご連絡します。以下は診断の詳細です。`
+    : `${ICON("i-check")}送信ありがとうございます。以下で全社の詳細と申込条件をご確認いただけます。`;
+  $("lockBody").prepend(note);
+  wrap.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function consFor(s,R){
@@ -983,7 +1085,7 @@ function consFor(s,R){
 /* 結果をテキスト要約でクリップボードへ */
 function copyResult(){
   const R=scoreServices();
-  const lines=[`【決済ナビ 診断結果】月間決済額 約${R.volume}万円`,""];
+  const lines=[`【決済ナビ 診断結果】年間取扱高 約${scaleYen(R.volume)}`,""];
   R.scored.forEach((x,i)=>{ lines.push(`${i+1}位 ${x.s.name}（適合${x.pct}%）年間コスト目安 ${yen(x.annualCost)}／${rateText(x.s)}`); });
   lines.push("","※2026年7月時点の参考値。契約前に各社公式で最新条件をご確認ください。","診断: 決済ナビ https://w-t-n-b.github.io/payment-navi/");
   const text=lines.join("\n");
