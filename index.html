@@ -146,7 +146,7 @@ section{scroll-margin-top:72px}
 .progress i.cur{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
 .q-title{font-size:1.28rem;font-weight:800;margin:0 0 var(--s1);letter-spacing:.01em}
 .q-note{color:var(--sub);font-size:.86rem;margin:0 0 var(--s5)}
-.q-note .help{display:inline-block;background:var(--good-soft);color:var(--good);border-radius:6px;padding:1px 8px;font-size:.78rem;font-weight:700;margin-left:2px}
+.help{display:inline-block;background:var(--good-soft);color:var(--good);border-radius:6px;padding:1px 8px;font-size:.78rem;font-weight:700;margin-left:2px}
 .q-anim{animation:slideIn .28s var(--ease)}
 .q-anim.back{animation:slideInBack .28s var(--ease)}
 @keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
@@ -181,6 +181,29 @@ section{scroll-margin-top:72px}
 .btn-ghost{background:transparent;color:var(--sub)}
 .btn-ghost:hover{color:var(--ink);background:var(--line-soft)}
 .count-badge{background:rgba(255,255,255,.28);border-radius:var(--r-pill);padding:0 8px;font-size:.82rem;font-weight:800}
+.btn.sm{padding:10px 20px;font-size:.92rem}
+/* ---------- accordion wizard ---------- */
+.acc-list{margin-top:var(--s2)}
+.acc{border:1.5px solid var(--line);border-radius:var(--r);margin-bottom:10px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.acc.open{border-color:var(--brand);box-shadow:0 0 0 3px rgba(21,88,214,.08)}
+.acc.answered:not(.open):hover{border-color:var(--brand-line)}
+.acc-head{display:flex;align-items:center;gap:12px;width:100%;background:none;border:none;padding:15px 16px;cursor:pointer;font-family:inherit;text-align:left;border-radius:var(--r)}
+.acc-no{flex:none;width:26px;height:26px;border-radius:50%;background:var(--chip);color:var(--sub);font-weight:800;font-size:.82rem;display:grid;place-items:center;transition:.15s}
+.acc-no .ic{width:15px;height:15px;stroke-width:2.6}
+.acc.open .acc-no{background:var(--brand);color:#fff}
+.acc.answered .acc-no{background:var(--good);color:#fff}
+.acc-q{flex:1;min-width:0}
+.acc-title{display:block;font-weight:800;font-size:1.02rem;color:var(--ink);line-height:1.4}
+.acc-ans{display:block;font-size:.82rem;color:var(--brand-ink);font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acc.open .acc-ans{display:none}
+.acc-cr{flex:none;color:var(--faint);transition:transform .25s var(--ease);width:1.15em;height:1.15em}
+.acc.open .acc-cr{transform:rotate(180deg)}
+.acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.acc.open .acc-body{grid-template-rows:1fr}
+.acc-inner{overflow:hidden}
+.acc-pad{padding:2px 16px 16px}
+.acc-note{color:var(--sub);font-size:.84rem;margin:0 0 14px}
+.acc-go{display:flex;justify-content:flex-end;margin-top:14px}
 
 /* ---------- result ---------- */
 .result-head{text-align:center;margin-bottom:var(--s5)}
@@ -392,18 +415,14 @@ footer{text-align:center;color:var(--faint);font-size:.78rem;margin:var(--s10) 0
     </div>
     <div class="card" id="quizCard">
       <div class="wz-top">
-        <span class="step-count" id="stepCount"></span>
-        <span class="time-left" id="timeLeft"></span>
+        <span class="step-count" id="ansCount">回答 0 / 6</span>
+        <span class="time-left">各設問はタップで開閉できます</span>
       </div>
-      <div class="progress" id="progress" role="progressbar" aria-label="診断の進捗"></div>
-      <div aria-live="polite">
-        <h2 class="q-title" id="qTitle"></h2>
-        <p class="q-note" id="qNote"></p>
-      </div>
-      <div id="qBody"></div>
+      <div class="progress" id="wzProg" role="progressbar" aria-label="診断の進捗"></div>
+      <div class="acc-list" id="accList"></div>
       <div class="nav">
-        <button class="btn btn-ghost" id="backBtn"><svg class="ic" aria-hidden="true"><use href="#i-arrow-l"/></svg><span id="backLbl">戻る</span></button>
-        <button class="btn btn-primary" id="nextBtn">次へ<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="btn btn-ghost" id="backBtn"><svg class="ic" aria-hidden="true"><use href="#i-arrow-l"/></svg>最初へ</button>
+        <button class="btn btn-primary" id="diagBtn" disabled>診断する<svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
       </div>
     </div>
   </section>
@@ -620,96 +639,109 @@ const QUESTIONS = [
 
 /* ===================== 状態 ===================== */
 const answers = {};
-let step = 0;
-let navDir = "fwd";
+let openStep = 0;
 const $ = id => document.getElementById(id);
 const ICON = id => `<svg class="ic" aria-hidden="true"><use href="#${id}"/></svg>`;
 
-/* ===================== ウィザード描画 ===================== */
-function render(){
-  const q = QUESTIONS[step];
-  const total = QUESTIONS.length;
-  $("progress").innerHTML = QUESTIONS.map((_,i)=>`<i class="${i<step?'on':''}${i===step?' cur':''}"></i>`).join("");
-  $("progress").setAttribute("aria-valuenow", step+1);
-  $("progress").setAttribute("aria-valuemin", 1);
-  $("progress").setAttribute("aria-valuemax", total);
-  $("stepCount").textContent = `STEP ${step+1} / ${total}`;
-  const remain = Math.max(8,(total-step)*8);
-  $("timeLeft").textContent = `あと約${remain}秒`;
-  $("qTitle").textContent = q.title;
-  $("qNote").innerHTML = q.note + (q.help?` <span class="help">${q.help}</span>`:"");
+/* ===================== ウィザード（アコーディオン型） ===================== */
+const isAnswered = i=>{ const q=QUESTIONS[i], v=answers[q.key]; return q.type==="multi" ? (Array.isArray(v)&&v.length>0) : v!==undefined; };
+function answerText(i){
+  const q=QUESTIONS[i], v=answers[q.key];
+  if(q.type==="multi") return (v||[]).map(x=>{const o=q.opts.find(o=>o.v===x);return o?o.l:"";}).filter(Boolean).join("・");
+  const o=q.opts.find(o=>o.v===v); return o?o.l:"";
+}
+function openInitial(){ for(let i=0;i<QUESTIONS.length;i++) if(!isAnswered(i)) return i; return 0; }
 
-  const cur = answers[q.key];
-  const two = q.opts.length<=2 ? "two":"";
-  let html = q.type==="multi" ? `<p class="multi-hint">${ICON("i-check")}当てはまるものをすべて選択</p>`:"";
-  html += `<div class="opts ${two}" role="group">` + q.opts.map(o=>{
-    let sel = q.type==="multi" ? (Array.isArray(cur)&&cur.includes(o.v)) : cur===o.v;
-    return `<button class="opt ${sel?'sel':''}" data-v="${o.v}" aria-pressed="${sel}">
-      <span class="oi">${ICON(o.ic)}</span>
-      <span class="lbl">${o.l}${o.s?`<small>${o.s}</small>`:""}</span>
-      <span class="tick">${ICON("i-check")}</span>
-    </button>`;
-  }).join("") + `</div>`;
-  const body = $("qBody");
-  body.innerHTML = html;
-  body.className = "q-anim" + (navDir==="back"?" back":"");
-  // reflow to restart animation
-  void body.offsetWidth;
-
-  body.querySelectorAll(".opt").forEach((btn,idx,list)=>{
-    btn.onclick = ()=>choose(q, btn.dataset.v);
-    btn.onkeydown = e=>{
-      if(e.key==="ArrowDown"||e.key==="ArrowRight"){e.preventDefault();(list[idx+1]||list[0]).focus();}
-      if(e.key==="ArrowUp"||e.key==="ArrowLeft"){e.preventDefault();(list[idx-1]||list[list.length-1]).focus();}
-    };
-  });
-
-  $("backLbl").textContent = step===0 ? "最初へ" : "戻る";
-  const nb = $("nextBtn");
-  if(step===total-1){ nb.innerHTML = `診断する${ICON("i-search")}`; }
-  else { nb.innerHTML = `次へ${ICON("i-arrow")}`; }
-  updateNext(q);
+function buildWizard(){
+  const box=$("accList");
+  box.innerHTML = QUESTIONS.map((q,i)=>{
+    const two = q.opts.length<=2 ? "two":"";
+    const opts = `<div class="opts ${two}" role="group" data-q="${i}">`+ q.opts.map(o=>
+      `<button class="opt" type="button" data-q="${i}" data-v="${o.v}" aria-pressed="false">
+        <span class="oi">${ICON(o.ic)}</span>
+        <span class="lbl">${o.l}${o.s?`<small>${o.s}</small>`:""}</span>
+        <span class="tick">${ICON("i-check")}</span>
+      </button>`).join("") +`</div>`;
+    const note = q.note + (q.help?` <span class="help">${q.help}</span>`:"");
+    const multiHint = q.type==="multi" ? `<p class="multi-hint">${ICON("i-check")}当てはまるものをすべて選択</p>` : "";
+    const goBtn = q.type==="multi" ? `<div class="acc-go"><button class="btn btn-primary sm" type="button" data-next="${i}">次へ${ICON("i-arrow")}</button></div>` : "";
+    return `<div class="acc" data-i="${i}">
+      <button class="acc-head" type="button" data-head="${i}" aria-expanded="false">
+        <span class="acc-no" data-no="${i}">${i+1}</span>
+        <span class="acc-q"><span class="acc-title">${q.title}</span><span class="acc-ans" data-ans="${i}"></span></span>
+        <svg class="ic acc-cr" aria-hidden="true"><use href="#i-chev"/></svg>
+      </button>
+      <div class="acc-body"><div class="acc-inner"><div class="acc-pad">
+        <p class="acc-note">${note}</p>${multiHint}${opts}${goBtn}
+      </div></div></div>
+    </div>`;
+  }).join("");
+  box.querySelectorAll("[data-head]").forEach(h=> h.onclick=()=>toggleAcc(+h.dataset.head));
+  box.querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>selectOpt(+b.dataset.q, b.dataset.v); b.onkeydown=e=>optKey(e,b); });
+  box.querySelectorAll("[data-next]").forEach(b=> b.onclick=()=>goNext(+b.dataset.next));
+  refreshAll(); updateProgress(); setOpen(openInitial());
 }
 
-function choose(q, rawV){
-  const v = (q.key==="volume") ? Number(rawV) : rawV;
+function setOpen(i){
+  openStep=i;
+  $("accList").querySelectorAll(".acc").forEach(a=>{
+    const on = (+a.dataset.i)===i;
+    a.classList.toggle("open",on);
+    a.querySelector(".acc-head").setAttribute("aria-expanded",on);
+  });
+}
+function toggleAcc(i){ const willOpen = openStep!==i; setOpen(willOpen?i:-1); if(willOpen) scrollAcc(i); }
+function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`); if(el) el.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+
+function selectOpt(i,rawV){
+  const q=QUESTIONS[i];
+  const v=(q.key==="volume")?Number(rawV):rawV;
   if(q.type==="multi"){
-    const arr = Array.isArray(answers[q.key]) ? answers[q.key].slice() : [];
-    const i = arr.indexOf(v);
-    if(i>=0) arr.splice(i,1); else arr.push(v);
+    const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
+    const k=arr.indexOf(v); if(k>=0) arr.splice(k,1); else arr.push(v);
     answers[q.key]=arr;
-    render();
+    refreshQ(i); updateProgress();
   }else{
     answers[q.key]=v;
-    render();
-    if(step<QUESTIONS.length-1){ navDir="fwd"; setTimeout(()=>{ step++; render(); }, 200); }
+    refreshQ(i); updateProgress();
+    setTimeout(()=>goNext(i),240);
   }
 }
-
-function updateNext(q){
-  const cur = answers[q.key];
-  const cnt = Array.isArray(cur)?cur.length:0;
-  const ok = q.type==="multi" ? cnt>0 : (cur!==undefined);
-  $("nextBtn").disabled = !ok;
-  if(q.type==="multi" && cnt>0 && step<QUESTIONS.length-1){
-    $("nextBtn").innerHTML = `次へ <span class="count-badge">${cnt}</span>${ICON("i-arrow")}`;
-  }
+function goNext(fromI){
+  let t=-1;
+  for(let k=0;k<QUESTIONS.length;k++){ const j=(fromI+1+k)%QUESTIONS.length; if(!isAnswered(j)){ t=j; break; } }
+  if(t<0){ setOpen(-1); $("diagBtn").focus(); $("diagBtn").scrollIntoView({behavior:"smooth",block:"nearest"}); }
+  else { setOpen(t); scrollAcc(t); }
+}
+function optKey(e,b){
+  const list=[...b.parentElement.querySelectorAll(".opt")], idx=list.indexOf(b);
+  if(e.key==="ArrowDown"||e.key==="ArrowRight"){e.preventDefault();(list[idx+1]||list[0]).focus();}
+  if(e.key==="ArrowUp"||e.key==="ArrowLeft"){e.preventDefault();(list[idx-1]||list[list.length-1]).focus();}
 }
 
-$("nextBtn").onclick = ()=>{
-  const q = QUESTIONS[step];
-  const cur = answers[q.key];
-  const ok = q.type==="multi" ? (Array.isArray(cur)&&cur.length>0) : (cur!==undefined);
-  if(!ok) return;
-  if(step<QUESTIONS.length-1){ navDir="fwd"; step++; render(); scrollToQuiz(); }
-  else showResult();
-};
-$("backBtn").onclick = ()=>{
-  navDir="back";
-  if(step>0){ step--; render(); scrollToQuiz(); }
-  else goToHero();
-};
-function scrollToQuiz(){ $("shindan").scrollIntoView({behavior:"smooth",block:"start"}); }
+function refreshQ(i){
+  const q=QUESTIONS[i], acc=$("accList").querySelector(`.acc[data-i="${i}"]`), cur=answers[q.key];
+  acc.querySelectorAll(".opt").forEach(b=>{
+    const val=(q.key==="volume")?Number(b.dataset.v):b.dataset.v;
+    const sel = q.type==="multi" ? (Array.isArray(cur)&&cur.includes(val)) : cur===val;
+    b.classList.toggle("sel",sel); b.setAttribute("aria-pressed",sel);
+  });
+  const ans=isAnswered(i);
+  acc.classList.toggle("answered",ans);
+  acc.querySelector(`[data-no="${i}"]`).innerHTML = ans ? ICON("i-check") : (i+1);
+  acc.querySelector(`[data-ans="${i}"]`).textContent = ans ? answerText(i) : "";
+}
+function refreshAll(){ QUESTIONS.forEach((_,i)=>refreshQ(i)); }
+function updateProgress(){
+  const n = QUESTIONS.filter((_,i)=>isAnswered(i)).length, total=QUESTIONS.length;
+  $("ansCount").textContent = `回答 ${n} / ${total}`;
+  $("wzProg").innerHTML = QUESTIONS.map((_,i)=>`<i class="${isAnswered(i)?'on':''}"></i>`).join("");
+  $("wzProg").setAttribute("aria-valuenow", n);
+  $("wzProg").setAttribute("aria-valuemax", total);
+  $("diagBtn").disabled = n<total;
+}
+$("diagBtn").onclick = ()=>{ if(QUESTIONS.every((_,i)=>isAnswered(i))) showResult(); };
+$("backBtn").onclick = ()=> goToHero();
 
 /* ===================== スコアリング（既存ロジック維持） ===================== */
 function scoreServices(){
@@ -965,31 +997,31 @@ function startQuiz(){
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
-  navDir="fwd"; render();
-  scrollToQuiz();
+  buildWizard();
+  $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function goToHero(){
-  step=0; Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(answers).forEach(k=>delete answers[k]);
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
-  render();
+  buildWizard();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function restart(){
-  step=0; Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(answers).forEach(k=>delete answers[k]);
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
-  navDir="fwd"; render();
-  scrollToQuiz();
+  buildWizard();
+  $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
 }
 $("startBtn").onclick = startQuiz;
 
 /* ===================== 初期化 ===================== */
 $("svcCount").textContent = SERVICES.length;
 $("svcChips").innerHTML = SERVICES.map(s=>`<span>${s.name.replace(/（.*?）/,"")}</span>`).join("");
-render();
+buildWizard();
 </script>
 </body>
 </html>
