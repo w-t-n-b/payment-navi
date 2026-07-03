@@ -361,10 +361,9 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 <header class="site">
   <div class="site-inner">
     <div class="logo">
-      <svg class="mark ic" aria-hidden="true"><use href="#i-scale"/></svg>
       決済<b>ナビ</b>
     </div>
-    <span class="data-date">広告掲載なし・中立診断</span>
+    <span class="data-date">キャッシュレス決済 比較診断</span>
   </div>
 </header>
 
@@ -372,20 +371,13 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 
   <!-- ===== HERO / LP ===== -->
   <section class="hero">
-    <span class="trust-pill"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>広告なし・優先表示なし・全社同一基準</span>
     <h1>あなたの店に本当に合う決済端末が、<br><span class="hl">60秒</span>でわかる。</h1>
-    <p class="sub">個人店・小規模店のための、対面キャッシュレス端末の<b>中立診断</b>。特定の決済事業者から報酬を受け取らず、あなたの条件だけで主要10社を年間コスト付きに採点します。</p>
+    <p class="sub">個人店・小規模店のための決済端末の比較診断。特定の決済事業者から報酬を受け取らず、あなたの入力条件だけで主要10社を年間コスト付きに採点します。</p>
     <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
     <div class="cta-note">無料・登録不要／所要約60秒</div>
 
-    <div class="promises" aria-label="3つの約束">
-      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-noads"/></svg></div><b>広告なし</b><small>特定事業者からの<br>報酬・広告費はゼロ</small></div>
-      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>優先表示なし</b><small>お金で順位が<br>変わることはない</small></div>
-      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></div><b>全社同一基準</b><small>あなたの入力条件<br>だけで機械的に採点</small></div>
-    </div>
-
     <div class="services-strip">
-      <div class="cap">主要<b id="svcCount">—</b>サービスを、同じ物差しで比較</div>
+      <div class="cap">比較対象の主要<b id="svcCount">—</b>サービス</div>
       <div class="chips" id="svcChips"></div>
     </div>
 
@@ -393,7 +385,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       <h2>診断のしくみ</h2>
       <div class="steps">
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></div><b>条件を入力</b><small>導入状況・年間取扱高・使いたい手段などに答えるだけ</small></div>
-        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>中立スコアリング</b><small>5観点をあなたの重視点で重みづけし全社を採点</small></div>
+        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>スコアリング</b><small>5観点をあなたの重視点で重みづけし全社を採点</small></div>
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></div><b>年間コスト試算</b><small>あなたの決済額でいくらかかるかを金額で提示</small></div>
       </div>
     </div>
@@ -403,7 +395,6 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
   <section id="shindan">
     <div class="section-lead">
       <h2>お店の条件を教えてください</h2>
-      <p>回答は保存されません。いつでも「最初へ」で戻れます。</p>
     </div>
     <div class="card" id="quizCard">
       <div class="wz-top">
@@ -412,8 +403,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       </div>
       <div class="progress" id="wzProg" role="progressbar" aria-label="診断の進捗"></div>
       <div class="acc-list" id="accList"></div>
-      <div class="nav">
-        <button class="btn btn-ghost" id="backBtn"><svg class="ic" aria-hidden="true"><use href="#i-arrow-l"/></svg>最初へ</button>
+      <div class="nav" style="justify-content:flex-end">
         <button class="btn btn-primary" id="diagBtn" disabled>診断する<svg class="ic" aria-hidden="true"><use href="#i-search"/></svg></button>
       </div>
     </div>
@@ -430,22 +420,22 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
     <details><summary><span class="q">Q</span>このツールはなぜ中立だと言えるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。</div></details>
     <details><summary><span class="q">Q</span>料率・費用のデータはいつ時点のもの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。</div></details>
     <details><summary><span class="q">Q</span>診断結果の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と年間取扱高で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同じ計算式で採点しています。</div></details>
-    <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">診断そのものは登録不要・匿名でご利用いただけます。詳細な結果やご相談をご希望の場合のみ、任意で連絡先をご入力いただきます。いただいた情報は<a href="#privacy">プライバシーポリシー</a>に基づき、結果の詳細表示とご相談対応にのみ利用し、第三者には提供しません。</div></details>
+    <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">診断そのものは登録不要・匿名でご利用いただけます。詳細な結果やご相談をご希望の場合のみ、任意で連絡先をご入力いただきます。いただいた情報は<a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に基づき、結果の詳細表示とご相談対応にのみ利用し、第三者には提供しません。</div></details>
     <details><summary><span class="q">Q</span>年間コスト目安はどう計算していますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">「端末費用＋月額×12ヶ月＋年間取扱高×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。</div></details>
   </section>
 
   <!-- ===== 運営者・免責 ===== -->
   <div class="about">
     <h3>運営者情報・免責事項</h3>
-    <p>「決済ナビ」は個人店・小規模店舗向けに、対面キャッシュレス決済端末を中立に比較する情報提供ツールです（運営者情報は準備中）。</p>
-    <h3 id="privacy" style="margin-top:14px">プライバシーポリシー</h3>
-    <p>診断のご利用に登録は不要です。詳細結果の表示・ご相談対応のために任意でご入力いただく連絡先（店舗・会社名／お名前／メールアドレス／電話番号）および診断結果は、当該目的の範囲でのみ利用し、ご本人の同意なく第三者へ提供しません。利用停止・削除のご希望には速やかに対応します。診断の入力条件は結果の算出に使うのみで、連絡先を入力されない限り送信・保存されません。</p>
+    <p>「決済ナビ」は個人店・小規模店舗向けに、キャッシュレス決済端末を比較する情報提供ツールです（運営者情報は準備中）。</p>
     <p>掲載の料率・費用・キャンペーン内容は2026年7月時点で各社公式サイトを参照した参考値であり、正確性・最新性を保証するものではありません。実際の契約条件は決済ブランド・プラン・審査結果により異なります。契約の判断は、必ず各社公式サイトの最新情報をご確認のうえ、お客様ご自身の責任で行ってください。本ツールの利用により生じたいかなる損害についても、運営者は責任を負いかねます。</p>
+    <p><a href="privacy.html">プライバシーポリシー</a></p>
   </div>
 
   <footer>
-    決済ナビ ｜ 特定の決済事業者から報酬を受け取らない中立診断ツールです。<br>
-    掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。
+    決済ナビ ｜ 特定の決済事業者から報酬を受け取らず、入力条件のみで採点しています。<br>
+    掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    <a href="privacy.html">プライバシーポリシー</a>
   </footer>
 </div>
 
@@ -746,7 +736,6 @@ function updateProgress(){
   $("diagBtn").disabled = n<total;
 }
 $("diagBtn").onclick = ()=>{ if(QUESTIONS.every((_,i)=>isAnswered(i))) showResult(); };
-$("backBtn").onclick = ()=> goToHero();
 
 /* ===================== スコアリング（既存ロジック維持） ===================== */
 function scoreServices(){
@@ -994,7 +983,7 @@ function showResult(){
           <div class="lf-row"><input name="name" placeholder="お名前" required></div>
           <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
           <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
-          <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="#privacy">プライバシーポリシー</a>に同意して送信します</span></label>
+          <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
           <button type="submit" class="btn btn-primary">${ctaLabel}${ICON("i-arrow")}</button>
           <p class="lf-note">診断は無料・中立です。入力情報は結果の詳細表示とご相談対応にのみ利用し、第三者へ提供しません。</p>
         </form>
