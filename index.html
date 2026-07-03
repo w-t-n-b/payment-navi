@@ -3,196 +3,504 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>決済ナビ｜個店のための中立キャッシュレス端末診断</title>
-<meta name="description" content="広告なし・完全中立。あなたの店の条件を入力するだけで、対面決済に最適な決済端末・包括事業者を年間コスト付きで診断します。">
+<title>決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断【主要10社を年間コスト比較】</title>
+<meta name="description" content="広告なし・完全中立。お店の条件を60秒入力するだけで、対面決済に最適なキャッシュレス端末・包括事業者を主要10社から年間コスト付きで診断します。特定事業者からの報酬・優先表示は一切なし。">
+<link rel="canonical" href="https://w-t-n-b.github.io/payment-navi/">
+<meta name="theme-color" content="#1558d6">
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断">
+<meta property="og:description" content="お店の条件を60秒入力するだけで、対面決済に最適な端末を主要10社から年間コスト付きで中立診断。広告なし・優先表示なし。">
+<meta property="og:url" content="https://w-t-n-b.github.io/payment-navi/">
+<meta property="og:site_name" content="決済ナビ">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断">
+<meta name="twitter:description" content="お店の条件を60秒入力するだけで最適な決済端末を主要10社から中立診断。広告なし・優先表示なし。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"決済ナビ",
+  "url":"https://w-t-n-b.github.io/payment-navi/",
+  "applicationCategory":"BusinessApplication",
+  "operatingSystem":"Web",
+  "description":"個人店・小規模店舗向けの、広告なし・中立の対面キャッシュレス決済端末 診断ツール。主要10社を年間コストで比較します。",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"このツールはなぜ中立だと言えるの？","acceptedAnswer":{"@type":"Answer","text":"特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。"}},
+    {"@type":"Question","name":"料率・費用のデータはいつ時点のもの？","acceptedAnswer":{"@type":"Answer","text":"2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。"}},
+    {"@type":"Question","name":"診断結果の順位はどうやって決まるの？","acceptedAnswer":{"@type":"Answer","text":"手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と月間決済額で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同一の計算式で採点しています。"}},
+    {"@type":"Question","name":"個人情報は登録・保存されますか？","acceptedAnswer":{"@type":"Answer","text":"登録は不要です。入力内容は診断の計算にのみ使い、サーバーや端末には保存しません。"}},
+    {"@type":"Question","name":"年間コスト目安はどう計算していますか？","acceptedAnswer":{"@type":"Answer","text":"「端末費用＋月額×12ヶ月＋月間決済額×12ヶ月×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。"}}
+  ]
+}
+</script>
 <style>
-  :root{
-    --bg:#f6f8fb; --card:#ffffff; --ink:#1a2233; --sub:#5b6577; --line:#e5e9f0;
-    --brand:#2563eb; --brand-ink:#1d4ed8; --brand-soft:#eff4ff;
-    --good:#0f9d58; --warn:#e8890c; --gold:#b8860b;
-    --shadow:0 1px 3px rgba(20,30,60,.06),0 8px 24px rgba(20,30,60,.06);
-    --radius:16px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  body{
-    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
-    background:var(--bg); color:var(--ink); line-height:1.7; -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
-  header.site{text-align:center;padding:28px 0 8px}
-  .logo{font-size:1.55rem;font-weight:800;letter-spacing:.02em}
-  .logo b{color:var(--brand)}
-  .tagline{color:var(--sub);font-size:.92rem;margin-top:4px}
-  .neutral-badge{
-    display:inline-flex;align-items:center;gap:6px;margin-top:14px;
-    background:var(--brand-soft);color:var(--brand-ink);font-size:.8rem;font-weight:700;
-    padding:6px 14px;border-radius:999px;border:1px solid #d7e3ff;
-  }
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 22px;margin-top:20px}
-  /* progress */
-  .progress{display:flex;gap:6px;margin-bottom:22px}
-  .progress i{flex:1;height:6px;border-radius:99px;background:var(--line);transition:.3s}
-  .progress i.on{background:var(--brand)}
-  .step-count{font-size:.8rem;color:var(--sub);font-weight:700;letter-spacing:.05em;margin-bottom:6px}
-  .q-title{font-size:1.24rem;font-weight:800;margin:0 0 4px}
-  .q-note{color:var(--sub);font-size:.86rem;margin:0 0 18px}
-  /* options */
-  .opts{display:grid;gap:10px}
-  .opts.two{grid-template-columns:1fr 1fr}
-  .opt{
-    display:flex;align-items:center;gap:12px;text-align:left;width:100%;
-    background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;
-    font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer;transition:.15s;
-  }
-  .opt:hover{border-color:#c3d3f5;background:#fbfcff}
-  .opt .em{font-size:1.3rem;line-height:1}
-  .opt .lbl small{display:block;font-weight:500;color:var(--sub);font-size:.78rem;margin-top:2px}
-  .opt.sel{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
-  .opt.sel::after{content:"✓";margin-left:auto;color:var(--brand);font-weight:900}
-  .multi-hint{font-size:.78rem;color:var(--sub);margin:0 0 14px;font-weight:600}
-  /* nav */
-  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px}
-  .btn{border:none;border-radius:12px;padding:13px 24px;font-size:1rem;font-weight:800;cursor:pointer;transition:.15s}
-  .btn-primary{background:var(--brand);color:#fff}
-  .btn-primary:hover{background:var(--brand-ink)}
-  .btn-primary:disabled{background:#c3cde0;cursor:not-allowed}
-  .btn-ghost{background:transparent;color:var(--sub)}
-  .btn-ghost:hover{color:var(--ink)}
-  /* result */
-  .result-head{text-align:center;margin-bottom:6px}
-  .result-head h2{font-size:1.35rem;margin:0 0 6px}
-  .result-head p{color:var(--sub);font-size:.9rem;margin:0}
-  .rank{position:relative;border:1.5px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-top:16px;background:#fff}
-  .rank.top{border-color:#f2d98b;box-shadow:0 0 0 3px rgba(184,134,11,.08)}
-  .rank-badge{position:absolute;top:-11px;left:16px;font-size:.72rem;font-weight:800;padding:3px 12px;border-radius:99px;background:#eef2f9;color:var(--sub)}
-  .rank.top .rank-badge{background:linear-gradient(90deg,#f6d365,#d4a017);color:#4a3600}
-  .rank-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:4px}
-  .rank-name{font-size:1.18rem;font-weight:800}
-  .rank-score{font-size:.82rem;font-weight:800;color:var(--brand)}
-  .rank-score b{font-size:1.15rem}
-  .cost{background:var(--brand-soft);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:.86rem}
-  .cost .big{font-size:1.45rem;font-weight:800;color:var(--brand-ink);letter-spacing:-.01em}
-  .cost .brk{color:var(--sub);font-size:.76rem;margin-top:2px}
-  .facts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-  .facts span{font-size:.76rem;background:#f2f5fa;border-radius:7px;padding:3px 9px;color:#3d485c;font-weight:600}
-  .why{font-size:.85rem;margin:8px 0 0}
-  .why .pro{color:var(--good);font-weight:700}
-  .why .con{color:var(--warn);font-weight:700}
-  .why ul{margin:6px 0 0;padding-left:18px}
-  .why li{margin:2px 0}
-  .official{display:inline-block;margin-top:10px;font-size:.82rem;font-weight:700;color:var(--brand)}
-  /* table */
-  details.compare{margin-top:22px}
-  details.compare summary{cursor:pointer;font-weight:800;color:var(--brand);font-size:.92rem}
-  .tbl-scroll{overflow-x:auto;margin-top:12px}
-  table{border-collapse:collapse;width:100%;font-size:.8rem;min-width:560px}
-  th,td{border:1px solid var(--line);padding:8px 10px;text-align:center}
-  th{background:#f2f5fa;font-weight:700}
-  td.name{text-align:left;font-weight:700;white-space:nowrap}
-  .disc{font-size:.76rem;color:var(--sub);margin-top:22px;background:#fbfcfe;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
-  .disc b{color:#3d485c}
-  footer{text-align:center;color:var(--sub);font-size:.78rem;margin-top:34px}
-  .restart{margin-top:20px;text-align:center}
-  .hidden{display:none}
-  @media(max-width:520px){.opts.two{grid-template-columns:1fr}}
+/* =========================================================
+   決済ナビ — デザインシステム（4pxグリッド・ライトテーマ）
+   ========================================================= */
+:root{
+  /* brand & semantic */
+  --brand:#1558d6; --brand-ink:#0f3fa0; --brand-soft:#eaf1ff; --brand-line:#cfe0ff;
+  --gold:#a9791a; --gold-soft:#fdf4dd; --gold-line:#efd79a;
+  --good:#0a8a4f; --good-soft:#e7f6ee;
+  --warn:#c06a08; --warn-soft:#fdf1e2;
+  /* neutrals */
+  --ink:#111a2e; --sub:#5a6577; --faint:#8a93a3;
+  --line:#e4e8f0; --line-soft:#eef1f6; --bg:#f5f7fb; --card:#ffffff; --chip:#f1f4f9;
+  /* space (4px grid) */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s8:32px; --s10:40px; --s12:48px;
+  /* radius */
+  --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:22px; --r-pill:999px;
+  /* shadow */
+  --sh-sm:0 1px 2px rgba(17,26,46,.05);
+  --sh:0 1px 3px rgba(17,26,46,.06),0 8px 22px rgba(17,26,46,.06);
+  --sh-lg:0 4px 12px rgba(17,26,46,.08),0 18px 40px rgba(17,26,46,.10);
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.75; -webkit-font-smoothing:antialiased;
+  font-feature-settings:"palt";
+}
+.num{font-family:"Roboto Mono","Noto Sans JP",monospace;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+a{color:var(--brand)}
+:focus-visible{outline:3px solid rgba(21,88,214,.45);outline-offset:2px;border-radius:6px}
+.wrap{max-width:780px;margin:0 auto;padding:0 var(--s4)}
+.ic{width:1.25em;height:1.25em;display:inline-block;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* ---------- header ---------- */
+header.site{position:sticky;top:0;z-index:20;background:rgba(245,247,251,.86);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid var(--line-soft)}
+.site-inner{max-width:780px;margin:0 auto;padding:10px var(--s4);display:flex;align-items:center;justify-content:space-between;gap:var(--s3)}
+.logo{font-size:1.18rem;font-weight:800;letter-spacing:.01em;display:flex;align-items:center;gap:7px}
+.logo b{color:var(--brand)}
+.logo .mark{width:26px;height:26px;flex:none}
+.data-date{font-size:.7rem;color:var(--sub);background:var(--chip);border:1px solid var(--line);border-radius:var(--r-pill);padding:3px 10px;font-weight:600;white-space:nowrap}
+
+/* ---------- hero / LP ---------- */
+.hero{text-align:center;padding:var(--s10) 0 var(--s6)}
+.trust-pill{display:inline-flex;align-items:center;gap:6px;background:var(--brand-soft);color:var(--brand-ink);border:1px solid var(--brand-line);border-radius:var(--r-pill);padding:6px 15px;font-size:.8rem;font-weight:700;margin-bottom:var(--s5)}
+.trust-pill .ic{width:1em;height:1em}
+.hero h1{font-size:2rem;font-weight:800;line-height:1.42;letter-spacing:.01em;margin:0 0 var(--s4)}
+.hero h1 .hl{color:var(--brand);position:relative;white-space:nowrap}
+.hero h1 .hl::after{content:"";position:absolute;left:0;right:0;bottom:.04em;height:.34em;background:var(--brand-soft);z-index:-1;border-radius:3px}
+.hero .sub{color:var(--sub);font-size:1rem;max-width:34em;margin:0 auto var(--s6);font-weight:500}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:var(--brand);color:#fff;border:none;border-radius:var(--r-lg);padding:16px 34px;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(21,88,214,.28);transition:transform .15s var(--ease),background .15s,box-shadow .15s;font-family:inherit}
+.cta:hover{background:var(--brand-ink);transform:translateY(-1px);box-shadow:0 10px 22px rgba(21,88,214,.34)}
+.cta:active{transform:translateY(0)}
+.cta .ic{width:1.05em;height:1.05em;stroke-width:2.2}
+.cta-note{color:var(--faint);font-size:.82rem;margin-top:var(--s3);font-weight:600}
+
+.promises{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin:var(--s10) 0 var(--s6)}
+.promise{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5) var(--s3);box-shadow:var(--sh-sm);text-align:center}
+.promise .pi{width:40px;height:40px;border-radius:11px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin:0 auto var(--s3)}
+.promise .pi .ic{width:22px;height:22px}
+.promise b{display:block;font-size:.94rem;font-weight:700}
+.promise small{display:block;color:var(--sub);font-size:.78rem;margin-top:3px;font-weight:500;line-height:1.6}
+
+.services-strip{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5);box-shadow:var(--sh-sm);margin-bottom:var(--s6)}
+.services-strip .cap{font-size:.82rem;color:var(--sub);font-weight:700;text-align:center;margin-bottom:var(--s3)}
+.services-strip .cap b{color:var(--brand)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips span{font-size:.8rem;font-weight:700;color:#39445a;background:var(--chip);border:1px solid var(--line);border-radius:var(--r-pill);padding:6px 13px}
+
+.how{margin-bottom:var(--s6)}
+.how h2{text-align:center;font-size:1.15rem;font-weight:800;margin:0 0 var(--s5)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);counter-reset:st}
+.stepc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5) var(--s4);text-align:center;box-shadow:var(--sh-sm)}
+.stepc .no{counter-increment:st;position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--brand);color:#fff;font-size:.78rem;font-weight:800;display:grid;place-items:center}
+.stepc .no::after{content:counter(st)}
+.stepc .si{width:44px;height:44px;border-radius:12px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin:var(--s2) auto var(--s3)}
+.stepc .si .ic{width:24px;height:24px}
+.stepc b{font-size:.92rem;display:block}
+.stepc small{color:var(--sub);font-size:.78rem;font-weight:500;display:block;margin-top:3px;line-height:1.6}
+
+/* ---------- card ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh);padding:var(--s6) var(--s5)}
+section{scroll-margin-top:72px}
+.section-lead{text-align:center;margin:var(--s10) 0 var(--s4)}
+.section-lead h2{font-size:1.35rem;font-weight:800;margin:0 0 var(--s1)}
+.section-lead p{color:var(--sub);font-size:.9rem;margin:0}
+
+/* ---------- wizard ---------- */
+.wz-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);margin-bottom:var(--s2)}
+.step-count{font-size:.78rem;color:var(--brand);font-weight:800;letter-spacing:.04em}
+.time-left{font-size:.75rem;color:var(--sub);font-weight:600}
+.progress{display:flex;gap:5px;margin-bottom:var(--s6)}
+.progress i{flex:1;height:6px;border-radius:99px;background:var(--line);transition:background .4s var(--ease)}
+.progress i.on{background:var(--brand)}
+.progress i.cur{background:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+.q-title{font-size:1.28rem;font-weight:800;margin:0 0 var(--s1);letter-spacing:.01em}
+.q-note{color:var(--sub);font-size:.86rem;margin:0 0 var(--s5)}
+.q-note .help{display:inline-block;background:var(--good-soft);color:var(--good);border-radius:6px;padding:1px 8px;font-size:.78rem;font-weight:700;margin-left:2px}
+.q-anim{animation:slideIn .28s var(--ease)}
+.q-anim.back{animation:slideInBack .28s var(--ease)}
+@keyframes slideIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+@keyframes slideInBack{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+.multi-hint{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--sub);margin:0 0 var(--s3);font-weight:600}
+.opts{display:grid;gap:10px}
+.opts.two{grid-template-columns:1fr 1fr}
+.opt{
+  display:flex;align-items:center;gap:14px;text-align:left;width:100%;
+  background:#fff;border:1.5px solid var(--line);border-radius:var(--r);padding:15px 16px;
+  font-size:1rem;font-weight:700;color:var(--ink);cursor:pointer;
+  transition:border-color .15s,background .15s,box-shadow .15s,transform .12s var(--ease);
+  font-family:inherit;min-height:60px;
+}
+.opt:hover{border-color:var(--brand-line);background:#fbfcff}
+.opt:active{transform:scale(.99)}
+.opt .oi{flex:none;width:38px;height:38px;border-radius:10px;background:var(--chip);color:#48536a;display:grid;place-items:center;transition:.15s}
+.opt .oi .ic{width:21px;height:21px}
+.opt .lbl small{display:block;font-weight:500;color:var(--sub);font-size:.78rem;margin-top:1px}
+.opt .tick{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;color:#fff;transition:.15s}
+.opt .tick .ic{width:14px;height:14px;stroke-width:2.6;opacity:0;transform:scale(.5);transition:.15s var(--ease)}
+.opt.sel{border-color:var(--brand);background:var(--brand-soft);box-shadow:0 0 0 3px rgba(21,88,214,.1)}
+.opt.sel .oi{background:var(--brand);color:#fff}
+.opt.sel .tick{background:var(--brand);border-color:var(--brand)}
+.opt.sel .tick .ic{opacity:1;transform:none}
+.nav{display:flex;justify-content:space-between;gap:var(--s3);margin-top:var(--s6)}
+.btn{border:none;border-radius:var(--r);padding:14px 24px;font-size:1rem;font-weight:800;cursor:pointer;transition:.15s;font-family:inherit;display:inline-flex;align-items:center;gap:7px}
+.btn .ic{width:1em;height:1em;stroke-width:2.2}
+.btn-primary{background:var(--brand);color:#fff}
+.btn-primary:hover{background:var(--brand-ink)}
+.btn-primary:disabled{background:#c3cde0;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--sub)}
+.btn-ghost:hover{color:var(--ink);background:var(--line-soft)}
+.count-badge{background:rgba(255,255,255,.28);border-radius:var(--r-pill);padding:0 8px;font-size:.82rem;font-weight:800}
+
+/* ---------- result ---------- */
+.result-head{text-align:center;margin-bottom:var(--s5)}
+.result-head .eyebrow{color:var(--brand);font-weight:800;font-size:.82rem;letter-spacing:.06em}
+.result-head h2{font-size:1.5rem;margin:var(--s1) 0 var(--s2)}
+.result-head p{color:var(--sub);font-size:.9rem;margin:0}
+.reason-line{background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:var(--r);padding:10px 14px;font-size:.82rem;color:var(--brand-ink);font-weight:600;margin-top:var(--s4);text-align:left}
+.reason-line b{font-weight:800}
+
+/* top pick */
+.pick{border:2px solid var(--gold-line);border-radius:var(--r-xl);padding:var(--s6) var(--s5);margin-top:var(--s6);background:linear-gradient(180deg,#fffdf6,#fff);box-shadow:var(--sh-lg);position:relative}
+.pick-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,#e8bd52,#c99a1f);color:#3d2c00;font-size:.78rem;font-weight:800;padding:5px 18px;border-radius:var(--r-pill);white-space:nowrap;box-shadow:var(--sh-sm)}
+.pick-head{display:flex;align-items:center;gap:var(--s4);margin-top:var(--s2)}
+.gauge{flex:none;position:relative;width:88px;height:88px}
+.gauge svg{width:88px;height:88px;transform:rotate(-90deg)}
+.gauge .track{stroke:var(--line);}
+.gauge .fill{stroke:var(--brand);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.gauge .val{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column;text-align:center}
+.gauge .val b{font-size:1.5rem;font-weight:800;line-height:1;color:var(--brand-ink)}
+.gauge .val small{font-size:.62rem;color:var(--sub);font-weight:700;letter-spacing:.04em}
+.pick-name{font-size:1.32rem;font-weight:800;line-height:1.3}
+.pick-tag{display:inline-block;font-size:.74rem;font-weight:700;color:var(--good);background:var(--good-soft);border-radius:6px;padding:2px 9px;margin-top:5px}
+.pick-cost{background:var(--brand-soft);border:1px solid var(--brand-line);border-radius:var(--r);padding:14px 16px;margin:var(--s5) 0}
+.pick-cost .lab{font-size:.8rem;color:var(--brand-ink);font-weight:700}
+.pick-cost .big{font-size:1.9rem;font-weight:800;color:var(--brand-ink);letter-spacing:-.02em;line-height:1.1;margin:2px 0}
+.pick-cost .brk{color:var(--sub);font-size:.76rem}
+.why{background:var(--card);border:1px dashed var(--brand-line);border-radius:var(--r);padding:var(--s4);margin:var(--s4) 0}
+.why .wh{font-size:.82rem;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.why ul{margin:0;padding-left:18px;font-size:.85rem}
+.why li{margin:3px 0}
+.why li b{color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:7px;margin:var(--s4) 0}
+.facts span{font-size:.76rem;background:var(--chip);border:1px solid var(--line);border-radius:7px;padding:4px 10px;color:#3d485c;font-weight:600}
+.pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin:var(--s4) 0}
+@media(max-width:520px){.pc-grid{grid-template-columns:1fr}}
+.pc{border-radius:var(--r);padding:12px 14px;font-size:.84rem}
+.pc.pro{background:var(--good-soft)}
+.pc.con{background:var(--warn-soft)}
+.pc .h{font-weight:800;font-size:.8rem;display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.pc.pro .h{color:var(--good)} .pc.con .h{color:var(--warn)}
+.pc ul{margin:0;padding-left:16px}
+.pc li{margin:2px 0}
+/* CTA区（将来「無料相談」に差し替え可能な配置） */
+.pick-cta{margin-top:var(--s5)}
+.pick-cta .btn-primary{width:100%;justify-content:center;font-size:1.02rem;padding:15px}
+.pick-cta .sub-links{display:flex;gap:var(--s3);margin-top:var(--s3);justify-content:center;flex-wrap:wrap}
+.pick-cta .sub-links a{font-size:.82rem;font-weight:700}
+
+/* runner-up cards */
+.runners{margin-top:var(--s6)}
+.runner{display:flex;align-items:center;gap:var(--s4);border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s4);margin-top:var(--s3);background:#fff;box-shadow:var(--sh-sm)}
+.runner .rk{flex:none;width:34px;height:34px;border-radius:9px;background:var(--chip);color:var(--sub);font-weight:800;display:grid;place-items:center;font-size:.9rem}
+.runner .rn{font-weight:800;font-size:1rem}
+.runner .rc{color:var(--sub);font-size:.78rem}
+.runner .rc b{color:var(--ink)}
+.runner .rp{margin-left:auto;text-align:right;flex:none}
+.runner .rp .n{font-weight:800;color:var(--brand);font-size:1.05rem}
+.runner .rp small{display:block;font-size:.68rem;color:var(--sub);font-weight:700}
+
+/* annual cost chart (SVG) */
+.chart-card{margin-top:var(--s6)}
+.chart-card h3{font-size:1rem;font-weight:800;margin:0 0 var(--s2)}
+.chart-legend{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:.76rem;color:var(--sub);font-weight:600;margin-bottom:var(--s3)}
+.chart-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.lg-dev{background:#9db4e0}.lg-mon{background:#4d80d8}.lg-fee{background:#1558d6}
+.cost-chart{width:100%;height:auto;display:block}
+.cost-chart .cname{font-size:9px;font-weight:700;fill:var(--ink)}
+.cost-chart .cname.top{fill:var(--gold)}
+.cost-chart .camt{font-size:9px;font-weight:700;fill:var(--sub)}
+.cost-chart .seg-dev{fill:#9db4e0}.cost-chart .seg-mon{fill:#4d80d8}.cost-chart .seg-fee{fill:#1558d6}
+
+/* comparison table */
+.compare{margin-top:var(--s6)}
+.compare h3{font-size:1rem;font-weight:800;margin:0 0 var(--s3)}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;font-size:.8rem;min-width:620px}
+th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:center}
+thead th{background:var(--chip);font-weight:700;position:sticky;top:0}
+td.name{text-align:left;font-weight:700;white-space:nowrap}
+tr.hl td{background:var(--gold-soft)}
+tr.hl td.name{color:var(--gold)}
+.disc{font-size:.77rem;color:var(--sub);margin-top:var(--s6);background:#fbfcfe;border:1px solid var(--line);border-radius:var(--r);padding:var(--s4)}
+.disc b{color:#3d485c}
+.restart{margin-top:var(--s6);text-align:center}
+
+/* FAQ */
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-top:var(--s2);overflow:hidden}
+.faq summary{cursor:pointer;font-weight:700;font-size:.94rem;padding:15px var(--s4);list-style:none;display:flex;align-items:center;gap:10px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .q{color:var(--brand);font-weight:800;flex:none}
+.faq summary .cr{margin-left:auto;transition:transform .2s var(--ease);color:var(--sub)}
+.faq details[open] summary .cr{transform:rotate(180deg)}
+.faq .a{padding:0 var(--s4) var(--s4) 42px;font-size:.86rem;color:#3a445a}
+
+/* about / footer */
+.about{margin-top:var(--s6);font-size:.8rem;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:var(--s5)}
+.about h3{font-size:.9rem;color:var(--ink);margin:0 0 var(--s2)}
+.about p{margin:0 0 var(--s2)}
+footer{text-align:center;color:var(--faint);font-size:.78rem;margin:var(--s10) 0 var(--s12);line-height:1.9}
+.hidden{display:none}
+
+/* responsive */
+@media(max-width:600px){
+  .hero{padding:var(--s8) 0 var(--s5)}
+  .hero h1{font-size:1.6rem}
+  .promises{grid-template-columns:1fr;gap:var(--s2)}
+  .promise{display:flex;align-items:center;gap:var(--s3);text-align:left;padding:var(--s3) var(--s4)}
+  .promise .pi{margin:0}
+  .steps{grid-template-columns:1fr}
+  .card{padding:var(--s5) var(--s4)}
+  .opts.two{grid-template-columns:1fr}
+  .pick-head{flex-direction:column;text-align:center}
+  .pick-name{text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="site">
-    <div class="logo">決済<b>ナビ</b></div>
-    <div class="tagline">個店のための、対面キャッシュレス端末 中立診断</div>
-    <div class="neutral-badge">🛡 広告なし・優先表示なし｜スコアはあなたの条件のみで決定</div>
-  </header>
 
-  <!-- 診断カード -->
-  <div class="card" id="quizCard">
-    <div class="progress" id="progress"></div>
-    <div class="step-count" id="stepCount"></div>
-    <h2 class="q-title" id="qTitle"></h2>
-    <p class="q-note" id="qNote"></p>
-    <div id="qBody"></div>
-    <div class="nav">
-      <button class="btn btn-ghost" id="backBtn">← 戻る</button>
-      <button class="btn btn-primary" id="nextBtn">次へ →</button>
+<!-- ===== SVG icon sprite ===== -->
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.2-3 7.4-7 9-4-1.6-7-4.8-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M6 21h12M5 7h14M12 4l-7 3M12 4l7 3"/><path d="M5 7l-2.6 6a3 3 0 0 0 5.2 0L5 7zM19 7l-2.6 6a3 3 0 0 0 5.2 0L19 7z"/></symbol>
+  <symbol id="i-noads" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A9 9 0 0 1 12 5c5 0 9 4.5 9 7 0 .9-.6 2.1-1.7 3.2M6.4 6.9C4.3 8.3 3 10.4 3 12c0 2.5 4 7 9 7a9 9 0 0 0 3.6-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H6M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 6h11M4 11h8M4 16h6"/><path d="M17 12l3 3-5 5h-3v-3z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 20v-6M12 20V7M17 20v-9"/></symbol>
+  <!-- industries -->
+  <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v6a2 2 0 0 0 4 0V3M8 9v12M16 3c-1.6 0-2.6 2-2.6 5s1 3.5 2.6 3.5V21"/></symbol>
+  <symbol id="i-retail" viewBox="0 0 24 24"><path d="M6 8h12l.9 11a1 1 0 0 1-1 1.1H6.1a1 1 0 0 1-1-1.1L6 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></symbol>
+  <symbol id="i-beauty" viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.5"/><circle cx="6" cy="17.5" r="2.5"/><path d="M8 8l11 8M8 16l11-8"/></symbol>
+  <symbol id="i-health" viewBox="0 0 24 24"><path d="M10 3h4v6h6v4h-6v6h-4v-6H4V9h6z"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M3 6h11v9H3zM14 9h4l3 3v3h-2M7 17h5"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 10l1.2-5h13.6L20 10M5 10v9h14v-9M4 10h16M9 19v-5h4v5"/></symbol>
+  <!-- methods -->
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M6.5 14.5h3"/></symbol>
+  <symbol id="i-touch" viewBox="0 0 24 24"><path d="M6.5 8.5a7 7 0 0 1 11 0M9 11a3.6 3.6 0 0 1 6 0"/><path d="M13 14.5a1.5 1.5 0 0 0-2 0v0M9 21l1.5-4.5a1.8 1.8 0 0 1 3.4 0L18 21"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M20 14v.01M14 20h.01M17 20h4"/></symbol>
+  <symbol id="i-transit" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="13" rx="2"/><path d="M6 10h12M9.5 20l-2 2M14.5 20l2 2"/><circle cx="9" cy="13" r=".6" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r=".6" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2.5"/></symbol>
+  <!-- priorities -->
+  <symbol id="i-yen" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 8l3.5 4 3.5-4M12 12v5M9.5 13.5h5M9.5 15.5h5"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M4 13h16M12 9v11M12 9c-1.6 0-4-.4-4-2.4S9.5 4 12 6c2.5-2 4-.4 4 .6S13.6 9 12 9z"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 2.6 2.8 15.4 0 18M12 3c-2.8 2.6-2.8 15.4 0 18"/></symbol>
+  <!-- terminal -->
+  <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10.5 18h3"/></symbol>
+  <symbol id="i-counter" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M8 11h8M9 20h6M12 16v4"/></symbol>
+  <symbol id="i-pos" viewBox="0 0 24 24"><path d="M6 3h12v18l-2-1.4L14 21l-2-1.4L10 21l-2-1.4L6 21z"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M9 15l6-6M10.5 6.5l1-1a4 4 0 0 1 5.7 5.7l-1 1M13.5 17.5l-1 1a4 4 0 0 1-5.7-5.7l1-1"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+</svg>
+
+<header class="site">
+  <div class="site-inner">
+    <div class="logo">
+      <svg class="mark ic" style="stroke:var(--brand)" aria-hidden="true"><use href="#i-scale"/></svg>
+      決済<b>ナビ</b>
     </div>
+    <span class="data-date">データ基準：2026年7月</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===== HERO / LP ===== -->
+  <section class="hero">
+    <span class="trust-pill"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg>広告なし・優先表示なし・全社同一基準</span>
+    <h1>あなたの店に本当に合う決済端末が、<br><span class="hl">60秒</span>でわかる。</h1>
+    <p class="sub">個人店・小規模店のための、対面キャッシュレス端末の<b>中立診断</b>。特定の決済事業者から報酬を受け取らず、あなたの条件だけで主要10社を年間コスト付きに採点します。</p>
+    <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <div class="cta-note">無料・登録不要／所要約60秒</div>
+
+    <div class="promises" aria-label="3つの約束">
+      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-noads"/></svg></div><b>広告なし</b><small>特定事業者からの<br>報酬・広告費はゼロ</small></div>
+      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>優先表示なし</b><small>お金で順位が<br>変わることはない</small></div>
+      <div class="promise"><div class="pi"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg></div><b>全社同一基準</b><small>あなたの入力条件<br>だけで機械的に採点</small></div>
+    </div>
+
+    <div class="services-strip">
+      <div class="cap">主要<b id="svcCount">—</b>サービスを、同じ物差しで比較</div>
+      <div class="chips" id="svcChips"></div>
+    </div>
+
+    <div class="how">
+      <h2>診断のしくみ</h2>
+      <div class="steps">
+        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></div><b>条件を入力</b><small>業種・決済額・使いたい手段など6問に答えるだけ</small></div>
+        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-scale"/></svg></div><b>中立スコアリング</b><small>5観点をあなたの重視点で重みづけし全社を採点</small></div>
+        <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></div><b>年間コスト試算</b><small>あなたの決済額でいくらかかるかを金額で提示</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 診断ウィザード ===== -->
+  <section id="shindan">
+    <div class="section-lead">
+      <h2>お店の条件を教えてください</h2>
+      <p>回答は保存されません。いつでも「最初へ」で戻れます。</p>
+    </div>
+    <div class="card" id="quizCard">
+      <div class="wz-top">
+        <span class="step-count" id="stepCount"></span>
+        <span class="time-left" id="timeLeft"></span>
+      </div>
+      <div class="progress" id="progress" role="progressbar" aria-label="診断の進捗"></div>
+      <div aria-live="polite">
+        <h2 class="q-title" id="qTitle"></h2>
+        <p class="q-note" id="qNote"></p>
+      </div>
+      <div id="qBody"></div>
+      <div class="nav">
+        <button class="btn btn-ghost" id="backBtn"><svg class="ic" aria-hidden="true"><use href="#i-arrow-l"/></svg><span id="backLbl">戻る</span></button>
+        <button class="btn btn-primary" id="nextBtn">次へ<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 結果 ===== -->
+  <section id="resultSection" class="hidden" aria-live="polite">
+    <div class="card" id="resultCard"></div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq">
+    <div class="section-lead"><h2>よくある質問</h2><p>中立性の担保とデータの考え方について</p></div>
+    <details><summary><span class="q">Q</span>このツールはなぜ中立だと言えるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。</div></details>
+    <details><summary><span class="q">Q</span>料率・費用のデータはいつ時点のもの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。</div></details>
+    <details><summary><span class="q">Q</span>診断結果の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と月間決済額で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同じ計算式で採点しています。</div></details>
+    <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">登録は不要です。入力内容は診断の計算にのみ使い、サーバーや端末には保存しません。</div></details>
+    <details><summary><span class="q">Q</span>年間コスト目安はどう計算していますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">「端末費用＋月額×12ヶ月＋月間決済額×12ヶ月×料率」で試算した概算です。実際の手数料は決済ブランドや契約プランによって異なります。</div></details>
+  </section>
+
+  <!-- ===== 運営者・免責 ===== -->
+  <div class="about">
+    <h3>運営者情報・免責事項</h3>
+    <p>「決済ナビ」は個人店・小規模店舗向けに、対面キャッシュレス決済端末を中立に比較する情報提供ツールです（運営者情報は準備中）。</p>
+    <p>掲載の料率・費用・キャンペーン内容は2026年7月時点で各社公式サイトを参照した参考値であり、正確性・最新性を保証するものではありません。実際の契約条件は決済ブランド・プラン・審査結果により異なります。契約の判断は、必ず各社公式サイトの最新情報をご確認のうえ、お客様ご自身の責任で行ってください。本ツールの利用により生じたいかなる損害についても、運営者は責任を負いかねます。</p>
   </div>
 
-  <!-- 結果カード -->
-  <div class="card hidden" id="resultCard"></div>
-
   <footer>
-    決済ナビ（MVP）｜このツールは特定の決済事業者から報酬を受け取らず、中立に診断します。<br>
+    決済ナビ ｜ 特定の決済事業者から報酬を受け取らない中立診断ツールです。<br>
     掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。
   </footer>
 </div>
 
 <script>
 /* =========================================================================
-   決済サービス データ（対面BtoC向け・主要6社）
-   ※ 料率/費用は変動します。この1オブジェクトを更新すれば全診断に反映されます。
-   ※ 参考値：2026年7月時点。契約前に各公式で要確認。
+   決済サービス データ（対面BtoC向け・主要10社）
+   ※ 料率/費用は変動します。この配列を更新すれば全診断に反映されます。
+   ※ 参考値：2026年7月時点。各社公式を確認。契約前に各公式で要確認。
+   決済手段キー: credit touch qr transit emoney  値=対応度0〜1
+   端末形態キー: mobile(持ち運び) counter(据置) pos(レジ一体)  値=適合度0〜1
+   payout/brands/pos: 0〜1のヒューリスティック評価
    ========================================================================= */
 const DATA_UPDATED = "2026年7月時点・参考値";
-
-// 決済手段キー: credit(クレカ) touch(タッチ) qr(QRコード) transit(交通系IC) emoney(iD/QUICPay)
-// 端末形態キー: mobile(持ち運び) counter(据置) pos(レジ一体POS)  値=適合度0〜1
 const SERVICES = [
   {
     id:"square", name:"Square（スクエア）",
-    device:4980, monthly:0, cardRate:0.0325, qrRate:0.0325,
+    device:4980, monthly:0, cardRate:0.025, qrRate:0.0325,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:1,counter:.9,pos:.9},
-    payout:.95, brands:.9, pos:.9, soloOk:true,
+    payout:.9, brands:.9, pos:.95, soloOk:true,
     devLabel:"Reader ¥4,980〜",
-    pros:["端末が最安クラスで導入しやすい","入金が最短翌営業日と速い","無料POSレジアプリ内蔵"],
-    cons:["カード料率(3.25%)はやや高め"],
+    pros:["対面クレカ2.5%は業界最安水準","端末が安く月額0円で導入コスト最小","POS・EC・請求書まで無料アプリが充実"],
+    cons:["QR・交通系・電子マネーは3.25%とやや高め","三井住友・みずほ以外は入金が週1回"],
     url:"https://squareup.com/jp/ja"
   },
   {
     id:"airpay", name:"Airペイ（リクルート）",
-    device:20167, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0324, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.9,counter:.9,pos:1},
     payout:.6, brands:1, pos:.95, soloOk:true,
-    devLabel:"カードリーダー（0円ｷｬﾝﾍﾟｰﾝ多い）",
-    pros:["対応ブランド数が最多クラス","Airレジ/Airシリーズと強力連携","端末0円キャンペーンが頻繁"],
-    cons:["入金は月6回で速さは中程度","iPad/iPhoneが別途必要"],
+    devLabel:"カードリーダー0円貸与（要iPad/iPhone）",
+    pros:["対応92ブランドで交通系ICまで網羅","端末0円＋月額0円＋振込手数料0円","Airレジとシームレスに連携"],
+    cons:["iPad/iPhoneが別途必要","標準クレカ3.24%は高め（2.48%は条件付き審査）"],
     url:"https://airregi.jp/payment/"
   },
   {
     id:"stores", name:"STORES決済",
-    device:19800, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    device:27720, monthly:0, cardRate:0.0248, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.95,counter:.85,pos:.8},
-    payout:.8, brands:.85, pos:.8, soloOk:true,
-    devLabel:"カードリーダー（0円ｷｬﾝﾍﾟｰﾝ有）",
-    pros:["手動申請なら入金が翌営業日と速い","交通系ICが低率(1.98%)","STORESレジ/ネットショップと連携"],
-    cons:["自動入金だと月1回になる"],
+    payout:.7, brands:.85, pos:.85, soloOk:true,
+    devLabel:"カードリーダー ¥27,720（スタンダードは無料）",
+    pros:["フリープランでもクレカ2.48%","交通系ICが1.98%と最安","スタンダード(月3,300円)ならクレカ1.98%"],
+    cons:["自動入金は月1回（翌月20日）と遅め","QR・iD/QUICPayは3.24%"],
     url:"https://stores.jp/payments"
   },
   {
     id:"stera", name:"stera pack（三井住友カード）",
-    device:0, monthly:3300, cardRate:0.027, qrRate:0.027,
+    device:0, monthly:3300, cardRate:0.027, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.3,counter:1,pos:.95},
-    payout:.55, brands:.95, pos:.85, soloOk:true,
-    devLabel:"オールインワン据置端末（初期0円）",
-    pros:["カード料率が2.70%と低い","レシートプリンタ内蔵のオールインワン据置","主要ブランド/QRを全網羅"],
-    cons:["月額3,300円がかかる","持ち運び用途には不向き"],
-    url:"https://www.smbc-card.com/nyukai/merchant/stera/"
+    payout:.7, brands:.95, pos:.85, soloOk:true,
+    devLabel:"オールインワン据置端末（端末0円・初年度月額0円）",
+    pros:["1台で30種類以上・レシートプリンタ内蔵","端末0円・初年度は月額も0円","三井住友銀行なら振込手数料0円・最短翌々営業日"],
+    cons:["2年目以降 月額3,300円（年間3,000万円で永年無料）","QR・交通系・電子マネーは3.24%と高め","持ち運び用途には不向き"],
+    url:"https://www.smbc-gp.co.jp/stera/"
   },
   {
     id:"rakuten", name:"楽天ペイ（実店舗）",
-    device:19800, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0248, qrRate:0.0248,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
-    terminal:{mobile:.9,counter:.85,pos:.5},
-    payout:.7, brands:.8, pos:.5, soloOk:true,
-    devLabel:"カードリーダー/ターミナル（0円ｷｬﾝﾍﾟｰﾝ有）",
-    pros:["楽天ポイントが使えて集客に有利","楽天銀行なら入金が翌日","楽天ペイQRの利用者が多い"],
-    cons:["外部POS連携はやや弱い"],
-    url:"https://checkout.rakuten.co.jp/"
+    terminal:{mobile:.9,counter:.85,pos:.6},
+    payout:.85, brands:.8, pos:.6, soloOk:true,
+    devLabel:"楽天ペイ ターミナル（0円CP／通常¥38,280）",
+    pros:["楽天銀行なら翌日入金・振込手数料無料","クレカ・楽天ペイQRが低率（ライト2.48%）","端末1台完結＋楽天ポイントで集客"],
+    cons:["楽天銀行以外は入金ごとに330円","端末0円条件・スタンダード月額2,200円は要確認"],
+    url:"https://pay.rakuten.co.jp/business/service/"
   },
   {
     id:"paypay", name:"PayPay（QR専用）",
@@ -200,10 +508,54 @@ const SERVICES = [
     methods:{credit:0,touch:0,qr:1,transit:0,emoney:0},
     terminal:{mobile:.9,counter:.8,pos:.4},
     payout:.7, brands:.3, pos:.4, soloOk:true,
-    devLabel:"端末不要（店頭QR/スマホ）",
-    pros:["端末費用0円・QR利用者数が国内最大","QR決済率が最安クラス(1.98%〜)","小規模・移動販売でも即導入"],
-    cons:["クレカ/電子マネーは非対応（QRのみ）"],
+    devLabel:"端末不要・QR貼るだけ（0円）",
+    pros:["端末0円・QR貼るだけで即導入","QR利用者数が国内最大で集客に強い","ライトプラン(月1,980円)なら1.60%"],
+    cons:["クレカ・交通系・電子マネーは非対応（QR単体）","多決済にはPayCAS等の別端末が必要"],
     url:"https://paypay.ne.jp/store/"
+  },
+  {
+    id:"usen", name:"USEN PAY",
+    device:0, monthly:0, cardRate:0.0299, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.85,counter:.9,pos:.9}, soloOk:true,
+    payout:.65, brands:.85, pos:.85,
+    devLabel:"1台完結端末（3か月0円キャンペーン）",
+    pros:["プリンタ・バッテリー内蔵の1台完結","Visa/MC 2.99%＋約70ブランド対応","全国365日サポート・翌日入金あり"],
+    cons:["月額0円は取扱高の条件付き","翌日入金は住信SBIネット銀行が必須"],
+    url:"https://usen.com/service/payment/u-pay/"
+  },
+  {
+    id:"smaregi", name:"スマレジ・PAYGATE",
+    device:0, monthly:3300, cardRate:0.0198, qrRate:0.02,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.9,counter:.9,pos:1}, soloOk:true,
+    payout:.7, brands:.9, pos:1,
+    devLabel:"PAYGATE端末（0円CP／通常¥39,600）",
+    pros:["スマレジPOSとネイティブ連携（会計を自動連携・二度打ち不要）","クレカ1.98%〜と低率","プリンタ・SIM内蔵で1台完結・屋外可"],
+    cons:["standalone構成は月3,300円","QRは入金が月1回","1.98%は中小事業者の条件付き"],
+    url:"https://smaregi.jp/payment/"
+  },
+  {
+    id:"otegaru", name:"おてがるPay（JMS）",
+    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.4,counter:1,pos:.85}, soloOk:true,
+    payout:.6, brands:.9, pos:.8,
+    devLabel:"VEGA3000端末（0円キャンペーン）",
+    pros:["71ブランド超・分割/リボ/ボーナス払い対応","端末0円・月2回入金なら手数料0円","全国約23万店の導入実績"],
+    cons:["種別・ブランド別の詳細料率は非公開（要見積り）","最速の月6回入金は1回198円"],
+    url:"https://www.japanmerchantservices.com/plan/otegaru/"
+  },
+  {
+    id:"timespay", name:"Times PAY（パーク24）",
+    device:0, monthly:2500, cardRate:0.0248, qrRate:0.0324,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:.6,counter:1,pos:.8}, soloOk:true,
+    payout:.6, brands:.85, pos:.7,
+    devLabel:"オールインワン端末（導入0円）",
+    pros:["通信費・振込手数料までTimes PAY負担で0円","パーク24の全国サポート・分割/リボ対応","中小支援プランでクレカ2.48%"],
+    cons:["月額2,500円固定（低売上店に割高）","最安2.48%は中小支援プランの条件付き（通常2.8%〜）"],
+    url:"https://timespay.jp/"
   }
 ];
 
@@ -212,55 +564,56 @@ const QUESTIONS = [
   {
     key:"industry", title:"どんな業種のお店ですか？", note:"診断の傾向づけに使います", type:"single",
     opts:[
-      {v:"food",em:"🍽",l:"飲食店",s:"居酒屋・カフェ・レストラン"},
-      {v:"retail",em:"🛍",l:"小売・物販",s:"雑貨・アパレル・食品販売"},
-      {v:"beauty",em:"💇",l:"美容・サロン",s:"美容室・ネイル・エステ"},
-      {v:"health",em:"🩺",l:"医療・治療院",s:"整体・接骨・クリニック"},
-      {v:"mobile",em:"🚚",l:"移動販売・イベント",s:"キッチンカー・催事・出張"},
-      {v:"other",em:"🏪",l:"その他の対面店",s:""}
+      {v:"food",ic:"i-food",l:"飲食店",s:"居酒屋・カフェ・レストラン"},
+      {v:"retail",ic:"i-retail",l:"小売・物販",s:"雑貨・アパレル・食品販売"},
+      {v:"beauty",ic:"i-beauty",l:"美容・サロン",s:"美容室・ネイル・エステ"},
+      {v:"health",ic:"i-health",l:"医療・治療院",s:"整体・接骨・クリニック"},
+      {v:"mobile",ic:"i-truck",l:"移動販売・イベント",s:"キッチンカー・催事・出張"},
+      {v:"other",ic:"i-store",l:"その他の対面店",s:""}
     ]
   },
   {
-    key:"volume", title:"月間のキャッシュレス決済額の見込みは？", note:"手数料の実額試算と、料率の重要度に反映します", type:"single",
+    key:"volume", title:"月間のキャッシュレス決済額の見込みは？",
+    note:"手数料の実額試算に使います", help:"現金を含む月商の3〜5割が目安", type:"single",
     opts:[
-      {v:15,em:"🌱",l:"〜30万円",s:"月商 目安15万円で試算"},
-      {v:65,em:"📈",l:"30〜100万円",s:"月商 目安65万円で試算"},
-      {v:200,em:"🚀",l:"100〜300万円",s:"月商 目安200万円で試算"},
-      {v:400,em:"🏢",l:"300万円〜",s:"月商 目安400万円で試算"}
+      {v:15,ic:"i-yen",l:"〜30万円",s:"月あたり約15万円で試算"},
+      {v:65,ic:"i-yen",l:"30〜100万円",s:"月あたり約65万円で試算"},
+      {v:200,ic:"i-yen",l:"100〜300万円",s:"月あたり約200万円で試算"},
+      {v:400,ic:"i-yen",l:"300万円〜",s:"月あたり約400万円で試算"}
     ]
   },
   {
-    key:"methods", title:"使いたい決済手段は？", note:"複数選択できます", type:"multi",
+    key:"methods", title:"使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
     opts:[
-      {v:"credit",em:"💳",l:"クレジットカード",s:"VISA/Master/JCB等"},
-      {v:"touch",em:"📲",l:"タッチ決済",s:"NFC非接触"},
-      {v:"qr",em:"📱",l:"QRコード決済",s:"PayPay・楽天ペイ等"},
-      {v:"transit",em:"🚃",l:"交通系IC",s:"Suica・PASMO等"},
-      {v:"emoney",em:"🔑",l:"iD・QUICPay",s:"電子マネー"}
+      {v:"credit",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
+      {v:"touch",ic:"i-touch",l:"タッチ決済",s:"NFC非接触・Apple Pay等"},
+      {v:"qr",ic:"i-qr",l:"QRコード決済",s:"PayPay・楽天ペイ 等"},
+      {v:"transit",ic:"i-transit",l:"交通系IC",s:"Suica・PASMO 等"},
+      {v:"emoney",ic:"i-key",l:"iD・QUICPay",s:"電子マネー"}
     ]
   },
   {
     key:"terminal", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
     opts:[
-      {v:"mobile",em:"🤳",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
-      {v:"counter",em:"🏬",l:"カウンター据置",s:"レジ横に固定して使う"},
-      {v:"pos",em:"🧾",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
+      {v:"mobile",ic:"i-mobile",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
+      {v:"counter",ic:"i-counter",l:"カウンター据置",s:"レジ横に固定して使う"},
+      {v:"pos",ic:"i-pos",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
     ]
   },
   {
-    key:"priorities", title:"特に重視したいのは？", note:"複数選択可。選んだ項目の重みが上がります", type:"multi",
+    key:"priorities", title:"特に重視したいのは？", note:"選んだ項目の重みが上がります（複数選択可）", type:"multi",
     opts:[
-      {v:"fee",em:"💰",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
-      {v:"initial",em:"🎁",l:"初期費用の安さ",s:"端末・月額を抑えたい"},
-      {v:"payout",em:"⚡️",l:"入金の速さ",s:"資金繰りを重視"},
-      {v:"brands",em:"🌐",l:"対応ブランドの多さ",s:"あらゆる支払いに対応したい"}
+      {v:"fee",ic:"i-yen",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
+      {v:"initial",ic:"i-gift",l:"初期費用の安さ",s:"端末・月額を抑えたい"},
+      {v:"payout",ic:"i-bolt",l:"入金の速さ",s:"資金繰りを重視"},
+      {v:"brands",ic:"i-globe",l:"対応ブランドの多さ",s:"あらゆる支払いに対応したい"}
     ]
   },
   {
     key:"pos", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
     opts:[
-      {v:"yes",em:"🔗",l:"必要",s:"POSレジ・売上管理と繋げたい"},
-      {v:"no",em:"➖",l:"特に不要",s:"決済ができれば十分"}
+      {v:"yes",ic:"i-link",l:"必要",s:"POSレジ・売上管理と繋げたい"},
+      {v:"no",ic:"i-minus",l:"特に不要",s:"決済ができれば十分"}
     ]
   }
 ];
@@ -268,36 +621,53 @@ const QUESTIONS = [
 /* ===================== 状態 ===================== */
 const answers = {};
 let step = 0;
-
+let navDir = "fwd";
 const $ = id => document.getElementById(id);
+const ICON = id => `<svg class="ic" aria-hidden="true"><use href="#${id}"/></svg>`;
 
+/* ===================== ウィザード描画 ===================== */
 function render(){
   const q = QUESTIONS[step];
-  // progress
-  $("progress").innerHTML = QUESTIONS.map((_,i)=>`<i class="${i<=step?'on':''}"></i>`).join("");
-  $("stepCount").textContent = `STEP ${step+1} / ${QUESTIONS.length}`;
+  const total = QUESTIONS.length;
+  $("progress").innerHTML = QUESTIONS.map((_,i)=>`<i class="${i<step?'on':''}${i===step?' cur':''}"></i>`).join("");
+  $("progress").setAttribute("aria-valuenow", step+1);
+  $("progress").setAttribute("aria-valuemin", 1);
+  $("progress").setAttribute("aria-valuemax", total);
+  $("stepCount").textContent = `STEP ${step+1} / ${total}`;
+  const remain = Math.max(8,(total-step)*8);
+  $("timeLeft").textContent = `あと約${remain}秒`;
   $("qTitle").textContent = q.title;
-  $("qNote").textContent = q.note;
+  $("qNote").innerHTML = q.note + (q.help?` <span class="help">${q.help}</span>`:"");
+
   const cur = answers[q.key];
   const two = q.opts.length<=2 ? "two":"";
-  let html = q.type==="multi" ? `<p class="multi-hint">✓ 当てはまるものをすべて選択</p>`:"";
-  html += `<div class="opts ${two}">` + q.opts.map(o=>{
-    let sel=false;
-    if(q.type==="multi") sel = Array.isArray(cur)&&cur.includes(o.v);
-    else sel = cur===o.v;
-    return `<button class="opt ${sel?'sel':''}" data-v="${o.v}">
-      <span class="em">${o.em}</span>
+  let html = q.type==="multi" ? `<p class="multi-hint">${ICON("i-check")}当てはまるものをすべて選択</p>`:"";
+  html += `<div class="opts ${two}" role="group">` + q.opts.map(o=>{
+    let sel = q.type==="multi" ? (Array.isArray(cur)&&cur.includes(o.v)) : cur===o.v;
+    return `<button class="opt ${sel?'sel':''}" data-v="${o.v}" aria-pressed="${sel}">
+      <span class="oi">${ICON(o.ic)}</span>
       <span class="lbl">${o.l}${o.s?`<small>${o.s}</small>`:""}</span>
+      <span class="tick">${ICON("i-check")}</span>
     </button>`;
   }).join("") + `</div>`;
-  $("qBody").innerHTML = html;
+  const body = $("qBody");
+  body.innerHTML = html;
+  body.className = "q-anim" + (navDir==="back"?" back":"");
+  // reflow to restart animation
+  void body.offsetWidth;
 
-  $("qBody").querySelectorAll(".opt").forEach(btn=>{
+  body.querySelectorAll(".opt").forEach((btn,idx,list)=>{
     btn.onclick = ()=>choose(q, btn.dataset.v);
+    btn.onkeydown = e=>{
+      if(e.key==="ArrowDown"||e.key==="ArrowRight"){e.preventDefault();(list[idx+1]||list[0]).focus();}
+      if(e.key==="ArrowUp"||e.key==="ArrowLeft"){e.preventDefault();(list[idx-1]||list[list.length-1]).focus();}
+    };
   });
 
-  $("backBtn").style.visibility = step===0 ? "hidden":"visible";
-  $("nextBtn").textContent = step===QUESTIONS.length-1 ? "診断する 🔎":"次へ →";
+  $("backLbl").textContent = step===0 ? "最初へ" : "戻る";
+  const nb = $("nextBtn");
+  if(step===total-1){ nb.innerHTML = `診断する${ICON("i-search")}`; }
+  else { nb.innerHTML = `次へ${ICON("i-arrow")}`; }
   updateNext(q);
 }
 
@@ -308,20 +678,22 @@ function choose(q, rawV){
     const i = arr.indexOf(v);
     if(i>=0) arr.splice(i,1); else arr.push(v);
     answers[q.key]=arr;
+    render();
   }else{
     answers[q.key]=v;
-  }
-  render();
-  // 単一選択は自動で次へ（最終ステップ以外）
-  if(q.type==="single" && step<QUESTIONS.length-1){
-    setTimeout(()=>{ step++; render(); }, 180);
+    render();
+    if(step<QUESTIONS.length-1){ navDir="fwd"; setTimeout(()=>{ step++; render(); }, 200); }
   }
 }
 
 function updateNext(q){
   const cur = answers[q.key];
-  const ok = q.type==="multi" ? (Array.isArray(cur)&&cur.length>0) : (cur!==undefined);
+  const cnt = Array.isArray(cur)?cur.length:0;
+  const ok = q.type==="multi" ? cnt>0 : (cur!==undefined);
   $("nextBtn").disabled = !ok;
+  if(q.type==="multi" && cnt>0 && step<QUESTIONS.length-1){
+    $("nextBtn").innerHTML = `次へ <span class="count-badge">${cnt}</span>${ICON("i-arrow")}`;
+  }
 }
 
 $("nextBtn").onclick = ()=>{
@@ -329,68 +701,49 @@ $("nextBtn").onclick = ()=>{
   const cur = answers[q.key];
   const ok = q.type==="multi" ? (Array.isArray(cur)&&cur.length>0) : (cur!==undefined);
   if(!ok) return;
-  if(step<QUESTIONS.length-1){ step++; render(); }
+  if(step<QUESTIONS.length-1){ navDir="fwd"; step++; render(); scrollToQuiz(); }
   else showResult();
 };
-$("backBtn").onclick = ()=>{ if(step>0){ step--; render(); } };
+$("backBtn").onclick = ()=>{
+  navDir="back";
+  if(step>0){ step--; render(); scrollToQuiz(); }
+  else goToHero();
+};
+function scrollToQuiz(){ $("shindan").scrollIntoView({behavior:"smooth",block:"start"}); }
 
-/* ===================== スコアリング ===================== */
+/* ===================== スコアリング（既存ロジック維持） ===================== */
 function scoreServices(){
-  const volume = answers.volume;             // 万円
-  const methods = answers.methods||[];
-  const term = answers.terminal;
-  const pris = answers.priorities||[];
-  const needPos = answers.pos==="yes";
-
-  // 月商が大きいほど手数料の重みを上げる（中立ロジック）
+  const volume = answers.volume, methods = answers.methods||[], term = answers.terminal;
+  const pris = answers.priorities||[], needPos = answers.pos==="yes";
   const volFeeFactor = {15:0, 65:.3, 200:.8, 400:1.5}[volume] || 0;
-
-  // 重み（base + 重視点ブースト）
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
 
-  // 正規化用の生データ収集
   const raw = SERVICES.map(s=>{
-    // 端末サービスのカード料率が無い(PayPay)場合はQR率で代用
     const rate = s.cardRate!=null ? s.cardRate : s.qrRate;
-    const annualFee = volume*10000*rate*12;             // 手数料 年額
-    const annualCost = s.device + s.monthly*12 + annualFee; // 総保有コスト 年額
+    const annualFee = volume*10000*rate*12;
+    const annualCost = s.device + s.monthly*12 + annualFee;
     return {s, rate, annualFee, annualCost};
   });
-
   const min=(f)=>Math.min(...raw.map(f)), max=(f)=>Math.max(...raw.map(f));
-  const norm=(x,lo,hi)=> hi===lo?1:(x-lo)/(hi-lo);
   const invnorm=(x,lo,hi)=> hi===lo?1:1-(x-lo)/(hi-lo);
-
   const feeLo=min(r=>r.rate), feeHi=max(r=>r.rate);
   const initLo=min(r=>r.s.device+r.s.monthly*12), initHi=max(r=>r.s.device+r.s.monthly*12);
 
   const scored = raw.map(r=>{
     const s=r.s;
-    // 各次元 0〜1
     const feeS = invnorm(r.rate, feeLo, feeHi);
     const initS= invnorm(s.device+s.monthly*12, initLo, initHi);
-    const payS = s.payout;
-    const brandS = s.brands;
-    const posS = s.pos;
-
-    // 適合フィルタ（乗算）：端末形態と決済手段カバレッジ
+    const payS=s.payout, brandS=s.brands, posS=s.pos;
     const termFit = s.terminal[term] ?? .5;
     let cover = 1;
-    if(methods.length){
-      const hit = methods.filter(m=>s.methods[m]>0).length;
-      cover = hit/methods.length;      // 手段カバー率
-    }
-    // カバー率は強めに効かせる（0のとき大幅減点）
+    if(methods.length){ cover = methods.filter(m=>s.methods[m]>0).length/methods.length; }
     const coverMult = 0.25 + 0.75*cover;
     const fitMult = (0.35 + 0.65*termFit) * coverMult;
-
     const base = w.fee*feeS + w.initial*initS + w.payout*payS + w.brands*brandS + w.pos*posS;
     const total = base * fitMult;
-
     return {...r, feeS, initS, cover, termFit, total};
   });
-
   const maxTotal = Math.max(...scored.map(x=>x.total));
   scored.forEach(x=> x.pct = Math.round(x.total/maxTotal*100));
   scored.sort((a,b)=> b.total-a.total);
@@ -402,122 +755,240 @@ const yen = n => "¥"+Math.round(n).toLocaleString("ja-JP");
 const TERM_LABEL={mobile:"持ち運び",counter:"据置",pos:"レジ一体POS"};
 const METHOD_LABEL={credit:"クレカ",touch:"タッチ",qr:"QR",transit:"交通系",emoney:"iD/QUICPay"};
 const PRI_LABEL={fee:"手数料の安さ",initial:"初期費用の安さ",payout:"入金の速さ",brands:"対応ブランド"};
+function payoutTxt(p){
+  if(p>=.9) return "最短翌営業日";
+  if(p>=.8) return "翌日〜";
+  if(p>=.65) return "翌日/月2回〜";
+  if(p>=.55) return "月2回程度";
+  return "月3〜6回";
+}
+function rateText(s){ return s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
+function rateShort(s){ return s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%" : (s.qrRate*100).toFixed(2)+"%(QR)"; }
+
+/* 「なぜこの順位か」— ユーザー条件が効いた点を文章化（中立性の証明） */
+function whyBullets(x, R){
+  const s=x.s, out=[];
+  out.push(`端末形態「<b>${TERM_LABEL[R.term]}</b>」への適合度が高い`);
+  if(R.pris.includes("fee")||R.volFeeFactor>0){
+    out.push(`重視した<b>手数料</b>で有利（料率 ${rateText(s)}）`);
+  }
+  if(R.pris.includes("initial")) out.push(`重視した<b>初期費用</b>が抑えめ（端末${yen(s.device)}／月額${s.monthly>0?yen(s.monthly):"0円"}）`);
+  if(R.pris.includes("payout")) out.push(`重視した<b>入金速度</b>が速い（${payoutTxt(s.payout)}）`);
+  if(R.pris.includes("brands")) out.push(`重視した<b>対応ブランド</b>が広い`);
+  if(R.needPos) out.push(`<b>レジ連携</b>の要望に対応`);
+  if(R.methods.length){
+    const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>METHOD_LABEL[m]);
+    if(miss.length===0) out.push(`選んだ決済手段（${R.methods.map(m=>METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`);
+  }
+  return out.slice(0,4);
+}
+
+/* 年間コスト内訳の積み上げ横棒（SVG） */
+function costChartSVG(R){
+  const rows=R.scored, W=320, rowH=40, padL=6, padR=6, top=6;
+  const maxCost=Math.max(...rows.map(r=>r.annualCost))||1;
+  const barMax=W-padL-padR;
+  let bars="";
+  rows.forEach((x,i)=>{
+    const s=x.s, y=top+i*rowH;
+    const barY=y+16, h=13;
+    const dev=s.device, mon=s.monthly*12, fee=x.annualFee;
+    const wDev=dev/maxCost*barMax, wMon=mon/maxCost*barMax, wFee=fee/maxCost*barMax;
+    const isTop=i===0;
+    bars+=`<text class="cname${isTop?' top':''}" x="${padL}" y="${y+11}">${isTop?'★ ':''}${escapeXml(s.name)}</text>`;
+    bars+=`<text class="camt" x="${W-padR}" y="${y+11}" text-anchor="end">${yen(x.annualCost)}</text>`;
+    let cx=padL;
+    if(wDev>0.3){bars+=`<rect class="seg-dev" x="${cx}" y="${barY}" width="${wDev}" height="${h}" rx="2"/>`;cx+=wDev;}
+    if(wMon>0.3){bars+=`<rect class="seg-mon" x="${cx}" y="${barY}" width="${wMon}" height="${h}" rx="2"/>`;cx+=wMon;}
+    if(wFee>0.3){bars+=`<rect class="seg-fee" x="${cx}" y="${barY}" width="${wFee}" height="${h}" rx="2"/>`;}
+  });
+  const H=top+rows.length*rowH;
+  return `<svg class="cost-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="各社の年間コスト内訳">${bars}</svg>`;
+}
+function escapeXml(s){return s.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));}
 
 function showResult(){
   const R = scoreServices();
   $("quizCard").classList.add("hidden");
+  $("shindan").classList.add("hidden");
+  $("resultSection").classList.remove("hidden");
   const rc = $("resultCard");
-  rc.classList.remove("hidden");
 
-  const reasonBits = [];
+  const reasonBits=[];
   reasonBits.push(`端末は「${TERM_LABEL[R.term]}」向け`);
   if(R.methods.length) reasonBits.push(R.methods.map(m=>METHOD_LABEL[m]).join("・")+"に対応");
-  if(R.pris.length) reasonBits.push("重視点＝"+R.pris.map(p=>PRI_LABEL[p]).join("・"));
-  if(R.volFeeFactor>0) reasonBits.push("決済額が大きいため手数料の比重UP");
+  if(R.pris.length) reasonBits.push("重視＝"+R.pris.map(p=>PRI_LABEL[p]).join("・"));
+  if(R.volFeeFactor>0) reasonBits.push("決済額が大きく手数料の比重UP");
   if(R.needPos) reasonBits.push("レジ連携を優先");
 
-  let html = `
-    <div class="result-head">
-      <h2>あなたの店に合う決済はこれ 🎯</h2>
-      <p>月間決済額 <b>${R.volume}万円</b>の条件で年間コストを試算・${R.scored.length}社を中立採点</p>
+  const top=R.scored[0], s0=top.s;
+  const C=44, r=38, circ=2*Math.PI*r, off=circ*(1-top.pct/100);
+
+  let html=`
+  <div class="result-head">
+    <div class="eyebrow">DIAGNOSIS RESULT</div>
+    <h2>あなたの店に合う決済はこれ</h2>
+    <p>月間決済額 <b class="num">${R.volume}万円</b>の条件で年間コストを試算・${R.scored.length}社を中立採点</p>
+    <div class="reason-line">${ICON("i-scale")} <b>診断の観点：</b>${reasonBits.join(" ／ ")}</div>
+  </div>
+
+  <!-- 1位：おすすめ -->
+  <div class="pick">
+    <span class="pick-badge">🏆 総合1位・あなたへのおすすめ</span>
+    <div class="pick-head">
+      <div class="gauge">
+        <svg viewBox="0 0 ${C*2} ${C*2}"><circle class="track" cx="${C}" cy="${C}" r="${r}" fill="none" stroke-width="8"/><circle class="fill" cx="${C}" cy="${C}" r="${r}" fill="none" stroke-width="8" stroke-dasharray="${circ}" stroke-dashoffset="${circ}" data-off="${off}"/></svg>
+        <div class="val"><b class="num">${top.pct}</b><small>適合スコア</small></div>
+      </div>
+      <div>
+        <div class="pick-name">${s0.name}</div>
+        <span class="pick-tag">${s0.devLabel}</span>
+      </div>
     </div>
-    <p class="q-note" style="text-align:center;margin-top:10px">診断の観点：${reasonBits.join(" ／ ")}</p>
-  `;
 
-  R.scored.forEach((x,i)=>{
+    <div class="pick-cost">
+      <div class="lab">年間コスト目安</div>
+      <div class="big num">${yen(top.annualCost)}</div>
+      <div class="brk">＝ 端末 <span class="num">${yen(s0.device)}</span> ＋ 月額 <span class="num">${yen(s0.monthly*12)}</span> ＋ 手数料 <span class="num">${yen(top.annualFee)}</span>（決済額${R.volume}万×12ヶ月×<span class="num">${(top.rate*100).toFixed(2)}%</span>）</div>
+    </div>
+
+    <div class="why">
+      <div class="wh">${ICON("i-scale")}なぜこの順位？ ― あなたの条件がこう効きました</div>
+      <ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul>
+    </div>
+
+    <div class="facts">
+      <span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span>
+      <span>${rateText(s0)}</span>
+      <span>入金 ${payoutTxt(s0.payout)}</span>
+    </div>
+
+    <div class="pc-grid">
+      <div class="pc pro"><div class="h">${ICON("i-check")}強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>
+      <div class="pc con"><div class="h">! 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div>
+    </div>
+
+    <!-- CTA区（将来ここが「無料相談」CTAに差し替わる想定） -->
+    <div class="pick-cta">
+      <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">公式サイトで最新条件を確認${ICON("i-ext")}</a>
+      <div class="sub-links">
+        <a href="#compareSec">▼ 全${R.scored.length}社を比較する</a>
+        <a href="#" onclick="restart();return false;">条件を変えて再診断</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2位以下 -->
+  <div class="runners">`;
+
+  R.scored.slice(1).forEach((x,i)=>{
     const s=x.s;
-    const top = i===0;
-    const rank = ["🥇 総合1位","🥈 2位","🥉 3位","4位","5位","6位"][i];
-    const rateTxt = s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%` : `QR ${(s.qrRate*100).toFixed(2)}%`;
-    const facts = [
-      s.devLabel,
-      s.monthly>0?`月額 ${yen(s.monthly)}`:"月額 0円",
-      rateTxt,
-      `入金 ${payoutTxt(s.payout)}`
-    ];
-    // このユーザー条件に対する注意（選んだ手段の非対応など）
-    const missing = (R.methods||[]).filter(m=>!(s.methods[m]>0)).map(m=>METHOD_LABEL[m]);
-    const cons = s.cons.slice();
-    if(missing.length) cons.unshift(`選択した「${missing.join("・")}」は非対応`);
-
-    html += `
-    <div class="rank ${top?'top':''}">
-      <span class="rank-badge">${rank}</span>
-      <div class="rank-top">
-        <span class="rank-name">${s.name}</span>
-        <span class="rank-score">適合 <b>${x.pct}</b>%</span>
+    html+=`
+    <div class="runner">
+      <div class="rk">${i+2}</div>
+      <div>
+        <div class="rn">${s.name}</div>
+        <div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div>
       </div>
-      <div class="cost">
-        年間コスト目安 <span class="big">${yen(x.annualCost)}</span>
-        <div class="brk">＝ 端末${yen(s.device)} ＋ 月額${yen(s.monthly*12)} ＋ 手数料${yen(x.annualFee)}（決済額${R.volume}万×12ヶ月×${(x.rate*100).toFixed(2)}%）</div>
-      </div>
-      <div class="facts">${facts.map(f=>`<span>${f}</span>`).join("")}</div>
-      <div class="why">
-        <span class="pro">◎ 強み</span>
-        <ul>${s.pros.map(p=>`<li>${p}</li>`).join("")}</ul>
-        <span class="con">△ 注意</span>
-        <ul>${cons.map(c=>`<li>${c}</li>`).join("")}</ul>
-      </div>
-      <a class="official" href="${s.url}" target="_blank" rel="noopener">公式サイトで最新条件を確認 ↗</a>
+      <div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div>
     </div>`;
   });
+  html+=`</div>`;
 
-  // 比較表
-  html += `
-  <details class="compare">
-    <summary>📊 全${R.scored.length}社を表で比較する</summary>
+  /* 年間コスト比較チャート */
+  html+=`
+  <div class="chart-card card" style="margin-top:var(--s6)">
+    <h3>${ICON("i-chart")} 年間コスト比較（${R.volume}万円/月の場合）</h3>
+    <div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>
+    ${costChartSVG(R)}
+  </div>`;
+
+  /* 常設比較表 */
+  html+=`
+  <div class="compare card" id="compareSec" style="margin-top:var(--s6)">
+    <h3>📊 全${R.scored.length}社 比較表</h3>
     <div class="tbl-scroll">
       <table>
-        <tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr>
-        ${R.scored.map(x=>{
-          const s=x.s;
-          const rateTxt = s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%" : (s.qrRate*100).toFixed(2)+"%(QR)";
-          return `<tr>
-            <td class="name">${s.name}</td>
-            <td>${yen(s.device)}</td>
-            <td>${s.monthly>0?yen(s.monthly):"0"}</td>
-            <td>${rateTxt}</td>
-            <td>${yen(x.annualCost)}</td>
-            <td>${payoutTxt(s.payout)}</td>
-            <td>${x.pct}%</td>
-          </tr>`;
-        }).join("")}
+        <thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead>
+        <tbody>
+        ${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}">
+          <td class="name">${i===0?'★ ':''}${s.name}</td>
+          <td class="num">${yen(s.device)}</td>
+          <td class="num">${s.monthly>0?yen(s.monthly):"0"}</td>
+          <td class="num">${rateShort(s)}</td>
+          <td class="num">${yen(x.annualCost)}</td>
+          <td>${payoutTxt(s.payout)}</td>
+          <td class="num">${x.pct}%</td>
+        </tr>`;}).join("")}
+        </tbody>
       </table>
     </div>
-  </details>
+  </div>
 
   <div class="disc">
-    <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。
-    スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と決済額に応じて重みづけし、
-    端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの月間決済額を基にした試算です。<br><br>
+    <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と決済額に応じて重みづけし、端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの月間決済額を基にした試算です。<br><br>
     料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランドや契約プランで異なります。契約前に必ず各社公式でご確認ください。
   </div>
 
   <div class="restart">
-    <button class="btn btn-ghost" onclick="restart()">↺ もう一度診断する</button>
+    <button class="btn btn-ghost" onclick="copyResult()" id="copyBtn">${ICON("i-copy")}診断結果をコピー</button>
+    <button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button>
   </div>`;
 
   rc.innerHTML = html;
-  window.scrollTo({top:0,behavior:"smooth"});
+  // ゲージのアニメーション発火
+  requestAnimationFrame(()=>{ const f=rc.querySelector(".gauge .fill"); if(f) f.style.strokeDashoffset=f.dataset.off; });
+  $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-function payoutTxt(p){
-  if(p>=.9) return "最短翌営業日";
-  if(p>=.75) return "翌営業日〜";
-  if(p>=.65) return "翌日/月1〜";
-  if(p>=.55) return "月2回程度";
-  return "月6回";
+function consFor(s,R){
+  const cons=s.cons.slice();
+  const miss=(R.methods||[]).filter(m=>!(s.methods[m]>0)).map(m=>METHOD_LABEL[m]);
+  if(miss.length) cons.unshift(`選択した「${miss.join("・")}」は非対応`);
+  return cons;
 }
 
-function restart(){
-  step=0;
-  Object.keys(answers).forEach(k=>delete answers[k]);
-  $("resultCard").classList.add("hidden");
+/* 結果をテキスト要約でクリップボードへ */
+function copyResult(){
+  const R=scoreServices();
+  const lines=[`【決済ナビ 診断結果】月間決済額 約${R.volume}万円`,""];
+  R.scored.forEach((x,i)=>{ lines.push(`${i+1}位 ${x.s.name}（適合${x.pct}%）年間コスト目安 ${yen(x.annualCost)}／${rateText(x.s)}`); });
+  lines.push("","※2026年7月時点の参考値。契約前に各社公式で最新条件をご確認ください。","診断: 決済ナビ https://w-t-n-b.github.io/payment-navi/");
+  const text=lines.join("\n");
+  navigator.clipboard?.writeText(text).then(()=>{
+    const b=$("copyBtn"); const o=b.innerHTML; b.innerHTML=`${ICON("i-check")}コピーしました`; setTimeout(()=>b.innerHTML=o,1800);
+  }).catch(()=>{ alert(text); });
+}
+
+/* ===================== 画面遷移 ===================== */
+function startQuiz(){
+  $("resultSection").classList.add("hidden");
+  $("shindan").classList.remove("hidden");
+  $("quizCard").classList.remove("hidden");
+  navDir="fwd"; render();
+  scrollToQuiz();
+}
+function goToHero(){
+  step=0; Object.keys(answers).forEach(k=>delete answers[k]);
+  $("resultSection").classList.add("hidden");
+  $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
   render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
+function restart(){
+  step=0; Object.keys(answers).forEach(k=>delete answers[k]);
+  $("resultSection").classList.add("hidden");
+  $("shindan").classList.remove("hidden");
+  $("quizCard").classList.remove("hidden");
+  navDir="fwd"; render();
+  scrollToQuiz();
+}
+$("startBtn").onclick = startQuiz;
 
+/* ===================== 初期化 ===================== */
+$("svcCount").textContent = SERVICES.length;
+$("svcChips").innerHTML = SERVICES.map(s=>`<span>${s.name.replace(/（.*?）/,"")}</span>`).join("");
 render();
 </script>
 </body>
