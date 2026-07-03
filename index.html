@@ -58,19 +58,22 @@
 html,body{margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
-  background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
 .num{font-variant-numeric:tabular-nums}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
 :focus-visible{outline:2px solid var(--blue);outline-offset:1px}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+/* 全幅セクション帯（本文は中央920pxに揃える） */
+.band-grey{position:relative;left:50%;width:100vw;margin-left:-50vw;background:var(--sub-bg);border-block:1px solid var(--line);padding:28px max(20px,calc(50vw - 460px));margin-top:28px}
+.band-grey>*{max-width:920px;margin-left:auto;margin-right:auto}
 .ic{width:1.05em;height:1.05em;display:inline-block;vertical-align:-.15em;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
 .hidden{display:none}
 
 /* header */
 header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-.site-inner{max-width:760px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.site-inner{max-width:920px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{font-size:16px;font-weight:700;color:var(--navy)}
 .logo b{color:var(--blue)}
 .logo .mark{display:none}
@@ -414,6 +417,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
     <div class="card" id="resultCard"></div>
   </section>
 
+  <div class="band-grey">
   <!-- ===== FAQ ===== -->
   <section class="faq">
     <div class="section-lead"><h2>よくある質問</h2><p>中立性の担保とデータの考え方について</p></div>
@@ -437,6 +441,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
     掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
     <a href="privacy.html">プライバシーポリシー</a>
   </footer>
+  </div>
 </div>
 
 <script>
