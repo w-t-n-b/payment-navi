@@ -193,6 +193,8 @@ section{scroll-margin-top:60px}
 .route-banner .rb-ic{display:none}
 .route-banner .rb-title{font-weight:700;font-size:15px;color:var(--navy)}
 .route-banner .rb-desc{font-size:13px;color:var(--text);margin-top:3px}
+.ch-head{font-size:16px;font-weight:700;color:var(--navy);margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--blue)}
+.cart-note{font-size:12px;color:var(--muted);margin:14px 0 0;background:var(--sub-bg);border:1px solid var(--line);border-radius:4px;padding:9px 11px}
 
 /* pick（1位） */
 .pick{border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:4px;padding:16px;margin-top:14px;background:#fff}
@@ -567,75 +569,220 @@ const SERVICES = [
   }
 ];
 
-/* ===================== 診断質問 ===================== */
-const QUESTIONS = [
-  {
-    key:"status", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため、最初に伺います", type:"single",
-    opts:[
-      {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだ決済端末を持っていない"},
-      {v:"exist_hokatsu",ic:"i-card",l:"導入済み・包括事業者と契約",s:"Square・Airペイ・stera 等と契約中"},
-      {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別契約",s:"カード会社／アクワイアラと直接契約"},
-      {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
-    ]
-  },
-  {
-    key:"industry", title:"どんな業種のお店ですか？", note:"診断の傾向づけに使います", type:"single",
-    opts:[
-      {v:"food",ic:"i-food",l:"飲食店",s:"居酒屋・カフェ・レストラン"},
-      {v:"retail",ic:"i-retail",l:"小売・物販",s:"雑貨・アパレル・食品販売"},
-      {v:"beauty",ic:"i-beauty",l:"美容・サロン",s:"美容室・ネイル・エステ"},
-      {v:"health",ic:"i-health",l:"医療・治療院",s:"整体・接骨・クリニック"},
-      {v:"mobile",ic:"i-truck",l:"移動販売・イベント",s:"キッチンカー・催事・出張"},
-      {v:"other",ic:"i-store",l:"その他の対面店",s:""}
-    ]
-  },
-  {
-    key:"volume", title:"年間の取扱高（キャッシュレス決済額）は？",
-    note:"手数料の試算と、最適な契約形態の判定に使います", help:"これから導入の方は見込みでOK", type:"single",
-    opts:[
-      {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
-      {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
-      {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
-      {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
-      {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
-      {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
-    ]
-  },
-  {
-    key:"methods", title:"使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
-    opts:[
-      {v:"credit",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
-      {v:"touch",ic:"i-touch",l:"タッチ決済",s:"NFC非接触・Apple Pay等"},
-      {v:"qr",ic:"i-qr",l:"QRコード決済",s:"PayPay・楽天ペイ 等"},
-      {v:"transit",ic:"i-transit",l:"交通系IC",s:"Suica・PASMO 等"},
-      {v:"emoney",ic:"i-key",l:"iD・QUICPay",s:"電子マネー"}
-    ]
-  },
-  {
-    key:"terminal", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
-    opts:[
-      {v:"mobile",ic:"i-mobile",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
-      {v:"counter",ic:"i-counter",l:"カウンター据置",s:"レジ横に固定して使う"},
-      {v:"pos",ic:"i-pos",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
-    ]
-  },
-  {
-    key:"priorities", title:"特に重視したいのは？", note:"選んだ項目の重みが上がります（複数選択可）", type:"multi",
-    opts:[
-      {v:"fee",ic:"i-yen",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
-      {v:"initial",ic:"i-gift",l:"初期費用の安さ",s:"端末・月額を抑えたい"},
-      {v:"payout",ic:"i-bolt",l:"入金の速さ",s:"資金繰りを重視"},
-      {v:"brands",ic:"i-globe",l:"対応ブランドの多さ",s:"あらゆる支払いに対応したい"}
-    ]
-  },
-  {
-    key:"pos", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
-    opts:[
-      {v:"yes",ic:"i-link",l:"必要",s:"POSレジ・売上管理と繋げたい"},
-      {v:"no",ic:"i-minus",l:"特に不要",s:"決済ができれば十分"}
-    ]
-  }
+/* ===================== EC決済サービス（ネットショップ向け・主要10社） =====================
+   ※ 2026年7月時点・参考値。cardRate=null は料率非公開（要見積）。
+   methods: card conveni defer(後払い) carrier qr amazonpay paypal bank  値=対応度0〜1
+   carts: shopify base stores makeshop colorme futureshop eccube own  値=適合0〜1（そのカートで使えるか）
+   payout/sub(定期課金)/cross(越境)/ease(導入手軽さ): 0〜1
+   ========================================================================================= */
+const EC_SERVICES = [
+  { id:"shopify", name:"Shopify ペイメント", kind:"cart", initial:0, monthly:3650, cardRate:0.0355,
+    methods:{card:1,conveni:.4,defer:.4,carrier:.4,qr:.5,amazonpay:0,paypal:1,bank:.3},
+    carts:{shopify:1}, payout:.7, sub:1, cross:1, ease:.7, quoteOnly:false,
+    devLabel:"月額¥3,650〜（Basic年払）",
+    pros:["越境・多通貨・拡張性が圧倒的","上位プランのカード料率は国内最安級","Payments利用なら取引手数料0円"],
+    cons:["月額が高め","国内手段(コンビニ/PayPay/後払い)はKOMOJU等アプリ追加が前提"],
+    url:"https://www.shopify.com/jp" },
+  { id:"base", name:"BASE かんたん決済", kind:"cart", initial:0, monthly:0, cardRate:0.066,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
+    carts:{base:1}, payout:.3, sub:.6, cross:.6, ease:1, quoteOnly:false,
+    devLabel:"初期・月額0円（スタンダード）",
+    pros:["初期・月額0円で最も手軽に開始","決済手段が幅広く標準搭載","2026年〜海外販売も標準化"],
+    cons:["スタンダードは実質6.6%+40円と割高（グロースは2.9%）","入金が最短10営業日と遅い"],
+    url:"https://thebase.com/" },
+  { id:"stores_ec", name:"STORES 決済（ネットショップ）", kind:"cart", initial:0, monthly:0, cardRate:0.055,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
+    carts:{stores:1}, payout:.3, sub:.4, cross:.2, ease:1, quoteOnly:false,
+    devLabel:"初期・月額0円（フリー）",
+    pros:["フリーは初期・月額0円","楽天ペイ・PayPay・atone等 国内決済網が広い","スタンダード(月3,300円)なら3.6%〜"],
+    cons:["フリーは5.5%〜と割高","入金が翌月末と遅い"],
+    url:"https://stores.jp/ec" },
+  { id:"stripe", name:"Stripe", kind:"psp", initial:0, monthly:0, cardRate:0.036,
+    methods:{card:1,conveni:1,defer:0,carrier:0,qr:.8,amazonpay:0,paypal:0,bank:1},
+    carts:{own:1,eccube:1,shopify:.5,makeshop:.4,colorme:.4,futureshop:.3}, payout:.6, sub:1, cross:1, ease:.5, quoteOnly:false,
+    devLabel:"初期・月額0円（従量 3.6%）",
+    pros:["API/ドキュメントが最強クラス","135通貨・越境に強い","定期課金や周辺機能が豊富"],
+    cons:["海外カード+2%等でトータル料率が積み上がる","本領は自社開発で実装工数が要る"],
+    url:"https://stripe.com/jp" },
+  { id:"square_ec", name:"Square オンライン決済", kind:"psp", initial:0, monthly:0, cardRate:0.036,
+    methods:{card:1,conveni:0,defer:0,carrier:0,qr:0,amazonpay:0,paypal:0,bank:0},
+    carts:{own:1}, payout:.9, sub:1, cross:.3, ease:.8, quoteOnly:false,
+    devLabel:"初期・月額0円",
+    pros:["0円で入金が速い（翌営業日〜）","ノーコードで最短即日・実店舗と一元管理","請求書決済は3.25%"],
+    cons:["コンビニ・後払い・越境に弱い","カード中心でオンライン手段が少ない"],
+    url:"https://squareup.com/jp/ja/online-store" },
+  { id:"paypal_ec", name:"PayPal", kind:"psp", initial:0, monthly:0, cardRate:0.036,
+    methods:{card:.8,conveni:0,defer:0,carrier:0,qr:0,amazonpay:0,paypal:1,bank:0},
+    carts:{shopify:.8,makeshop:.8,colorme:.8,futureshop:.8,eccube:.8,own:1}, payout:.5, sub:1, cross:1, ease:.8, quoteOnly:false,
+    devLabel:"初期・月額0円（3.6%+40円）",
+    pros:["越境・海外集金に圧倒的","多くのカートで導入が手軽","買い手保護でCVRに寄与"],
+    cons:["通貨換算+4%が重い","アカウント凍結・資金保留のリスク"],
+    url:"https://www.paypal.com/jp/business" },
+  { id:"komoju", name:"KOMOJU（DEGICA）", kind:"psp", initial:0, monthly:0, cardRate:0.0325,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:0,paypal:0,bank:1},
+    carts:{shopify:1,eccube:1,own:1,makeshop:.4}, payout:.6, sub:.7, cross:1, ease:.7, quoteOnly:false,
+    devLabel:"初期・月額0円（料率公開 3.25%）",
+    pros:["全料率を公式公開＝透明","初期・月額0円で65手段以上","Shopifyで使える数少ない国産系代行"],
+    cons:["3.25%は大手交渉料率より高めになりうる","サブスク課金はカード限定"],
+    url:"https://ja.komoju.com/" },
+  { id:"gmopg", name:"GMOペイメントゲートウェイ", kind:"psp", initial:null, monthly:null, cardRate:null,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
+    carts:{eccube:1,makeshop:1,colorme:1,own:1}, payout:.6, sub:1, cross:.5, ease:.3, quoteOnly:true,
+    devLabel:"料率・費用は要見積",
+    pros:["国内最大手の信頼性・実績","30以上の決済手段を一括","大規模なら料率交渉の余地"],
+    cons:["料率・費用が非公開で比較しづらい","中堅〜大規模向け・審査厳しめ"],
+    url:"https://www.gmo-pg.com/service/mulpay/" },
+  { id:"sbps", name:"SBペイメントサービス", kind:"psp", initial:null, monthly:null, cardRate:null,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
+    carts:{shopify:1,eccube:1,futureshop:1,own:1}, payout:.6, sub:1, cross:.5, ease:.4, quoteOnly:true,
+    devLabel:"料率・費用は要見積",
+    pros:["対応手段が40ブランド超で最多クラス","PayPay・ソフトバンク系に強い","主要カートを網羅"],
+    cons:["費用が非公開・費目が多く総コストが読みにくい","要見積で導入に時間"],
+    url:"https://www.sbpayment.jp/" },
+  { id:"sony", name:"ソニーペイメント（e-SCOTT）", kind:"psp", initial:0, monthly:0, cardRate:0.035,
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:.5,amazonpay:0,paypal:0,bank:1},
+    carts:{eccube:1,futureshop:1,own:1}, payout:.6, sub:1, cross:.3, ease:.5, quoteOnly:false,
+    devLabel:"EC-CUBEプラン カード3.5%",
+    pros:["ソニーブランドの信頼性","EC-CUBEプランはカード3.5%・初期/月額0円","定期購入機能を追加料金なしで提供"],
+    cons:["総合プランは料率非公開","越境・Amazon Pay/PayPalの個別対応は弱め"],
+    url:"https://www.sonypaymentservices.jp/" }
 ];
+
+/* ===================== 診断質問（チャネル対応） ===================== */
+/* 共通設問（店舗/EC/両方で1回だけ聞く） */
+const Q_industry = {
+  key:"industry", title:"どんな業種・商材ですか？", note:"診断の傾向づけに使います", type:"single",
+  opts:[
+    {v:"food",ic:"i-food",l:"飲食",s:"居酒屋・カフェ・レストラン"},
+    {v:"retail",ic:"i-retail",l:"小売・物販",s:"雑貨・アパレル・食品"},
+    {v:"beauty",ic:"i-beauty",l:"美容・サロン",s:"美容室・ネイル・エステ"},
+    {v:"health",ic:"i-health",l:"医療・治療院",s:"整体・接骨・クリニック"},
+    {v:"mobile",ic:"i-truck",l:"移動販売・イベント",s:"キッチンカー・催事・出張"},
+    {v:"other",ic:"i-store",l:"その他",s:""}
+  ]
+};
+const Q_volume = {
+  key:"volume", title:"年間の取扱高（キャッシュレス決済額）は？",
+  note:"手数料の試算と、最適な契約形態の判定に使います", help:"これから導入の方は見込みでOK", type:"single",
+  opts:[
+    {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
+    {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
+    {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
+    {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
+    {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
+    {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
+  ]
+};
+const Q_priorities = {
+  key:"priorities", title:"特に重視したいのは？", note:"選んだ項目の重みが上がります（複数選択可）", type:"multi",
+  opts:[
+    {v:"fee",ic:"i-yen",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
+    {v:"initial",ic:"i-gift",l:"初期費用の安さ",s:"初期・月額を抑えたい"},
+    {v:"payout",ic:"i-bolt",l:"入金の速さ",s:"資金繰りを重視"},
+    {v:"brands",ic:"i-globe",l:"対応決済・ブランドの多さ",s:"あらゆる支払いに対応したい"}
+  ]
+};
+
+/* Q0：販売チャネル */
+const Q_CHANNEL = {
+  key:"channel", title:"どの販売チャネルの決済ですか？", note:"店舗（対面）とネットショップ（EC）で最適な決済が変わります", type:"single",
+  opts:[
+    {v:"shop",ic:"i-store",l:"店舗（対面）",s:"実店舗・移動販売でお客様と対面"},
+    {v:"ec",ic:"i-qr",l:"ネットショップ（EC）",s:"通販・オンライン販売"},
+    {v:"both",ic:"i-globe",l:"店舗とEC 両方",s:"実店舗もネット販売もある（設問は多めです）"}
+  ]
+};
+
+/* 店舗（対面）用 */
+const Q_shopStatus = {
+  key:"status", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
+  opts:[
+    {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだ決済端末を持っていない"},
+    {v:"exist_hokatsu",ic:"i-card",l:"導入済み・包括事業者と契約",s:"Square・Airペイ・stera 等と契約中"},
+    {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別契約",s:"カード会社／アクワイアラと直接契約"},
+    {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
+  ]
+};
+const Q_shopMethods = {
+  key:"methods", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
+  opts:[
+    {v:"credit",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
+    {v:"touch",ic:"i-touch",l:"タッチ決済",s:"NFC非接触・Apple Pay等"},
+    {v:"qr",ic:"i-qr",l:"QRコード決済",s:"PayPay・楽天ペイ 等"},
+    {v:"transit",ic:"i-transit",l:"交通系IC",s:"Suica・PASMO 等"},
+    {v:"emoney",ic:"i-key",l:"iD・QUICPay",s:"電子マネー"}
+  ]
+};
+const Q_terminal = {
+  key:"terminal", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
+  opts:[
+    {v:"mobile",ic:"i-mobile",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
+    {v:"counter",ic:"i-counter",l:"カウンター据置",s:"レジ横に固定して使う"},
+    {v:"pos",ic:"i-pos",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
+  ]
+};
+const Q_pos = {
+  key:"pos", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
+  opts:[
+    {v:"yes",ic:"i-link",l:"必要",s:"POSレジ・売上管理と繋げたい"},
+    {v:"no",ic:"i-minus",l:"特に不要",s:"決済ができれば十分"}
+  ]
+};
+
+/* EC（ネットショップ）用 */
+const Q_ecStatus = {
+  key:"ecStatus", title:"EC決済の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
+  opts:[
+    {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだEC決済を入れていない"},
+    {v:"exist_hokatsu",ic:"i-card",l:"導入済み・カート内蔵/一括代行",s:"BASE・STORES・Shopify Payments 等"},
+    {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別/直接契約",s:"アクワイアラ直・大手PSP個別契約"},
+    {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
+  ]
+};
+const Q_cart = {
+  key:"cart", title:"利用中（予定）のカート／サイトは？", note:"カートで使える決済が変わるため、候補を絞り込みます", type:"single",
+  opts:[
+    {v:"shopify",ic:"i-globe",l:"Shopify",s:"越境・拡張に強い"},
+    {v:"base",ic:"i-store",l:"BASE",s:"無料・手軽"},
+    {v:"stores",ic:"i-store",l:"STORES",s:"無料・手軽"},
+    {v:"makeshop",ic:"i-store",l:"MakeShop",s:""},
+    {v:"colorme",ic:"i-store",l:"カラーミーショップ",s:""},
+    {v:"futureshop",ic:"i-store",l:"futureshop",s:""},
+    {v:"eccube",ic:"i-store",l:"EC-CUBE",s:"決済を自由に選べる"},
+    {v:"own",ic:"i-store",l:"自社開発・その他",s:"フルスクラッチ等"},
+    {v:"undecided",ic:"i-minus",l:"まだ決めていない",s:"カートも含めて検討中"}
+  ]
+};
+const Q_ecMethods = {
+  key:"ecMethods", title:"用意したいオンライン決済手段は？", note:"対応していない手段があると減点します", type:"multi",
+  opts:[
+    {v:"card",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
+    {v:"conveni",ic:"i-store",l:"コンビニ決済",s:"クレカ非保有層に有効"},
+    {v:"defer",ic:"i-gift",l:"後払い",s:"Paidy・NP後払い 等"},
+    {v:"carrier",ic:"i-mobile",l:"キャリア決済",s:"d払い・au / ソフトバンク"},
+    {v:"qr",ic:"i-qr",l:"QR・ID決済",s:"PayPay・楽天ペイ・メルペイ 等"},
+    {v:"amazonpay",ic:"i-globe",l:"Amazon Pay",s:"ID決済でCVR向上"},
+    {v:"paypal",ic:"i-globe",l:"PayPal",s:"海外・越境に強い"},
+    {v:"bank",ic:"i-yen",l:"銀行振込・ペイジー",s:""}
+  ]
+};
+const Q_sub = {
+  key:"sub", title:"定期課金（サブスク）は使いますか？", note:"必要なら継続課金に対応するサービスを優先します", type:"single",
+  opts:[
+    {v:"yes",ic:"i-link",l:"使う",s:"月額・頒布会・定期便など"},
+    {v:"no",ic:"i-minus",l:"使わない",s:"都度購入のみ"}
+  ]
+};
+
+/* チャネルに応じた設問セット（共通設問は重複させず1回だけ） */
+function questionSet(){
+  const ch = answers.channel;
+  if(!ch) return [Q_CHANNEL];
+  if(ch==="shop") return [Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume,Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
+  if(ch==="ec")   return [Q_CHANNEL,Q_ecStatus,Q_cart,Q_industry,Q_volume,Q_ecMethods,Q_sub,Q_priorities];
+  return [Q_CHANNEL,Q_shopStatus,Q_ecStatus,Q_industry,Q_volume,Q_cart,Q_shopMethods,Q_terminal,Q_pos,Q_ecMethods,Q_sub,Q_priorities];
+}
+let QUESTIONS = [Q_CHANNEL];
 
 /* ===================== 状態 ===================== */
 const answers = {};
@@ -695,6 +842,7 @@ function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`
 
 function selectOpt(i,rawV){
   const q=QUESTIONS[i];
+  if(q.key==="channel"){ answers.channel=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
   const v=(q.key==="volume")?Number(rawV):rawV;
   if(q.type==="multi"){
     const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
@@ -794,24 +942,85 @@ function scaleYen(vman){ if(vman>=10000){ const oku=vman/10000; return (Number.i
 const LEAD_ENDPOINT = ""; // 例: "https://script.google.com/macros/s/XXXXXXXX/exec"
 
 /* 導入状況＋年間取扱高から最適ルートを判定（個別契約=常にコンサル／包括は2億で申込↔コンサル） */
-function decideRoute(R){
-  const status=answers.status, over2 = R.volume>=BORDER;
+/* ===================== EC スコアリング＆ヘルパー ===================== */
+const EC_METHOD_LABEL={card:"カード",conveni:"コンビニ",defer:"後払い",carrier:"キャリア",qr:"QR/ID",amazonpay:"Amazon Pay",paypal:"PayPal",bank:"銀行振込"};
+const CART_LABEL={shopify:"Shopify",base:"BASE",stores:"STORES",makeshop:"MakeShop",colorme:"カラーミー",futureshop:"futureshop",eccube:"EC-CUBE",own:"自社/その他",undecided:"未定"};
+function payoutTxtEC(p){ if(p>=.85)return "最短翌営業日"; if(p>=.6)return "週次〜"; if(p>=.4)return "月2回程度"; return "翌月末〜"; }
+function rateTextEC(s){ return s.quoteOnly ? "料率 要見積" : `カード ${(s.cardRate*100).toFixed(2)}%`; }
+function rateShortEC(s){ return s.quoteOnly ? "要見積" : (s.cardRate*100).toFixed(2)+"%"; }
+
+function scoreEC(){
+  const volume=answers.volume, methods=answers.ecMethods||[], cart=answers.cart;
+  const pris=answers.priorities||[], needSub=answers.sub==="yes";
+  const volFeeFactor = {500:0,3000:.3,7500:.5,15000:.8,35000:1.2,70000:1.6}[volume]||0;
+  const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, ease:.6 };
+  pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
+  const usable = EC_SERVICES.filter(s=> (!cart||cart==="undecided") ? true : (s.carts[cart]||0)>0 );
+  const raw = usable.map(s=>{
+    const rate = s.cardRate;
+    const annualFee = rate!=null ? volume*10000*rate : null;
+    const annualCost = (rate!=null && s.monthly!=null) ? (s.initial||0)+s.monthly*12+annualFee : null;
+    const cartFit = (cart&&cart!=="undecided") ? (s.carts[cart]||0) : 1;
+    return {s, rate, annualFee, annualCost, cartFit};
+  });
+  const priced = raw.filter(r=>r.annualCost!=null);
+  const initOf = r=>(r.s.initial||0)+r.s.monthly*12;
+  const feeLo=Math.min(...priced.map(r=>r.rate)), feeHi=Math.max(...priced.map(r=>r.rate));
+  const initLo=Math.min(...priced.map(initOf)), initHi=Math.max(...priced.map(initOf));
+  const invn=(x,lo,hi)=> (x==null||hi===lo)?.5:1-(x-lo)/(hi-lo);
+  const scored = raw.map(r=>{
+    const s=r.s;
+    const feeS = r.rate!=null? invn(r.rate,feeLo,feeHi):.5;
+    const initS= r.annualCost!=null? invn(initOf(r),initLo,initHi):.5;
+    let cover=1; if(methods.length){ cover=methods.filter(m=>(s.methods[m]||0)>0).length/methods.length; }
+    const base = w.fee*feeS + w.initial*initS + w.payout*s.payout + w.brands*cover + w.ease*s.ease;
+    const coverMult=0.25+0.75*cover;
+    const cartMult=0.4+0.6*(r.cartFit||0);
+    const subMult=needSub?(s.sub>0?1:.7):1;
+    const total=base*coverMult*cartMult*subMult;
+    return {...r, feeS, initS, cover, total};
+  });
+  const maxTotal=Math.max(...scored.map(x=>x.total))||1;
+  scored.forEach(x=> x.pct=Math.round(x.total/maxTotal*100));
+  scored.sort((a,b)=>b.total-a.total);
+  return {scored, volFeeFactor, volume, methods, pris, cart, needSub};
+}
+function whyBulletsEC(x,R){
+  const s=x.s,out=[];
+  if(R.cart&&R.cart!=="undecided") out.push(`カート「<b>${CART_LABEL[R.cart]}</b>」で利用できる`);
+  if(R.methods.length){ const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>EC_METHOD_LABEL[m]); if(!miss.length) out.push(`希望の決済（${R.methods.map(m=>EC_METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`); }
+  if(R.pris.includes("fee")||R.volFeeFactor>0) out.push(s.quoteOnly?`規模が大きく<b>個別見積</b>で料率交渉の余地`:`重視した<b>手数料</b>で有利（${rateTextEC(s)}）`);
+  if(R.needSub&&s.sub>0) out.push(`<b>定期課金</b>に対応`);
+  if(s.cross>=.8) out.push(`<b>越境・海外決済</b>に強い`);
+  return out.slice(0,4);
+}
+function ecConsFor(s,R){
+  const cons=s.cons.slice();
+  const miss=(R.methods||[]).filter(m=>!(s.methods[m]>0)).map(m=>EC_METHOD_LABEL[m]);
+  if(miss.length) cons.unshift(`選択した「${miss.join("・")}」は非対応`);
+  return cons;
+}
+
+function decideRoute(status, volume, isEC){
+  const over2 = volume>=BORDER;
+  const A = isEC ? "カート内蔵/一括代行" : "包括事業者";
+  const kobetsu = isEC ? "個別/直接契約（アクワイアラ直・大手PSP個別）" : "個別契約（カード会社・アクワイアラ直契約）";
   if(status==="exist_kobetsu"){
-    return {route:"consult", title:"「個別契約の最適化（専門コンサル）」がおすすめ",
-      desc:"すでに個別契約（カード会社・アクワイアラ直契約）をお持ちのため、料率やプランの見直しは専門コンサルの領域です。今の条件が適正か、無料で診断できます。"};
+    return {route:"consult", title:`「${isEC?'個別/直接契約':'個別契約'}の最適化（専門コンサル）」がおすすめ`,
+      desc:`すでに${kobetsu}をお持ちのため、料率やプランの見直しは専門コンサルの領域です。今の条件が適正か、無料で診断できます。`};
   }
   if(status==="new"){
     return over2
-      ? {route:"consult", title:"「個別契約＋専門コンサル」がおすすめ",
-         desc:"新規導入でも年間取扱高が2億円規模になると、包括事業者より個別契約の方が手数料を大きく下げられる可能性があります。最適な契約設計を専門コンサルがご提案します。"}
-      : {route:"aggregator", title:"「包括事業者での導入」がおすすめ",
-         desc:"年間取扱高が2億円未満の新規導入なら、初期費用ゼロで手軽に始められる包括事業者が最適です。あなたの条件で最もお得な包括事業者はこちら。"};
+      ? {route:"consult", title:`「個別契約＋専門コンサル」がおすすめ`,
+         desc:`新規導入でも年間取扱高が2億円規模になると、${A}より個別契約の方が手数料を大きく下げられる可能性があります。最適な契約設計を専門コンサルがご提案します。`}
+      : {route:"aggregator", title:`「${A}での導入」がおすすめ`,
+         desc:`年間取扱高が2億円未満の新規導入なら、初期費用ゼロで手軽に始められる${A}が最適です。あなたの条件で最もお得なサービスはこちら。`};
   }
   return over2
-    ? {route:"consult", title:"「個別契約への切り替え（専門コンサル）」がおすすめ",
-       desc:"年間取扱高が2億円を超える規模では、包括事業者の手数料は割高になりがちです。個別契約への切り替えでコストを下げられる可能性が高く、専門コンサルが無料で試算します。"}
-    : {route:"aggregator", title:"現状は「包括事業者」で十分です",
-       desc:"年間取扱高が2億円未満なら包括事業者で問題ありません。今より条件の良い包括への乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。"};
+    ? {route:"consult", title:`「個別契約への切り替え（専門コンサル）」がおすすめ`,
+       desc:`年間取扱高が2億円を超える規模では、${A}の手数料は割高になりがちです。個別契約への切り替えでコストを下げられる可能性が高く、専門コンサルが無料で試算します。`}
+    : {route:"aggregator", title:`現状は「${A}」で十分です`,
+       desc:`年間取扱高が2億円未満なら${A}で問題ありません。より条件の良いサービスへの乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。`};
 }
 function payoutTxt(p){
   if(p>=.9) return "最短翌営業日";
@@ -866,138 +1075,137 @@ function costChartSVG(R){
 function escapeXml(s){return s.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));}
 
 let LAST=null;
-function showResult(){
-  const R = scoreServices();
-  $("quizCard").classList.add("hidden");
-  $("shindan").classList.add("hidden");
-  $("resultSection").classList.remove("hidden");
-  const rc = $("resultCard");
 
-  const rt = decideRoute(R);
-  const top=R.scored[0], s0=top.s;
-  LAST = {R, rt, top};
-  const isConsult = rt.route==="consult";
-  const industryLabel = ((QUESTIONS.find(q=>q.key==="industry")||{opts:[]}).opts.find(o=>o.v===answers.industry)||{}).l || "—";
-  const C=44, r=38, circ=2*Math.PI*r, off=circ*(1-top.pct/100);
-  const gateLead = isConsult
-    ? `詳細な診断結果に加え、あなたの規模に最適な<b>個別契約を専門コンサルが無料でご提案</b>します。`
-    : `<b>全${R.scored.length}社の詳細比較・年間コスト・各社の申込条件</b>がすべて見られます。`;
-  const ctaLabel = isConsult ? "結果を見て無料相談する" : "詳細な比較結果を見る";
-
-  let html=`
-  <div class="result-head">
-    <div class="eyebrow">DIAGNOSIS RESULT</div>
-    <h2>診断結果</h2>
-    <p>以下の入力条件で、${R.scored.length}社を同一基準で採点しました。</p>
-    <table class="cond-table">
-      <tr><th>導入状況</th><td>${STATUS_LABEL[answers.status]}</td></tr>
-      <tr><th>業種</th><td>${industryLabel}</td></tr>
-      <tr><th>年間取扱高</th><td>${scaleYen(R.volume)}</td></tr>
-      <tr><th>端末形態</th><td>${TERM_LABEL[R.term]}</td></tr>
-      <tr><th>使いたい決済</th><td>${R.methods.length?R.methods.map(m=>METHOD_LABEL[m]).join("・"):"指定なし"}</td></tr>
-      <tr><th>重視点</th><td>${R.pris.length?R.pris.map(p=>PRI_LABEL[p]).join("・"):"指定なし"}</td></tr>
-      <tr><th>レジ連携</th><td>${R.needPos?"必要":"不要"}</td></tr>
-    </table>
-  </div>
-
-  <div class="route-banner ${isConsult?'consult':'aggregator'}">
-    <div class="rb-ic">${ICON(isConsult?"i-scale":"i-card")}</div>
-    <div><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
-  </div>
-
-  <div class="pick">
+function applyCtaHtml(s0){
+  return `<div class="apply-cta card"><div class="wh">申込・公式サイト</div>
+    <p>条件が最も合う上位社の公式サイトから申し込めます（掲載順は診断スコア順・報酬による優遇なし）。</p>
+    <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">${s0.name} の公式サイトへ${ICON("i-ext")}</a></div>`;
+}
+function scoreBlockHtml(top,s0,devLabel,isConsult){
+  return `<div class="pick">
     <span class="pick-badge">${isConsult?'比較上の総合1位':'総合1位・あなたへのおすすめ'}</span>
     <div class="pick-head">
-      <div class="score">
-        <div><span class="score-n num">${top.pct}</span><span class="score-d">/100</span></div>
-        <div class="score-bar"><i style="width:${top.pct}%"></i></div>
-        <div class="score-lb">適合スコア</div>
-      </div>
-      <div>
-        <div class="pick-name">${s0.name}</div>
-        <span class="pick-tag">${s0.devLabel}</span>
-      </div>
-    </div>
-    <div class="pick-cost">
-      <table class="cost-table">
+      <div class="score"><div><span class="score-n num">${top.pct}</span><span class="score-d">/100</span></div><div class="score-bar"><i style="width:${top.pct}%"></i></div><div class="score-lb">適合スコア</div></div>
+      <div><div class="pick-name">${s0.name}</div><span class="pick-tag">${devLabel}</span></div>
+    </div>`;
+}
+
+/* ---- 店舗（対面）ブロック ---- */
+function buildShopBlock(){
+  const R=scoreServices();
+  const rt=decideRoute(answers.status, R.volume, false);
+  const top=R.scored[0], s0=top.s, isConsult=rt.route==="consult";
+  const teaser = `
+    <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
+    ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
+      <div class="pick-cost"><table class="cost-table">
         <tr><td>端末代</td><td class="num">${yen(s0.device)}</td></tr>
         <tr><td>月額（12ヶ月分）</td><td class="num">${yen(s0.monthly*12)}</td></tr>
         <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(top.rate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
         <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>
-      </table>
-    </div>
-  </div>
+      </table></div>
+    </div>`;
+  const detail = `
+    <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
+    <div class="facts"><span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
+    <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
+    <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
+    <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
+    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
+    ${isConsult?"":applyCtaHtml(s0)}`;
+  return {kind:'shop', R, rt, top, teaser, detail};
+}
 
-  <div class="lock-wrap lock-locked" id="lockWrap">
-    <div class="lock-body" id="lockBody">
-      <div class="why" style="margin-top:14px">
-        <div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div>
-        <ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul>
-      </div>
-      <div class="facts">
-        <span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span>
-        <span>${rateText(s0)}</span>
-        <span>入金 ${payoutTxt(s0.payout)}</span>
-      </div>
-      <div class="pc-grid">
-        <div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div>
-        <div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div>
-      </div>
+/* ---- EC（ネットショップ）ブロック ---- */
+function buildEcBlock(){
+  const R=scoreEC();
+  const rt=decideRoute(answers.ecStatus, R.volume, true);
+  const top=R.scored[0], s0=top.s, isConsult=rt.route==="consult";
+  const costRows = s0.quoteOnly
+    ? `<tr><td>初期・月額</td><td class="num">要見積</td></tr><tr class="total"><td>年間コスト</td><td class="num">要見積</td></tr>`
+    : `<tr><td>初期費用</td><td class="num">${yen(s0.initial||0)}</td></tr>
+       <tr><td>月額（12ヶ月分）</td><td class="num">${yen((s0.monthly||0)*12)}</td></tr>
+       <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(s0.cardRate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
+       <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>`;
+  const cartNote = (R.cart&&R.cart!=="undecided") ? `<p class="cart-note">カート「<b>${CART_LABEL[R.cart]}</b>」で使える決済に絞り込んで採点しています。</p>` : "";
+  const teaser = `
+    ${cartNote}
+    <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
+    ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
+      <div class="pick-cost"><table class="cost-table">${costRows}</table></div>
+    </div>`;
+  const facts = `<div class="facts"><span>${(s0.monthly||0)>0?`月額 ${yen(s0.monthly)}`:"初期・月額 0円"}</span><span>${rateTextEC(s0)}</span><span>入金 ${payoutTxtEC(s0.payout)}</span>${s0.sub>0?"<span>定期課金 対応</span>":""}${s0.cross>=.8?"<span>越境◎</span>":""}</div>`;
+  const detail = `
+    <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBulletsEC(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
+    ${facts}
+    <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${ecConsFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
+    <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間コスト <b>要見積</b>"}・${rateTextEC(s)}・入金${payoutTxtEC(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
+    <div class="compare card"><h3>EC決済 ${R.scored.length}社 比較表${(R.cart&&R.cart!=="undecided")?`（${CART_LABEL[R.cart]}対応）`:""}</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${s.initial!=null?yen(s.initial):"—"}</td><td class="num">${s.monthly!=null?(s.monthly>0?yen(s.monthly):"0"):"—"}</td><td class="num">${rateShortEC(s)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
+    ${isConsult?"":applyCtaHtml(s0)}`;
+  return {kind:'ec', R, rt, top, teaser, detail};
+}
 
-      <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `
-        <div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
+function condTableHtml(ch){
+  const rows=[];
+  rows.push(['チャネル', ch==='shop'?'店舗（対面）':ch==='ec'?'ネットショップ（EC）':'店舗とEC 両方']);
+  const ind=(Q_industry.opts.find(o=>o.v===answers.industry)||{}).l; if(ind) rows.push(['業種・商材',ind]);
+  rows.push(['年間取扱高', scaleYen(answers.volume)]);
+  if(ch==='shop'||ch==='both'){
+    rows.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
+    rows.push(['端末形態', TERM_LABEL[answers.terminal]||'—']);
+    rows.push(['店舗の決済手段', (answers.methods||[]).map(m=>METHOD_LABEL[m]).join('・')||'指定なし']);
+    rows.push(['レジ連携', answers.pos==='yes'?'必要':'不要']);
+  }
+  if(ch==='ec'||ch==='both'){
+    rows.push(['EC決済の状況', STATUS_LABEL[answers.ecStatus]||'—']);
+    rows.push(['カート', CART_LABEL[answers.cart]||'—']);
+    rows.push(['EC決済手段', (answers.ecMethods||[]).map(m=>EC_METHOD_LABEL[m]).join('・')||'指定なし']);
+    rows.push(['定期課金', answers.sub==='yes'?'使う':'使わない']);
+  }
+  rows.push(['重視点', (answers.priorities||[]).map(p=>PRI_LABEL[p]).join('・')||'指定なし']);
+  return `<table class="cond-table">${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("")}</table>`;
+}
+function discHtml(){
+  return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
+}
+function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
+function gateHtml(lead,cta){
+  return `<div class="lock-gate" id="lockGate"><div class="lock-card">
+    <div class="lock-title">続きは無料で全部見られます</div>
+    <p class="lock-sub">${lead}</p>
+    <form id="leadForm" class="lead-form" autocomplete="on">
+      <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
+      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+      <button type="submit" class="btn btn-primary">${cta}${ICON("i-arrow")}</button>
+      <p class="lf-note">診断は無料・中立です。入力情報は結果の詳細表示とご相談対応にのみ利用し、第三者へ提供しません。</p>
+    </form></div></div>`;
+}
 
-      <div class="chart-card card" style="margin-top:14px">
-        <h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3>
-        <div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>
-        ${costChartSVG(R)}
-      </div>
-
-      <div class="compare card" id="compareSec" style="margin-top:14px">
-        <h3>全${R.scored.length}社 比較表</h3>
-        <div class="tbl-scroll"><table>
-          <thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead>
-          <tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody>
-        </table></div>
-      </div>
-
-      ${isConsult ? "" : `<div class="apply-cta card" style="margin-top:14px">
-        <div class="wh">申込・公式サイト</div>
-        <p>条件が最も合う上位社の公式サイトから申し込めます（掲載順は診断スコア順・報酬による優遇なし）。</p>
-        <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">${s0.name} の公式サイトへ${ICON("i-ext")}</a>
-      </div>`}
-
-      <div class="disc">
-        <b>診断の考え方（中立性について）：</b> このツールは特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。スコアは「手数料・初期費用・入金速度・対応ブランド・レジ連携」を、あなたの重視点と取扱高に応じて重みづけし、端末形態と決済手段の適合度を掛け合わせて算出。<b>年間コスト目安</b>はあなたの年間取扱高を基にした試算です。<br><br>
-        料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランドや契約プランで異なります。契約前に必ず各社公式でご確認ください。
-      </div>
-
-      <div class="restart">
-        <button class="btn btn-ghost" onclick="copyResult()" id="copyBtn">${ICON("i-copy")}診断結果をコピー</button>
-        <button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button>
-      </div>
-    </div>
-
-    <div class="lock-gate" id="lockGate">
-      <div class="lock-card">
-        <div class="lock-ic">${ICON("i-shield")}</div>
-        <div class="lock-title">続きは無料で全部見られます</div>
-        <p class="lock-sub">${gateLead}</p>
-        <form id="leadForm" class="lead-form" autocomplete="on">
-          <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
-          <div class="lf-row"><input name="name" placeholder="お名前" required></div>
-          <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
-          <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
-          <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
-          <button type="submit" class="btn btn-primary">${ctaLabel}${ICON("i-arrow")}</button>
-          <p class="lf-note">診断は無料・中立です。入力情報は結果の詳細表示とご相談対応にのみ利用し、第三者へ提供しません。</p>
-        </form>
-      </div>
-    </div>
-  </div>`;
-
-  rc.innerHTML = html;
-  requestAnimationFrame(()=>{ const f=rc.querySelector(".gauge .fill"); if(f) f.style.strokeDashoffset=f.dataset.off; });
+function showResult(){
+  const ch=answers.channel;
+  $("quizCard").classList.add("hidden");
+  $("shindan").classList.add("hidden");
+  $("resultSection").classList.remove("hidden");
+  const rc=$("resultCard");
+  const blocks=[];
+  if(ch==="shop"||ch==="both") blocks.push(buildShopBlock());
+  if(ch==="ec"||ch==="both") blocks.push(buildEcBlock());
+  LAST={ch, blocks};
+  const twin=blocks.length===2;
+  const anyConsult=blocks.some(b=>b.rt.route==="consult");
+  const chHead=k=>`<h3 class="ch-head">${k==='shop'?'店舗（対面）の診断':'ネットショップ（EC）の診断'}</h3>`;
+  const head=`<div class="result-head"><div class="eyebrow">DIAGNOSIS RESULT</div><h2>診断結果</h2><p>以下の入力条件で、各サービスを同一基準で採点しました。</p>${condTableHtml(ch)}</div>`;
+  const teasers=blocks.map(b=>(twin?chHead(b.kind):"")+b.teaser).join("");
+  const details=blocks.map(b=>(twin?chHead(b.kind):"")+b.detail).join("");
+  const gateLead=anyConsult
+    ? `全社の詳細比較・年間コストに加え、あなたの規模に最適な<b>個別契約を専門コンサルが無料でご提案</b>します。`
+    : `<b>全社の詳細比較・年間コスト・各社の申込条件</b>がすべて見られます。`;
+  const ctaLabel=anyConsult?"結果を見て無料相談する":"詳細な比較結果を見る";
+  rc.innerHTML = head + teasers +
+    `<div class="lock-wrap lock-locked" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div>${gateHtml(gateLead,ctaLabel)}</div>`;
   const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
   $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -1005,41 +1213,33 @@ function showResult(){
 /* 連絡先送信 → 解除（GASへPOST、未設定なら送信スキップして解除） */
 function submitLead(e){
   e.preventDefault();
-  const f=e.target;
-  if(!f.consent.checked) return;
-  const {R, rt, top}=LAST;
+  const f=e.target; if(!f.consent.checked) return;
   const payload={
     タイムスタンプ:new Date().toISOString(),
-    店舗会社名:f.company.value.trim(),
-    お名前:f.name.value.trim(),
-    メール:f.email.value.trim(),
-    電話:f.phone.value.trim(),
-    導入状況:STATUS_LABEL[answers.status],
-    年間取扱高:scaleYen(R.volume),
-    業種:(QUESTIONS[1].opts.find(o=>o.v===answers.industry)||{}).l||"",
-    推奨ルート: rt.route==="consult" ? "個別/コンサル" : "包括/申込",
-    第1位:top.s.name, 適合スコア:top.pct, 年間コスト目安:Math.round(top.annualCost),
-    参照元:location.href
+    店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), メール:f.email.value.trim(), 電話:f.phone.value.trim(),
+    チャネル: LAST.ch==='shop'?'店舗':LAST.ch==='ec'?'EC':'両方',
+    年間取扱高: scaleYen(answers.volume),
+    業種: (Q_industry.opts.find(o=>o.v===answers.industry)||{}).l||"",
+    導入状況: [answers.status?('店舗:'+(STATUS_LABEL[answers.status]||'')):'', answers.ecStatus?('EC:'+(STATUS_LABEL[answers.ecStatus]||'')):''].filter(Boolean).join(' / '),
+    カート: CART_LABEL[answers.cart]||'',
+    推奨ルート: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}:${b.rt.route==='consult'?'個別/コンサル':'包括/申込'}`).join(' / '),
+    第1位: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}=${b.top.s.name}(適合${b.top.pct}%)`).join(' / '),
+    参照元: location.href
   };
-  const btn=f.querySelector('button[type="submit"]');
-  btn.disabled=true; btn.textContent="送信中…";
-  const done=()=>unlockResults(rt);
-  if(LEAD_ENDPOINT){
-    fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
-  }else{
-    console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップして解除します。", payload);
-    done();
-  }
+  const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
+  const done=()=>unlockResults();
+  if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
+  else { console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップして解除します。", payload); done(); }
 }
-function unlockResults(rt){
+function unlockResults(){
   const wrap=$("lockWrap"); if(!wrap) return;
   wrap.classList.remove("lock-locked");
   const gate=$("lockGate"); if(gate) gate.remove();
-  const note=document.createElement("div");
-  note.className="unlock-note";
-  note.innerHTML = rt.route==="consult"
-    ? `${ICON("i-check")}送信ありがとうございます。専門コンサルより2営業日以内にご連絡します。以下は診断の詳細です。`
-    : `${ICON("i-check")}送信ありがとうございます。以下で全社の詳細と申込条件をご確認いただけます。`;
+  const anyConsult=LAST.blocks.some(b=>b.rt.route==="consult");
+  const note=document.createElement("div"); note.className="unlock-note";
+  note.textContent = anyConsult
+    ? "送信ありがとうございます。専門コンサルより2営業日以内にご連絡します。以下は診断の詳細です。"
+    : "送信ありがとうございます。以下で全社の詳細と申込条件をご確認いただけます。";
   $("lockBody").prepend(note);
   wrap.scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -1065,6 +1265,7 @@ function copyResult(){
 
 /* ===================== 画面遷移 ===================== */
 function startQuiz(){
+  Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
@@ -1072,7 +1273,7 @@ function startQuiz(){
   $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function goToHero(){
-  Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
@@ -1080,7 +1281,7 @@ function goToHero(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function restart(){
-  Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
   $("resultSection").classList.add("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
