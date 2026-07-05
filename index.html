@@ -179,9 +179,14 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 @keyframes mqLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes mqRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mq-viewport:hover .mq-track{animation-play-state:paused}
-/* 面リボンのアニメ（位相ずらしの捻れ・transform/opacityのみ・filter/blur不使用） */
-.hb-ribbon .rb-band,.hb-ribbon .rb-hi{transform-box:fill-box;transform-origin:center;animation-name:rbTwist;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform}
-@keyframes rbTwist{0%,100%{transform:translate(0,0) rotate(-0.7deg) skewX(-1.3deg)}50%{transform:translate(-12px,10px) rotate(0.7deg) skewX(1.3deg)}}
+/* 面リボンのアニメ（束が捻れて流れる／位相を大きくずらす・transform/opacityのみ・filter不使用） */
+.hb-ribbon .rb-band,.hb-ribbon .rb-hi{transform-box:fill-box;transform-origin:50% 12%;animation-name:rbTwist;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform}
+@keyframes rbTwist{
+  0%,100%{transform:translateX(0) rotate(-1.8deg) skewX(-5deg) scaleX(1)}
+  28%{transform:translateX(12px) rotate(1.3deg) skewX(3.5deg) scaleX(.85)}
+  54%{transform:translateX(-6px) rotate(2.6deg) skewX(6deg) scaleX(1.08)}
+  80%{transform:translateX(-14px) rotate(-1deg) skewX(-3.5deg) scaleX(.9)}
+}
 @media(prefers-reduced-motion:reduce){
   .hb-ribbon .rb-band,.hb-ribbon .rb-hi{animation:none}
   .mq-track{animation:none!important;flex-wrap:wrap}
@@ -1866,10 +1871,10 @@ function buildRibbon(){
     const p0=[bx,-90], c1=[bx+100+j,190], c2=[bx-85+j,540], p3=[bx+55,890];  // 緩やかなS字
     const edge=(sx)=>`M ${(p0[0]+sx).toFixed(1)} ${p0[1]} C ${(c1[0]+sx).toFixed(1)} ${c1[1]}, ${(c2[0]+sx).toFixed(1)} ${c2[1]}, ${(p3[0]+sx).toFixed(1)} ${p3[1]}`;
     const d=`${edge(-off)} L ${(p3[0]+off).toFixed(1)} ${p3[1]} C ${(c2[0]+off).toFixed(1)} ${c2[1]}, ${(c1[0]+off).toFixed(1)} ${c1[1]}, ${(p0[0]+off).toFixed(1)} ${p0[1]} Z`;
-    const dur=(30+i*3);
-    paths+=`<path class="rb-band" d="${d}" fill="url(#${g})" opacity="${op}" style="animation-duration:${dur}s;animation-delay:${delay}s"/>`;
+    const dur=(15+i*1.4).toFixed(1), dl=(-(i*3.5)).toFixed(1);   // 速め＋帯ごとに位相を大きくずらす＝束が捻れて見える
+    paths+=`<path class="rb-band" d="${d}" fill="url(#${g})" opacity="${op}" style="animation-duration:${dur}s;animation-delay:${dl}s"/>`;
     /* 帯の縁に沿う1pxの白ハイライトを、太い帯2本だけに添える（立体感） */
-    if(i<2) hi+=`<path class="rb-hi" d="${edge(-off+1)}" fill="none" stroke="#fff" stroke-width="1" opacity="0.5" style="animation-duration:${dur}s;animation-delay:${delay}s"/>`;
+    if(i<2) hi+=`<path class="rb-hi" d="${edge(-off+1)}" fill="none" stroke="#fff" stroke-width="1" opacity="0.5" style="animation-duration:${dur}s;animation-delay:${dl}s"/>`;
   });
   svg.innerHTML = defs+"<g class=\"rb-g\">"+paths+hi+"</g>";
 }
