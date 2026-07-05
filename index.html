@@ -253,6 +253,16 @@ section{scroll-margin-top:60px}
 .save-tbl tr.save-diff td{color:var(--score);font-size:14px}
 .save-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
 .save-banner.consult-pitch{border-top-color:var(--blue)}
+/* 現状 vs おすすめ の比較 */
+.cmp-tbl{min-width:340px}
+.cmp-tbl th{background:var(--sub-bg);color:var(--navy);font-weight:700;padding:7px 9px;border:1px solid var(--line);text-align:center;font-size:12px}
+.cmp-tbl td{padding:7px 9px;border:1px solid var(--line);text-align:center;font-size:12px;background:#fff}
+.cmp-tbl td:first-child{color:var(--muted);text-align:left;white-space:nowrap}
+.cmp-tbl th:last-child,.cmp-tbl td:last-child{background:var(--blue-soft)}
+.cmp-tbl .cmp-nm{font-size:11px;color:var(--muted);font-weight:400}
+.cmp-bullets{margin:10px 0 0;padding-left:18px;font-size:13px}
+.cmp-bullets li{margin:3px 0}
+.cur-tag{display:inline-block;font-size:10px;font-weight:700;color:var(--blue);background:var(--blue-soft);border:1px solid var(--line);border-radius:3px;padding:0 5px;margin-left:5px;vertical-align:1px}
 .why .wh .ic{display:none}
 .why ul{margin:0;padding-left:18px;font-size:13px}
 .why li{margin:2px 0}
@@ -781,6 +791,11 @@ const Q_curRate = {
     {v:0,ic:"i-store",l:"分からない",s:"一般的な3.24%で試算します"}
   ]
 };
+/* 包括ユーザー(決済サービスと契約)にのみ表示：今どのサービスを使っているか。現状 vs 他社の比較に使用 */
+const Q_curService = {
+  key:"curService", section:"state", title:"今お使いの決済サービスは？", note:"現状のサービスと各社を結果画面で比較します", help:"分からなければ「その他」でOK", type:"single",
+  opts:[ ...SERVICES.map(s=>({v:s.id, ic:"i-card", l:s.name.replace(/（.*?）/,"")})), {v:"other", ic:"i-store", l:"その他・分からない"} ]
+};
 const Q_shopMethods = {
   key:"methods", section:"wish", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
@@ -872,9 +887,15 @@ function questionSet(){
     wish.push(Q_terminal,Q_priorities,Q_pos);
     list=[...state,...wish];
   }
-  /* 既存ユーザー（新規以外）のみ、導入状況の直後に現在の料率を挿入 */
-  if((ch==="shop"||ch==="both") && answers.status && answers.status!=="new"){
-    const i=list.indexOf(Q_shopStatus); if(i>=0 && list.indexOf(Q_curRate)<0) list.splice(i+1,0,Q_curRate);
+  /* 既存ユーザー（新規以外）のみ、導入状況の直後に追加設問を挿入
+     直契約→現在の料率（交渉試算用）／包括・不明→利用中サービス（現状 vs 他社の比較用） */
+  const st=answers.status;
+  if((ch==="shop"||ch==="both") && st && st!=="new"){
+    const i=list.indexOf(Q_shopStatus);
+    if(i>=0){
+      const q = st==="exist_kobetsu" ? Q_curRate : Q_curService;
+      if(list.indexOf(q)<0) list.splice(i+1,0,q);
+    }
   }
   if(answers.industry==="beauty"){ const i=list.indexOf(Q_industry); if(i>=0) list.splice(i+1,0,Q_prepay); }
   return list;
@@ -1238,11 +1259,15 @@ function scoreBlockHtml(top,s0,devLabel,isConsult){
     </div>`;
 }
 
-/* 乗り換え差額（店舗・既存ユーザーのみ）＝ 現状の年間手数料 − 推奨の年間手数料
-   端末代・月額は含まない「手数料率の差」の概算。現料率が不明なら一般的な3.24%と仮定して明記。 */
-const ASSUMED_RATE = 0.0324;   // 料率不明時の一般的な想定（包括・不明ユーザーの試算用）
 const NEGO_TRIGGER = 0.025;    // 直契約：この料率以上ならコンサル（交渉サポート）を提案
 const NEGO_TARGET  = 0.0245;   // 直契約：交渉後の目安料率（Visa/Master 2.4%・JCB 2.5% の中間で削減額を保守的に試算）
+/* 現状の想定料率：直契約は入力料率、包括/不明は利用中サービスのデータ料率から推定（不明なら0） */
+function currentRateEstimate(){
+  if(answers.status==="exist_kobetsu") return answers.curRate>0?answers.curRate:0;
+  const s=SERVICES.find(x=>x.id===answers.curService);
+  return s ? (s.cardRate ?? s.qrRate) : 0;
+}
+function methodCount(s){ return Object.values(s.methods).filter(v=>v>0).length; }
 
 /* コンサル対象（＝包括比較を出さず、カード会社直接契約への引き下げをリード獲得する層）:
    ・直接契約(exist_kobetsu)：全規模。ただし本体ピッチは2億以上のみ、2億未満はソフト相談
@@ -1255,16 +1280,18 @@ function isConsultingSegment(){
   return false;
 }
 function consultPitchDirect(R){
-  const volYen=R.volume*10000, over2=R.volume>=BORDER, rate=answers.curRate, known=rate>0;
+  const volYen=R.volume*10000, over2=R.volume>=BORDER, rate=currentRateEstimate(), known=rate>0;
   const isKobetsu=answers.status==="exist_kobetsu";
   /* 直契約×2億未満は限定的。強い宣伝はせず軽い相談導線のみ（包括×2億未満はここに来ない＝本丸へ） */
   if(!over2){
     return `<div class="route-banner"><div class="rb-title">カード会社との直接契約、料率は適正ですか？</div>
       <div class="rb-desc">契約内容の見直しをご希望の場合は、無料でご相談いただけます。</div></div>`;
   }
-  /* 2億以上 × 料率2.5%未満 → すでに良い水準（無理な提案はしない） */
-  if(known && rate < NEGO_TRIGGER){
-    return `<div class="route-banner"><div class="rb-title">今の料率（${(rate*100).toFixed(2)}%）はすでに良い水準です</div>
+  /* 2億以上 × 料率2.5%以下 → すでに良い水準（競争力ある料率なので提案しない） */
+  if(known && rate <= NEGO_TRIGGER){
+    const svc=SERVICES.find(s=>s.id===answers.curService);
+    const label = isKobetsu ? `今の料率（${(rate*100).toFixed(2)}%）は` : (svc?`お使いの【${svc.name}】は料率が`:`今の料率は`);
+    return `<div class="route-banner"><div class="rb-title">${label}すでに良い水準です</div>
       <div class="rb-desc">十分に低い料率です。無理な見直しは不要。さらに条件を詰めたい場合のみ、無料でご相談ください。</div></div>`;
   }
   /* 完全成果報酬ピッチ本体（2億以上 × 2.5%以上 or 料率不明） */
@@ -1308,28 +1335,44 @@ function buildConsultBlock(){
   return {kind:'shop', R, rt:{route:'consult',title:'',desc:''}, top:R.scored[0], teaser, detail, consulting:true};
 }
 
-function switchSavingsShop(R, top){
-  const status=answers.status;
-  if(!status || status==="new") return "";                 // 新規は乗り換え元が無い
-  if(status==="exist_kobetsu") return "";                   // 直契約は teaser 冒頭でコンサルピッチを表示（ここでは出さない）
-  const known = answers.curRate>0;
-  const curRate = known ? answers.curRate : ASSUMED_RATE;
-  const volYen = R.volume*10000;
-  const curFee = volYen*curRate, newFee = top.annualFee, diff = curFee - newFee;
-  const curTxt = `${(curRate*100).toFixed(2)}%${known?"":"（一般的な水準と仮定）"}`;
-  const newTxt = `${(top.rate*100).toFixed(2)}%`;
-  if(diff <= 0){
-    return `<div class="route-banner"><div class="rb-title">今の料率はすでに良い水準です</div>
-      <div class="rb-desc">想定 ${curTxt} → 推奨 ${newTxt}。手数料だけで見ると乗り換えメリットは小さめです。入金速度・レジ連携など料率以外の条件で比較しましょう。</div></div>`;
+/* 現状 vs おすすめ の比較（包括/不明ユーザーで、利用中サービスが分かる場合）。
+   単なる削減額ではなく、コスト・入金・対応手段のトレードオフを横並びで提示。 */
+function compareVsCurrentShop(R){
+  const st=answers.status;
+  if(st!=="exist_hokatsu" && st!=="exist_unknown") return "";   // 新規/直契約はここでは出さない
+  const cur = SERVICES.find(s=>s.id===answers.curService);
+  if(!cur) return "";                                            // その他/不明 → 比較なし
+  const top=R.scored[0], rec=top.s, volYen=R.volume*10000;
+  const curFee=volYen*(cur.cardRate ?? cur.qrRate), recFee=top.annualFee;
+  const curCost=cur.monthly*12+curFee;              // 既存＝端末は保有済み（sunk）
+  const recCost=rec.device+rec.monthly*12+recFee;   // 乗換＝新端末代を初年度計上
+  if(cur.id===rec.id){
+    return `<div class="save-banner"><div class="save-h">今の【${cur.name}】が、あなたの条件では最適です</div>
+      <p class="save-note">診断でも1位はお使いのサービスでした。無理な乗り換えは不要です。下の全社比較で他社との違いもご確認いただけます。</p></div>`;
   }
+  const costDiff=recCost-curCost;                    // ＋なら高くなる
+  const methDiff=methodCount(rec)-methodCount(cur);
+  const bullets=[];
+  if(costDiff<0) bullets.push(`年間コストが <b>${yen(-costDiff)} 安く</b>なります`);
+  else if(costDiff>0) bullets.push(`年間コストは <b>${yen(costDiff)} 高く</b>なります（初年度・端末代込み）`);
+  else bullets.push(`年間コストはほぼ同額です`);
+  if(rec.payout>cur.payout) bullets.push(`入金が <b>速く</b>なります（${payoutTxt(cur.payout)} → ${payoutTxt(rec.payout)}）`);
+  else if(rec.payout<cur.payout) bullets.push(`入金はやや遅くなります（${payoutTxt(cur.payout)} → ${payoutTxt(rec.payout)}）`);
+  if(methDiff>0) bullets.push(`対応できる決済手段が <b>${methDiff}種類 増えます</b>`);
+  else if(methDiff<0) bullets.push(`対応決済手段は ${-methDiff}種類 減ります`);
   return `<div class="save-banner">
-    <div class="save-h">乗り換えで <span class="save-n num">${yen(diff)}</span> / 年 の手数料削減が見込めます</div>
-    <table class="save-tbl">
-      <tr><td>今の年間手数料（想定 ${curTxt}）</td><td class="num">${yen(curFee)}</td></tr>
-      <tr><td>推奨の年間手数料（${newTxt}）</td><td class="num">${yen(newFee)}</td></tr>
-      <tr class="save-diff"><td>差額（手数料のみ・年間）</td><td class="num">▲${yen(diff)}</td></tr>
-    </table>
-    <p class="save-note">手数料率の差だけの概算です（端末代・月額は含みません）。${known?"":"現在の料率が不明のため一般的な3.24%で試算しています。"}実際の料率は契約プラン・ブランドで異なります。</p>
+    <div class="save-h">現状（${cur.name}）と おすすめ（${rec.name}）の比較</div>
+    <div class="tbl-scroll"><table class="cmp-tbl">
+      <thead><tr><th></th><th>現状<br><span class="cmp-nm">${cur.name}</span></th><th>おすすめ<br><span class="cmp-nm">${rec.name}</span></th></tr></thead>
+      <tbody>
+        <tr><td>カード料率</td><td class="num">${rateShort(cur)}</td><td class="num">${rateShort(rec)}</td></tr>
+        <tr><td>年間コスト${(cur.device||rec.device)?"※":""}</td><td class="num">${yen(curCost)}</td><td class="num">${yen(recCost)}</td></tr>
+        <tr><td>入金スピード</td><td>${payoutTxt(cur.payout)}</td><td>${payoutTxt(rec.payout)}</td></tr>
+        <tr><td>対応決済手段</td><td class="num">${methodCount(cur)}種類</td><td class="num">${methodCount(rec)}種類</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="cmp-bullets">${bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+    <p class="save-note">現状の年間コストは端末を保有済みとして月額＋手数料で試算。おすすめ側は乗り換え時の新端末代を初年度に計上しています。料率・費用は参考値で契約プランにより異なります。</p>
   </div>`;
 }
 
@@ -1364,7 +1407,7 @@ function buildShopBlock(){
         <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>
       </table></div>
     </div>
-    ${switchSavingsShop(R, top)}`;
+    ${compareVsCurrentShop(R)}`;
   const detail = `
     ${indNote}
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
@@ -1372,8 +1415,8 @@ function buildShopBlock(){
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
     <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
-    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
-    ${isConsult?"":applyCtaHtml(s0)}`;
+    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
+    ${(isConsult || answers.curService===s0.id)?"":applyCtaHtml(s0)}`;
   return {kind:'shop', R, rt, top, teaser, detail};
 }
 
@@ -1426,8 +1469,12 @@ function condTableHtml(ch){
   if(answers.industry==="beauty"&&answers.prepay) state.push(['事前決済（前払い）', answers.prepay==="yes"?"必要":"不要"]);
   if(ch==='shop'||ch==='both'){
     state.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
-    if(answers.status && answers.status!=='new' && answers.curRate!==undefined)
+    if(answers.status==='exist_kobetsu' && answers.curRate!==undefined)
       state.push(['現在の料率', answers.curRate>0 ? (answers.curRate*100).toFixed(2)+'%' : '不明（平均で試算）']);
+    if((answers.status==='exist_hokatsu'||answers.status==='exist_unknown') && answers.curService){
+      const cs=SERVICES.find(s=>s.id===answers.curService);
+      state.push(['利用中サービス', cs?cs.name:(answers.curService==='other'?'その他・分からない':'—')]);
+    }
     if(ch==='both') state.push(['店舗の取扱高', scaleYen(answers.volumeShop)]);
   }
   if(ch==='ec'||ch==='both'){
@@ -1521,7 +1568,8 @@ function submitLead(e){
     業種: (Q_industry.opts.find(o=>o.v===answers.industry)||{}).l||"",
     導入状況: [answers.status?('店舗:'+(STATUS_LABEL[answers.status]||'')):'', answers.ectrack?('EC:'+(ECTRACK_LABEL[answers.ectrack]||'')):''].filter(Boolean).join(' / '),
     カート: answers.ecCart?({base:'BASE',stores:'STORES',shopify:'Shopify',other:'その他'}[answers.ecCart]||''):'',
-    現在の料率: (answers.status&&answers.status!=='new'&&answers.curRate!==undefined) ? (answers.curRate>0?(answers.curRate*100).toFixed(2)+'%':'不明') : '',
+    現在の料率: answers.status==='exist_kobetsu'&&answers.curRate!==undefined ? (answers.curRate>0?(answers.curRate*100).toFixed(2)+'%':'不明') : '',
+    利用中サービス: answers.curService ? ((SERVICES.find(s=>s.id===answers.curService)||{}).name||(answers.curService==='other'?'その他・不明':'')) : '',
     推奨ルート: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}:${b.consulting?'直接契約引き下げコンサル':(b.rt.route==='consult'?'個別/コンサル':'包括/申込')}`).join(' / '),
     第1位: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}=${b.consulting?'直接契約への引き下げ相談':b.top.s.name+'(適合'+b.top.pct+'%)'}`).join(' / '),
     参照元: location.href
