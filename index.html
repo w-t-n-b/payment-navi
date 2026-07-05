@@ -253,6 +253,8 @@ section{scroll-margin-top:60px}
 .save-tbl tr.save-diff td{color:var(--score);font-size:14px}
 .save-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
 .save-banner.consult-pitch{border-top-color:var(--blue)}
+.pitch-benefits{margin:10px 0 0;padding-left:20px;font-size:13px}
+.pitch-benefits li{margin:5px 0}
 /* 現状 vs おすすめ の比較 */
 .cmp-tbl{min-width:340px}
 .cmp-tbl th{background:var(--sub-bg);color:var(--navy);font-weight:700;padding:7px 9px;border:1px solid var(--line);text-align:center;font-size:12px}
@@ -800,6 +802,13 @@ const Q_curService = {
   key:"curService", section:"state", title:"今お使いの決済サービスは？", note:"現状のサービスと各社を結果画面で比較します", help:"分からなければ「その他」でOK", type:"single",
   opts:[ ...SERVICES.map(s=>({v:s.id, ic:"i-card", l:s.name.replace(/（.*?）/,"")})), {v:"other", ic:"i-store", l:"その他・分からない"} ]
 };
+/* 契約形態が「不明」の人向け：カード会社と直接契約の選択肢を含める（選ぶと直契約フローへ再分類） */
+const Q_curServiceU = {
+  key:"curService", section:"state", title:"今の決済はどのタイプに近い？", note:"現状に合わせてご案内します", help:"", type:"single",
+  opts:[ ...SERVICES.map(s=>({v:s.id, ic:"i-card", l:s.name.replace(/（.*?）/,"")})),
+         {v:"direct", ic:"i-scale", l:"カード会社と直接契約", s:"決済サービスを介していない"},
+         {v:"other", ic:"i-store", l:"分からない"} ]
+};
 const Q_shopMethods = {
   key:"methods", section:"wish", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
@@ -897,7 +906,7 @@ function questionSet(){
   if((ch==="shop"||ch==="both") && st && st!=="new"){
     const i=list.indexOf(Q_shopStatus);
     if(i>=0){
-      const q = st==="exist_kobetsu" ? Q_curRate : Q_curService;
+      const q = st==="exist_kobetsu" ? Q_curRate : (st==="exist_unknown" ? Q_curServiceU : Q_curService);
       if(list.indexOf(q)<0) list.splice(i+1,0,q);
     }
   }
@@ -970,6 +979,8 @@ function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`
 function selectOpt(i,rawV){
   const q=QUESTIONS[i];
   if(q.key==="channel"||q.key==="industry"||q.key==="ectrack"||q.key==="status"){ answers[q.key]=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
+  /* 「不明」ユーザーが直接契約を選んだら、直契約フローへ再分類（現料率を聞くルートに切替） */
+  if(q.key==="curService" && rawV==="direct"){ answers.status="exist_kobetsu"; delete answers.curService; QUESTIONS=questionSet(); buildWizard(); return; }
   const v=(q.key==="volume"||q.key==="curRate")?Number(rawV):rawV;
   if(q.type==="multi"){
     const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
@@ -1192,8 +1203,8 @@ function decideRoute(status, volume, isEC){
   return over2
     ? {route:"consult", title:"契約の切り替え（無料相談）がおすすめ",
        desc:"年間の決済が2億円を超える規模では、いまの手数料は割高になりがちです。契約の切り替えでコストを下げられる可能性が高く、専門家が無料で試算します。"}
-    : {route:"aggregator", title:"今の決済サービスで十分です",
-       desc:"年間の決済が2億円未満なら、いまの決済サービスで問題ありません。より条件の良いサービスへの乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。"};
+    : {route:"aggregator", title:"お使いのサービスと各社を比較しました",
+       desc:"手数料だけでなく、入金スピードや対応できる決済手段まで含めて比較しています。乗り換えると何がどう変わるかをご確認ください。"};
 }
 function payoutTxt(p){
   if(p>=.9) return "最短翌営業日";
@@ -1303,12 +1314,25 @@ function consultPitchDirect(R){
     return `<div class="route-banner"><div class="rb-title">カード会社との直接契約、料率は適正ですか？</div>
       <div class="rb-desc">契約内容の見直しをご希望の場合は、無料でご相談いただけます。</div></div>`;
   }
-  /* 2億以上 × 料率2.5%以下 → すでに良い水準（競争力ある料率なので提案しない） */
+  /* 2億以上 × 料率2.5%以下 → すでに良い水準 */
   if(known && rate <= NEGO_TRIGGER){
+    if(isKobetsu){
+      /* 直契約は既に直接契約。さらなる引き下げ余地は限定的なので正直に伝える */
+      return `<div class="route-banner"><div class="rb-title">今の料率（${(rate*100).toFixed(2)}%）は良い水準です</div>
+        <div class="rb-desc">直接契約で十分に低い料率です。さらなる引き下げ余地は限定的ですが、契約条件の見直しをご希望なら無料でご相談いただけます。</div></div>`;
+    }
+    /* 包括/不明は「良い水準。さらに直接契約でこんなメリット＋伴走」で相談導線に */
     const svc=SERVICES.find(s=>s.id===answers.curService);
-    const label = isKobetsu ? `今の料率（${(rate*100).toFixed(2)}%）は` : (svc?`お使いの【${svc.name}】は料率が`:`今の料率は`);
-    return `<div class="route-banner"><div class="rb-title">${label}すでに良い水準です</div>
-      <div class="rb-desc">十分に低い料率です。無理な見直しは不要。さらに条件を詰めたい場合のみ、無料でご相談ください。</div></div>`;
+    const label = svc?`お使いの【${svc.name}】は良い水準です`:`今の料率は良い水準です`;
+    return `<div class="save-banner consult-pitch">
+      <div class="save-h">${label}。さらに直接契約にすると…</div>
+      <ul class="pitch-benefits">
+        <li>中間事業者を介さない直接契約で、<b>Visa/Master 2.4%・JCB 2.5%</b> までさらに引き下げられる可能性</li>
+        <li>入金サイクルやブランド別の条件も、カード会社と<b>直接交渉</b>できる</li>
+        <li><b>完全成果報酬</b>・契約完了まで弊社が<b>伴走</b>します（下がらなければ費用は0円）</li>
+      </ul>
+      <p class="save-note">年間取扱高2億円以上の事業者さま向けのサービスです。下のフォームからお気軽にご相談ください。</p>
+    </div>`;
   }
   /* 完全成果報酬ピッチ本体（2億以上 × 2.5%以上 or 料率不明） */
   const save=known?(rate-NEGO_TARGET)*volYen:0, curFee=known?rate*volYen:0, newFee=NEGO_TARGET*volYen;
@@ -1358,12 +1382,8 @@ function compareTeaserShop(R){
   const cur=SERVICES.find(s=>s.id===answers.curService);
   if(!cur) return "";
   const top=R.scored[0], rec=top.s;
-  if(cur.id===rec.id) return `<div class="save-banner"><div class="save-h">今お使いの【${cur.name}】が、あなたの条件では最適です</div><p class="save-note">診断1位はお使いのサービスでした。下の全社比較もご確認いただけます。</p></div>`;
-  const volYen=R.volume*10000;
-  const curCost=cur.monthly*12+volYen*(cur.cardRate??cur.qrRate);
-  const recCost=rec.device+rec.monthly*12+top.annualFee;
-  const msg = recCost<curCost ? `今お使いの【${cur.name}】より <b>年間コストを抑えられる候補</b>が見つかりました` : `今お使いの【${cur.name}】より <b>あなたの条件に合う候補</b>が見つかりました`;
-  return `<div class="save-banner"><div class="save-h">${msg}</div><p class="save-note">正確な差額・入金や対応手段の違いは、下のフォーム送信後にご確認いただけます。</p></div>`;
+  if(cur.id===rec.id) return `<div class="save-banner"><div class="save-h">今お使いの【${cur.name}】が、あなたの条件では最適でした</div><p class="save-note">診断1位はお使いのサービスでした。下の全社比較もご確認いただけます。</p></div>`;
+  return `<div class="save-banner"><div class="save-h">今お使いの【${cur.name}】と、おすすめ（${rec.name}）を比較しました</div><p class="save-note">乗り換えると、<b>手数料・入金スピード・対応できる決済手段</b>がどう変わるかを、フォーム送信後に横並びでご確認いただけます。</p></div>`;
 }
 /* 現状 vs おすすめ の比較（詳細・ゲート内）。コスト・入金・対応手段のトレードオフを横並びで提示。 */
 function compareVsCurrentShop(R){
