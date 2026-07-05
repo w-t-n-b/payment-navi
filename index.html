@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断【主要10社を年間コスト比較】</title>
-<meta name="description" content="広告なし・完全中立。お店の条件を60秒入力するだけで、対面決済に最適なキャッシュレス端末・包括事業者を主要10社から年間コスト付きで診断します。特定事業者からの報酬・優先表示は一切なし。">
+<title>決済ナビ｜広告なし・中立のキャッシュレス決済 比較診断【店舗・EC対応】</title>
+<meta name="description" content="広告なし・完全中立。お店の条件を60秒入力するだけで、店舗（対面）・ネットショップ（EC）に最適なキャッシュレス決済を年間コスト付きで診断します。特定事業者からの報酬・優先表示は一切なし。">
 <link rel="canonical" href="https://w-t-n-b.github.io/payment-navi/">
 <meta name="theme-color" content="#1a6bb8">
 <!-- OGP -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断">
-<meta property="og:description" content="お店の条件を60秒入力するだけで、対面決済に最適な端末を主要10社から年間コスト付きで中立診断。広告なし・優先表示なし。">
+<meta property="og:description" content="お店の条件を60秒入力するだけで、店舗・ECのキャッシュレス決済を年間コスト付きで中立診断。広告なし・優先表示なし。">
 <meta property="og:url" content="https://w-t-n-b.github.io/payment-navi/">
 <meta property="og:site_name" content="決済ナビ">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="決済ナビ｜広告なし・中立の対面キャッシュレス端末 診断">
-<meta name="twitter:description" content="お店の条件を60秒入力するだけで最適な決済端末を主要10社から中立診断。広告なし・優先表示なし。">
+<meta name="twitter:description" content="お店の条件を60秒入力するだけで最適なキャッシュレス決済を中立診断。広告なし・優先表示なし。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
   "url":"https://w-t-n-b.github.io/payment-navi/",
   "applicationCategory":"BusinessApplication",
   "operatingSystem":"Web",
-  "description":"個人店・小規模店舗向けの、広告なし・中立の対面キャッシュレス決済端末 診断ツール。主要10社を年間コストで比較します。",
+  "description":"個人店・小規模店舗向けの、広告なし・中立の店舗・ECキャッシュレス決済 診断ツール。各社を年間コストで比較します。",
   "offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}
 }
 </script>
@@ -99,11 +99,20 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 .promise b{display:block;font-size:13px;font-weight:700;color:var(--navy)}
 .promise small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
 .promise small br{display:none}
-.services-strip{border:1px solid var(--line);border-radius:4px;padding:12px 14px;margin-bottom:16px}
-.services-strip .cap{font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px}
-.services-strip .cap b{color:var(--blue)}
+.services-strip{border:1px solid var(--line);border-radius:4px;padding:14px 16px;margin-bottom:16px}
+.services-strip .cap{font-size:13px;color:var(--navy);font-weight:800;margin-bottom:10px}
+.svc-group{margin-top:13px}
+.svc-group:first-of-type{margin-top:0}
+.svc-gh{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.svc-sub{border-left:2px solid var(--line);padding-left:12px;margin-top:9px}
+.svc-sh{font-size:11.5px;font-weight:600;color:var(--muted);margin-bottom:6px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips span{font-size:12px;color:var(--text);background:var(--sub-bg);border:1px solid var(--line);border-radius:3px;padding:3px 8px}
+.chip{display:inline-flex;align-items:center;font-size:12px;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:4px;padding:4px 9px;line-height:1.4}
+.chip .cd{width:6px;height:6px;border-radius:50%;background:var(--blue);margin-right:5px;flex:none}
+.svc-legend{display:flex;align-items:center;font-size:11.5px;color:var(--muted);margin-top:13px}
+.svc-legend .cd{width:6px;height:6px;border-radius:50%;background:var(--blue);margin-right:6px;flex:none}
+.svc-note{font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:600px){.chip{font-size:11px;padding:3px 7px}.services-strip{padding:12px 13px}}
 .how{margin-bottom:8px}
 .how h2{font-size:14px;font-weight:700;color:var(--navy);margin:0 0 10px}
 .steps{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:4px;counter-reset:st}
@@ -377,13 +386,29 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
   <!-- ===== HERO / LP ===== -->
   <section class="hero">
     <h1>あなたの店に本当に合う決済端末が、<br><span class="hl">60秒</span>でわかる。</h1>
-    <p class="sub">個人店・小規模店のための決済端末の比較診断。特定の決済事業者から報酬を受け取らず、あなたの入力条件だけで主要10社を年間コスト付きに採点します。</p>
+    <p class="sub">個人店・小規模店のための決済サービスの比較診断。特定の決済事業者から報酬を受け取らず、あなたの入力条件だけで年間コスト付きに採点します。</p>
     <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
     <div class="cta-note">無料・登録不要／所要約60秒</div>
 
     <div class="services-strip">
-      <div class="cap">比較対象の主要<b id="svcCount">—</b>サービス</div>
-      <div class="chips" id="svcChips"></div>
+      <div class="cap">比較対象サービス</div>
+      <div class="svc-group">
+        <div class="svc-gh">店舗の決済端末</div>
+        <div class="chips" id="svcChipsShop"></div>
+      </div>
+      <div class="svc-group">
+        <div class="svc-gh">EC・オンライン決済</div>
+        <div class="svc-sub">
+          <div class="svc-sh">ネットショップ作成とセット</div>
+          <div class="chips" id="svcChipsEcCart"></div>
+        </div>
+        <div class="svc-sub">
+          <div class="svc-sh">サイト不要・既存サイトに追加</div>
+          <div class="chips" id="svcChipsEcPsp"></div>
+        </div>
+      </div>
+      <div class="svc-legend"><i class="cd"></i>店舗とECを同一アカウントで使えるサービス</div>
+      <div class="svc-note">店舗・ECいずれも同一基準で比較。掲載は無料・広告掲載はありません。</div>
     </div>
 
     <div class="how">
@@ -1302,8 +1327,20 @@ function restart(){
 $("startBtn").onclick = startQuiz;
 
 /* ===================== 初期化 ===================== */
-$("svcCount").textContent = SERVICES.length;
-$("svcChips").innerHTML = SERVICES.map(s=>`<span>${s.name.replace(/（.*?）/,"")}</span>`).join("");
+function svcChip(name, cross, tip){ return `<span class="chip"${tip?` title="${tip}"`:""}>${cross?'<i class="cd"></i>':""}${name}</span>`; }
+$("svcChipsShop").innerHTML = SERVICES.map(s=>{ const n=s.name.replace(/（.*?）/,""); return svcChip(n, s.id==="square"||s.id==="stores"); }).join("");
+$("svcChipsEcCart").innerHTML = [
+  ["BASE",false,"BASEかんたん決済"],
+  ["STORES ネットショップ",true,"STORES決済｜店舗と同一アカウント可"],
+  ["Shopify",false,"Shopifyペイメント"]
+].map(a=>svcChip(a[0],a[1],a[2])).join("");
+$("svcChipsEcPsp").innerHTML = [
+  ["Square オンライン",true,"店舗のSquareと同一アカウント可"],
+  ["Stripe",false,""],
+  ["GMOイプシロン",false,""],
+  ["KOMOJU",false,""],
+  ["PayPal",false,""]
+].map(a=>svcChip(a[0],a[1],a[2])).join("");
 buildWizard();
 </script>
 </body>
