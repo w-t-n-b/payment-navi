@@ -773,12 +773,23 @@ const Q_sub = {
 };
 
 /* チャネルに応じた設問セット（共通設問は重複させず1回だけ） */
+/* 業種で「美容・サロン」を選んだときだけ聞く条件付き設問 */
+const Q_prepay = {
+  key:"prepay", title:"事前決済（前払い）は必要ですか？", note:"予約時のオンライン前払い・回数券などに使いたい場合", type:"single",
+  opts:[
+    {v:"yes",ic:"i-link",l:"必要",s:"予約時の前払い・回数券などに対応したい"},
+    {v:"no",ic:"i-minus",l:"不要",s:"来店時のお会計だけでよい"}
+  ]
+};
 function questionSet(){
   const ch = answers.channel;
   if(!ch) return [Q_CHANNEL];
-  if(ch==="shop") return [Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume,Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
-  if(ch==="ec")   return [Q_CHANNEL,Q_ecStatus,Q_cart,Q_industry,Q_volume,Q_ecMethods,Q_sub,Q_priorities];
-  return [Q_CHANNEL,Q_shopStatus,Q_ecStatus,Q_industry,Q_volume,Q_cart,Q_shopMethods,Q_terminal,Q_pos,Q_ecMethods,Q_sub,Q_priorities];
+  let list;
+  if(ch==="shop") list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume,Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
+  else if(ch==="ec") list=[Q_CHANNEL,Q_ecStatus,Q_cart,Q_industry,Q_volume,Q_ecMethods,Q_sub,Q_priorities];
+  else list=[Q_CHANNEL,Q_shopStatus,Q_ecStatus,Q_industry,Q_volume,Q_cart,Q_shopMethods,Q_terminal,Q_pos,Q_ecMethods,Q_sub,Q_priorities];
+  if(answers.industry==="beauty"){ const i=list.indexOf(Q_industry); if(i>=0) list.splice(i+1,0,Q_prepay); }
+  return list;
 }
 let QUESTIONS = [Q_CHANNEL];
 
@@ -841,6 +852,7 @@ function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`
 function selectOpt(i,rawV){
   const q=QUESTIONS[i];
   if(q.key==="channel"){ answers.channel=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
+  if(q.key==="industry"){ answers.industry=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
   const v=(q.key==="volume")?Number(rawV):rawV;
   if(q.type==="multi"){
     const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
@@ -1147,6 +1159,7 @@ function condTableHtml(ch){
   const rows=[];
   rows.push(['チャネル', ch==='shop'?'店舗（対面）':ch==='ec'?'ネットショップ（EC）':'店舗とEC 両方']);
   const ind=(Q_industry.opts.find(o=>o.v===answers.industry)||{}).l; if(ind) rows.push(['業種・商材',ind]);
+  if(answers.industry==="beauty"&&answers.prepay) rows.push(['事前決済（前払い）', answers.prepay==="yes"?"必要":"不要"]);
   rows.push(['年間取扱高', scaleYen(answers.volume)]);
   if(ch==='shop'||ch==='both'){
     rows.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
