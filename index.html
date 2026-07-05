@@ -179,16 +179,10 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 @keyframes mqLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes mqRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mq-viewport:hover .mq-track{animation-play-state:paused}
-/* 面リボンのアニメ（束が捻れて流れる／位相を大きくずらす・transform/opacityのみ・filter不使用） */
-.hb-ribbon .rb-band,.hb-ribbon .rb-hi{transform-box:fill-box;transform-origin:50% 12%;animation-name:rbTwist;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform}
-@keyframes rbTwist{
-  0%,100%{transform:translateX(0) rotate(-1.8deg) skewX(-5deg) scaleX(1)}
-  28%{transform:translateX(12px) rotate(1.3deg) skewX(3.5deg) scaleX(.85)}
-  54%{transform:translateX(-6px) rotate(2.6deg) skewX(6deg) scaleX(1.08)}
-  80%{transform:translateX(-14px) rotate(-1deg) skewX(-3.5deg) scaleX(.9)}
-}
+/* 面リボンは JS のパスモーフィング（複数の低速正弦波で S字をたなびかせる）で動かす。
+   形状を波打たせるため transform ではなくパス d を更新。reduced-motion では静止（JS側で制御）。 */
+.hb-ribbon .rb-band,.hb-ribbon .rb-hi{will-change:auto}
 @media(prefers-reduced-motion:reduce){
-  .hb-ribbon .rb-band,.hb-ribbon .rb-hi{animation:none}
   .mq-track{animation:none!important;flex-wrap:wrap}
   .mq-viewport{overflow:visible}
   .mq-dup{display:none}
@@ -1861,22 +1855,38 @@ function buildRibbon(){
     ["rbC",[[0,"#20303f",0],[.30,"#1a6bb8",1],[.72,"#4d94d6",1],[1,"#dbe9f5",0]]]
   ];
   const defs="<defs>"+grads.map(([id,st])=>`<linearGradient id="${id}" x1="0" y1="0" x2="0.3" y2="1">${st.map(([o,c,a])=>`<stop offset="${o}" stop-color="${c}" stop-opacity="${a}"/>`).join("")}</linearGradient>`).join("")+"</defs>";
-  /* [中心x, 帯幅(太→細でリズム), 透明度0.35-0.85, グラデid, animation-delay] ／ 画面外まで突き抜け */
+  /* [中心x, 帯幅(太→細でリズム), 透明度0.35-0.85, グラデid, 位相rad] ／ 画面外まで突き抜け */
   const bands = mobile
-    ? [[300,200,.55,"rbA",0],[400,90,.78,"rbB",-8],[210,40,.5,"rbC",-16]]
-    : [[300,200,.5,"rbA",0],[430,120,.72,"rbB",-7],[510,55,.82,"rbC",-15],[360,150,.6,"rbA",-4],[555,26,.45,"rbC",-22],[250,90,.55,"rbB",-11]];
-  let paths="", hi="";
-  bands.forEach(([bx,w,op,g,delay],i)=>{
-    const j=(i%2?1:-1)*10, off=w/2;
-    const p0=[bx,-90], c1=[bx+100+j,190], c2=[bx-85+j,540], p3=[bx+55,890];  // 緩やかなS字
-    const edge=(sx)=>`M ${(p0[0]+sx).toFixed(1)} ${p0[1]} C ${(c1[0]+sx).toFixed(1)} ${c1[1]}, ${(c2[0]+sx).toFixed(1)} ${c2[1]}, ${(p3[0]+sx).toFixed(1)} ${p3[1]}`;
-    const d=`${edge(-off)} L ${(p3[0]+off).toFixed(1)} ${p3[1]} C ${(c2[0]+off).toFixed(1)} ${c2[1]}, ${(c1[0]+off).toFixed(1)} ${c1[1]}, ${(p0[0]+off).toFixed(1)} ${p0[1]} Z`;
-    const dur=(15+i*1.4).toFixed(1), dl=(-(i*3.5)).toFixed(1);   // 速め＋帯ごとに位相を大きくずらす＝束が捻れて見える
-    paths+=`<path class="rb-band" d="${d}" fill="url(#${g})" opacity="${op}" style="animation-duration:${dur}s;animation-delay:${dl}s"/>`;
-    /* 帯の縁に沿う1pxの白ハイライトを、太い帯2本だけに添える（立体感） */
-    if(i<2) hi+=`<path class="rb-hi" d="${edge(-off+1)}" fill="none" stroke="#fff" stroke-width="1" opacity="0.5" style="animation-duration:${dur}s;animation-delay:${dl}s"/>`;
-  });
-  svg.innerHTML = defs+"<g class=\"rb-g\">"+paths+hi+"</g>";
+    ? [[300,200,.55,"rbA",0],[400,90,.78,"rbB",2.1],[210,40,.5,"rbC",4.2]]
+    : [[300,200,.5,"rbA",0],[430,120,.72,"rbB",1.0],[510,55,.82,"rbC",2.1],[360,150,.6,"rbA",3.2],[555,26,.45,"rbC",4.3],[250,90,.55,"rbB",5.4]];
+  /* 要素は一度だけ生成し、以降は d 属性のみ更新（パスモーフィング） */
+  let inner=defs+'<g class="rb-g">';
+  bands.forEach(b=>{ inner+=`<path class="rb-band" fill="url(#${b[3]})" opacity="${b[2]}"/>`; });
+  bands.forEach((b,i)=>{ if(i<2) inner+=`<path class="rb-hi" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>`; });
+  svg.innerHTML=inner+'</g>';
+  const pathEls=[...svg.querySelectorAll('.rb-band')], hiEls=[...svg.querySelectorAll('.rb-hi')];
+  const band=(p0,c1,c2,p3,off)=>`M ${(p0[0]-off).toFixed(1)} ${p0[1]} C ${(c1[0]-off).toFixed(1)} ${c1[1]}, ${(c2[0]-off).toFixed(1)} ${c2[1]}, ${(p3[0]-off).toFixed(1)} ${p3[1]} L ${(p3[0]+off).toFixed(1)} ${p3[1]} C ${(c2[0]+off).toFixed(1)} ${c2[1]}, ${(c1[0]+off).toFixed(1)} ${c1[1]}, ${(p0[0]+off).toFixed(1)} ${p0[1]} Z`;
+  const edge=(p0,c1,c2,p3,sx)=>`M ${(p0[0]+sx).toFixed(1)} ${p0[1]} C ${(c1[0]+sx).toFixed(1)} ${c1[1]}, ${(c2[0]+sx).toFixed(1)} ${c2[1]}, ${(p3[0]+sx).toFixed(1)} ${p3[1]}`;
+  function update(time){
+    for(let i=0;i<bands.length;i++){
+      const bx=bands[i][0], w=bands[i][1], ph=bands[i][4];
+      /* 3本の低速・非整数比の正弦波で制御点を別々に揺らす＝有機的にたなびく。位相ずらしで束が捻れる */
+      const s1=Math.sin(time*0.33+ph)*26, s2=Math.sin(time*0.24+ph*1.3+1.3)*34, s3=Math.sin(time*0.18+ph*0.7+2.1)*18;
+      const off=(w*(1+Math.sin(time*0.29+ph)*0.09))/2;   // 幅を緩やかに伸縮（±9%）＝ねじれ感
+      const p0=[bx,-90], c1=[bx+100+s1,190], c2=[bx-85+s2,540], p3=[bx+55+s3,890];
+      pathEls[i].setAttribute('d', band(p0,c1,c2,p3,off));
+      if(hiEls[i]) hiEls[i].setAttribute('d', edge(p0,c1,c2,p3,-off+1));
+    }
+  }
+  const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(reduce){ update(0); return; }               // 静止
+  const hero=$("heroSection");
+  let t0=null;
+  (function frame(now){
+    if(t0===null) t0=now;
+    if(!hero || !hero.classList.contains("hidden")) update((now-t0)*0.001);  // 結果画面(hidden)では停止
+    requestAnimationFrame(frame);
+  })(performance.now());
 }
 function buildMarquee(){
   const shop=$("mqShop"), ec=$("mqEc"); if(!shop&&!ec) return;
