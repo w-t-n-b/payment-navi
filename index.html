@@ -1021,9 +1021,11 @@ function rateShortEC(s){ return s.quoteOnly ? "要見積" : (s.cardRate*100).toF
 
 function scoreEC(){
   const volume=ecVol(), methods=answers.ecMethods||[], tr=answers.ectrack;
-  const pris=answers.priorities||[], needSub=answers.sub==="yes";
+  /* 事前決済（美容の前払い・回数券）を「定期課金/前払い」ニーズの実信号として使う。
+     旧: answers.sub（設定する設問が無く常に false＝死にコード）を prepay に置換。 */
+  const pris=answers.priorities||[], needSub = answers.prepay==="yes";
   const volFeeFactor = {500:0,3000:.3,7500:.5,15000:.8,35000:1.2,70000:1.6}[volume]||0;
-  const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, ease:.6 };
+  const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, ease:.6, sub: needSub?1.2:0 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
   const usable = EC_SERVICES.filter(s=>{
     if(tr==="cart_new") return s.track==="cart";
@@ -1048,10 +1050,9 @@ function scoreEC(){
     const feeS = r.rate!=null? invn(r.rate,feeLo,feeHi):.5;
     const initS= r.annualCost!=null? invn(initOf(r),initLo,initHi):.5;
     let cover=1; if(methods.length){ cover=methods.filter(m=>(s.methods[m]||0)>0).length/methods.length; }
-    const base = w.fee*feeS + w.initial*initS + w.payout*s.payout + w.brands*cover + w.ease*s.ease;
+    const base = w.fee*feeS + w.initial*initS + w.payout*s.payout + w.brands*cover + w.ease*s.ease + w.sub*(s.sub||0);
     const coverMult=0.25+0.75*cover;
-    const subMult=needSub?(s.sub>0?1:.7):1;
-    const total=base*coverMult*subMult;
+    const total=base*coverMult;
     return {...r, feeS, initS, cover, total};
   });
   const maxTotal=Math.max(...scored.map(x=>x.total))||1;
@@ -1067,7 +1068,7 @@ function whyBulletsEC(x,R){
   else if(R.ectrack==="cart_new") out.push(`<b>カートと決済がセット</b>で始められる`);
   if(R.methods.length){ const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>EC_METHOD_LABEL[m]); if(!miss.length) out.push(`希望の決済（${R.methods.map(m=>EC_METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`); }
   if(R.pris.includes("fee")||R.volFeeFactor>0) out.push(s.quoteOnly?`規模が大きく<b>個別見積</b>で料率交渉の余地`:`重視した<b>手数料</b>で有利（${rateTextEC(s)}）`);
-  if(R.needSub&&s.sub>0) out.push(`<b>定期課金</b>に対応`);
+  if(R.needSub&&s.sub>0) out.push(`予約時の<b>前払い・回数券（定期課金）</b>に対応`);
   if(s.cross>=.8) out.push(`<b>越境・海外決済</b>に強い`);
   return out.slice(0,4);
 }
@@ -1170,7 +1171,12 @@ function buildShopBlock(){
   const R=scoreServices();
   const rt=decideRoute(answers.status, R.volume, false);
   const top=R.scored[0], s0=top.s, isConsult=rt.route==="consult";
+  /* 店舗のみ×前払い希望：対面端末だけでは事前決済できないため、EC/リンク決済の併用を案内（EC診断がある both/ec では EC 側で反映） */
+  const prepayNote = (answers.channel==="shop" && answers.prepay==="yes")
+    ? `<p class="cart-note">前払い・回数券などの<b>事前決済</b>は対面端末だけでは対応できません。オンライン前払いには <b>Square リンク決済</b> や <b>STORES</b> など EC/リンク決済の併用がおすすめです（店舗と同一アカウントで一元管理できます）。</p>`
+    : "";
   const teaser = `
+    ${prepayNote}
     <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
     ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
       <div class="pick-cost"><table class="cost-table">
