@@ -1853,12 +1853,12 @@ function buildRibbon(){
   const svg=$("heroRibbon"); if(!svg) return;
   const mobile = window.matchMedia("(max-width:760px)").matches;
   const pal=["#20303f","#1a4f88","#1a6bb8","#3f82c4","#5f9bd0","#84b4dd","#a7cbe8"];  // 内(濃紺)→外(淡青)・フラット単色
-  const cx=600, cy=mobile?400:430, r0=70, N=mobile?6:11, step=mobile?66:48, period=5.5;
+  const cx=600, cy=mobile?400:430, r0=110, N=mobile?4:5, step=mobile?100:98, period=5;  // 5本前後・間隔ゆったり
   let rings="";
   for(let i=0;i<N;i++){
     const r=r0+i*step;
     const col=pal[Math.min(Math.round(i/(N-1)*(pal.length-1)), pal.length-1)];
-    const sw=Math.max(10, (mobile?26:40)-i*1.4).toFixed(1);          // 内側太→外側細でリズム
+    const sw=Math.max(18, (mobile?26:32)-i*2.2).toFixed(1);          // 内側太→外側細でリズム
     const dl=(-(i*period/N)).toFixed(2);                              // 位相を外側へ順送り＝波が外へ広がる
     rings+=`<circle class="rb-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" style="animation-duration:${period}s;animation-delay:${dl}s"/>`;
   }
