@@ -1351,8 +1351,21 @@ function buildConsultBlock(){
   return {kind:'shop', R, rt:{route:'consult',title:'',desc:''}, top:R.scored[0], teaser, detail, consulting:true};
 }
 
-/* 現状 vs おすすめ の比較（包括/不明ユーザーで、利用中サービスが分かる場合）。
-   単なる削減額ではなく、コスト・入金・対応手段のトレードオフを横並びで提示。 */
+/* teaser用（ゲート前）：フックだけ。正確な金額は出さず「もっと良い候補がある」ことだけ伝える */
+function compareTeaserShop(R){
+  const st=answers.status;
+  if(st!=="exist_hokatsu" && st!=="exist_unknown") return "";
+  const cur=SERVICES.find(s=>s.id===answers.curService);
+  if(!cur) return "";
+  const top=R.scored[0], rec=top.s;
+  if(cur.id===rec.id) return `<div class="save-banner"><div class="save-h">今お使いの【${cur.name}】が、あなたの条件では最適です</div><p class="save-note">診断1位はお使いのサービスでした。下の全社比較もご確認いただけます。</p></div>`;
+  const volYen=R.volume*10000;
+  const curCost=cur.monthly*12+volYen*(cur.cardRate??cur.qrRate);
+  const recCost=rec.device+rec.monthly*12+top.annualFee;
+  const msg = recCost<curCost ? `今お使いの【${cur.name}】より <b>年間コストを抑えられる候補</b>が見つかりました` : `今お使いの【${cur.name}】より <b>あなたの条件に合う候補</b>が見つかりました`;
+  return `<div class="save-banner"><div class="save-h">${msg}</div><p class="save-note">正確な差額・入金や対応手段の違いは、下のフォーム送信後にご確認いただけます。</p></div>`;
+}
+/* 現状 vs おすすめ の比較（詳細・ゲート内）。コスト・入金・対応手段のトレードオフを横並びで提示。 */
 function compareVsCurrentShop(R){
   const st=answers.status;
   if(st!=="exist_hokatsu" && st!=="exist_unknown") return "";   // 新規/直契約はここでは出さない
@@ -1362,10 +1375,7 @@ function compareVsCurrentShop(R){
   const curFee=volYen*(cur.cardRate ?? cur.qrRate), recFee=top.annualFee;
   const curCost=cur.monthly*12+curFee;              // 既存＝端末は保有済み（sunk）
   const recCost=rec.device+rec.monthly*12+recFee;   // 乗換＝新端末代を初年度計上
-  if(cur.id===rec.id){
-    return `<div class="save-banner"><div class="save-h">今の【${cur.name}】が、あなたの条件では最適です</div>
-      <p class="save-note">診断でも1位はお使いのサービスでした。無理な乗り換えは不要です。下の全社比較で他社との違いもご確認いただけます。</p></div>`;
-  }
+  if(cur.id===rec.id) return "";   // 現状=1位。teaser側で「最適」を伝えるので詳細比較は出さない
   const costDiff=recCost-curCost;                    // ＋なら高くなる
   const methDiff=methodCount(rec)-methodCount(cur);
   const bullets=[];
@@ -1411,7 +1421,8 @@ function buildShopBlock(){
   const indNote = (ind && ind.reason)
     ? `<div class="ind-note"><div class="wh">業種の傾向 ― ${ind.label}</div><p>${ind.reason}</p><p class="ind-axes">この傾向から <b>${ind.axes.join("・")}</b> の観点をやや重めに採点しました（業種による重み調整は±0.6以内。主役はあなたが選んだ重視点です）。</p>${ind.avoid?`<p class="ind-avoid">この業種で<b>避けたい傾向</b>：${ind.avoid}。</p>`:""}</div>`
     : "";
-  const showApply = answers.curService!==s0.id;   // 推奨＝利用中サービスなら申込CTA非表示
+  const isCurTop = answers.curService===s0.id;   // 推奨＝利用中サービス
+  /* teaser（ゲート前・フック）＝ 1位の社名/スコア/コスト＋なぜ1位＋「もっと良い候補あり」の煽り */
   const teaser = `
     ${prepayNote}
     ${topBanner}
@@ -1423,15 +1434,17 @@ function buildShopBlock(){
         <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(top.rate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
         <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>
       </table></div>
-      ${showApply?applyBtnHero(s0.url,s0.name):""}
     </div>
-    ${compareVsCurrentShop(R)}
-    ${runnersShopHtml(R)}`;
-  const detail = `
-    ${indNote}
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
+    ${compareTeaserShop(R)}`;
+  /* detail（ゲート後・ペイオフ）＝ 申込CTA・正確な差額・2位以降＋申込リンク・詳細比較 */
+  const detail = `
+    ${isCurTop?"":applyBtnHero(s0.url,s0.name)}
+    ${compareVsCurrentShop(R)}
+    ${indNote}
     <div class="facts"><span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
+    ${runnersShopHtml(R)}
     <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
     <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'shop', R, rt, top, teaser, detail};
@@ -1468,13 +1481,13 @@ function buildEcBlock(){
     ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
       <div class="pick-cost"><table class="cost-table">${costRows}</table></div>
       ${shopifyNote}
-      ${isConsult?"":applyBtnHero(s0.url,s0.name)}
     </div>
-    ${runnersEcHtml(R)}`;
-  const detail = `
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBulletsEC(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
-    ${facts}
+    ${facts}`;
+  const detail = `
+    ${isConsult?"":applyBtnHero(s0.url,s0.name)}
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${ecConsFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
+    ${runnersEcHtml(R)}
     <div class="compare card"><h3>EC決済 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${s.initial!=null?yen(s.initial):"—"}</td><td class="num">${s.monthly!=null?(s.monthly>0?yen(s.monthly):"0"):"—"}</td><td class="num">${rateShortEC(s)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td><td><a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a></td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'ec', R, rt, top, teaser, detail};
 }
@@ -1565,8 +1578,8 @@ function showResult(){
   const details=blocks.map(b=>(twin?chHead(b.kind):"")+b.detail).join("");
   const gateLead=anyConsult
     ? `あなたに合う契約を<b>専門家が無料でご提案</b>します。まずはご相談ください。`
-    : `各社の<b>詳しい強み・弱み、コスト内訳グラフ、スペック比較表</b>が見られます。`;
-  const ctaLabel=anyConsult?"無料で相談する":"詳しい比較を見る";
+    : `1位の<b>申込先</b>・2位以降の全ランキング・<b>正確な乗り換え節約額</b>・全社比較がすべて見られます。`;
+  const ctaLabel=anyConsult?"無料で相談する":"結果を全部見る（無料）";
   rc.innerHTML = head + teasers +
     `<div class="lock-wrap lock-locked" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div>${gateHtml(gateLead,ctaLabel)}</div>`;
   const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
