@@ -204,6 +204,13 @@ section{scroll-margin-top:60px}
 .route-banner .rb-desc{font-size:13px;color:var(--text);margin-top:3px}
 .ch-head{font-size:16px;font-weight:700;color:var(--navy);margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--blue)}
 .cart-note{font-size:12px;color:var(--muted);margin:14px 0 0;background:var(--sub-bg);border:1px solid var(--line);border-radius:4px;padding:9px 11px}
+.wz-section{font-size:12px;font-weight:800;color:var(--blue);letter-spacing:.03em;margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+.acc-list .wz-section:first-child{margin-top:0}
+.cond-table tr.ct-sec th{background:var(--sub-bg);color:var(--navy);font-weight:800;font-size:11.5px;letter-spacing:.03em;width:auto}
+.integ-badge{margin-top:12px;border:1px solid var(--blue);border-left:4px solid var(--blue);background:var(--blue-soft);color:var(--blue-d);font-weight:700;font-size:13px;padding:10px 13px;border-radius:4px}
+.mall-card{border:1px solid var(--line);border-radius:4px;padding:18px 16px;background:var(--sub-bg);font-size:14px;color:var(--ink)}
+.mall-card .mall-t{font-weight:800;color:var(--navy);font-size:15px;margin-bottom:8px}
+.mall-card p{margin:0 0 10px;color:var(--muted)}
 
 /* pick（1位） */
 .pick{border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:4px;padding:16px;margin-top:14px;background:#fff}
@@ -600,82 +607,107 @@ const SERVICES = [
    payout/sub(定期課金)/cross(越境)/ease(導入手軽さ): 0〜1
    ========================================================================================= */
 const EC_SERVICES = [
-  { id:"shopify", name:"Shopify ペイメント", kind:"cart", initial:0, monthly:3650, cardRate:0.0355,
-    methods:{card:1,conveni:.4,defer:.4,carrier:.4,qr:.5,amazonpay:0,paypal:1,bank:.3},
-    carts:{shopify:1}, payout:.7, sub:1, cross:1, ease:.7, quoteOnly:false,
-    devLabel:"月額¥3,650〜（Basic年払）",
-    pros:["越境・多通貨・拡張性が圧倒的","上位プランのカード料率は国内最安級","Payments利用なら取引手数料0円"],
-    cons:["月額が高め","国内手段(コンビニ/PayPay/後払い)はKOMOJU等アプリ追加が前提"],
-    url:"https://www.shopify.com/jp" },
-  { id:"base", name:"BASE かんたん決済", kind:"cart", initial:0, monthly:0, cardRate:0.066,
+  /* ── カート型（ネットショップ作成とセット）── */
+  { id:"base", track:"cart", cart:"base", name:"BASE（BASEかんたん決済）", crossacct:false,
+    initial:0, monthly:0, cardRate:0.066,
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
-    carts:{base:1}, payout:.3, sub:.6, cross:.6, ease:1, quoteOnly:false,
+    payout:.3, sub:.6, cross:.6, ease:1, quoteOnly:false,
     devLabel:"初期・月額0円（スタンダード）",
     pros:["初期・月額0円で最も手軽に開始","決済手段が幅広く標準搭載","2026年〜海外販売も標準化"],
     cons:["スタンダードは実質6.6%+40円と割高（グロースは2.9%）","入金が最短10営業日と遅い"],
     url:"https://thebase.com/" },
-  { id:"stores_ec", name:"STORES 決済（ネットショップ）", kind:"cart", initial:0, monthly:0, cardRate:0.055,
+  { id:"stores_ec", track:"cart", cart:"stores", name:"STORES ネットショップ（STORES決済）", crossacct:true,
+    initial:0, monthly:0, cardRate:0.055,
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
-    carts:{stores:1}, payout:.3, sub:.4, cross:.2, ease:1, quoteOnly:false,
+    payout:.3, sub:.4, cross:.2, ease:1, quoteOnly:false,
     devLabel:"初期・月額0円（フリー）",
-    pros:["フリーは初期・月額0円","楽天ペイ・PayPay・atone等 国内決済網が広い","スタンダード(月3,300円)なら3.6%〜"],
+    pros:["店舗のSTORESと同一アカウントで店舗＋EC統合","フリーは初期・月額0円","楽天ペイ・PayPay・atone等の国内決済網が広い"],
     cons:["フリーは5.5%〜と割高","入金が翌月末と遅い"],
     url:"https://stores.jp/ec" },
-  { id:"stripe", name:"Stripe", kind:"psp", initial:0, monthly:0, cardRate:0.036,
-    methods:{card:1,conveni:1,defer:0,carrier:0,qr:.8,amazonpay:0,paypal:0,bank:1},
-    carts:{own:1,eccube:1,shopify:.5,makeshop:.4,colorme:.4,futureshop:.3}, payout:.6, sub:1, cross:1, ease:.5, quoteOnly:false,
-    devLabel:"初期・月額0円（従量 3.6%）",
-    pros:["API/ドキュメントが最強クラス","135通貨・越境に強い","定期課金や周辺機能が豊富"],
-    cons:["海外カード+2%等でトータル料率が積み上がる","本領は自社開発で実装工数が要る"],
-    url:"https://stripe.com/jp" },
-  { id:"square_ec", name:"Square オンライン決済", kind:"psp", initial:0, monthly:0, cardRate:0.036,
+  { id:"shopify", track:"cart", cart:"shopify", name:"Shopify（Shopifyペイメント）", crossacct:false, twoTier:true,
+    initial:0, monthly:3650, cardRate:0.0355,
+    methods:{card:1,conveni:.4,defer:.4,carrier:.4,qr:.5,amazonpay:0,paypal:1,bank:.3},
+    payout:.7, sub:1, cross:1, ease:.7, quoteOnly:false,
+    devLabel:"月額¥3,650〜＋決済手数料（2階建て）",
+    note:"月額＋決済手数料の2階建て。Shopifyペイメント以外の決済を使うと取引手数料 約2% が上乗せされます。",
+    pros:["越境・多通貨・拡張性が圧倒的","上位プランのカード料率は国内最安級","Shopifyペイメント利用なら取引手数料0円"],
+    cons:["月額が高め","国内手段(コンビニ/PayPay/後払い)は追加アプリが前提"],
+    url:"https://www.shopify.com/jp" },
+
+  /* ── リンク型（サイト不要・SNS/LINEに決済リンク）── */
+  { id:"square_link", track:"link", name:"Square リンク決済", crossacct:true,
+    initial:0, monthly:0, cardRate:0.036,
     methods:{card:1,conveni:0,defer:0,carrier:0,qr:0,amazonpay:0,paypal:0,bank:0},
-    carts:{own:1}, payout:.9, sub:1, cross:.3, ease:.8, quoteOnly:false,
-    devLabel:"初期・月額0円",
-    pros:["0円で入金が速い（翌営業日〜）","ノーコードで最短即日・実店舗と一元管理","請求書決済は3.25%"],
-    cons:["コンビニ・後払い・越境に弱い","カード中心でオンライン手段が少ない"],
-    url:"https://squareup.com/jp/ja/online-store" },
-  { id:"paypal_ec", name:"PayPal", kind:"psp", initial:0, monthly:0, cardRate:0.036,
+    payout:.9, sub:1, cross:.3, ease:.9, quoteOnly:false,
+    devLabel:"初期・月額0円・リンク送るだけ",
+    pros:["店舗のSquareと同一アカウントで一元管理","メール/SNS/LINEにリンクを送るだけ・ノーコード","入金が速い（翌営業日〜）"],
+    cons:["カード中心で他の手段は弱い","本格的なECサイト運用には不向き"],
+    url:"https://squareup.com/jp/ja/online-checkout" },
+  { id:"stripe_link", track:"link", name:"Stripe（Payment Links）", crossacct:false,
+    initial:0, monthly:0, cardRate:0.036,
+    methods:{card:1,conveni:.5,defer:0,carrier:0,qr:.5,amazonpay:0,paypal:0,bank:.5},
+    payout:.6, sub:1, cross:1, ease:.7, quoteOnly:false,
+    devLabel:"初期・月額0円・リンク作成",
+    pros:["ノーコードで決済リンクを作成","135通貨・越境に強い","定期課金にも対応"],
+    cons:["海外カード+2%等でトータル料率が積み上がる"],
+    url:"https://stripe.com/jp/payments/payment-links" },
+  { id:"paypal", track:"link", name:"PayPal", crossacct:false,
+    initial:0, monthly:0, cardRate:0.036,
     methods:{card:.8,conveni:0,defer:0,carrier:0,qr:0,amazonpay:0,paypal:1,bank:0},
-    carts:{shopify:.8,makeshop:.8,colorme:.8,futureshop:.8,eccube:.8,own:1}, payout:.5, sub:1, cross:1, ease:.8, quoteOnly:false,
+    payout:.5, sub:1, cross:1, ease:.8, quoteOnly:false,
     devLabel:"初期・月額0円（3.6%+40円）",
-    pros:["越境・海外集金に圧倒的","多くのカートで導入が手軽","買い手保護でCVRに寄与"],
+    pros:["越境・海外集金に圧倒的","請求書/リンクで手軽に集金","買い手保護でCVRに寄与"],
     cons:["通貨換算+4%が重い","アカウント凍結・資金保留のリスク"],
     url:"https://www.paypal.com/jp/business" },
-  { id:"komoju", name:"KOMOJU（DEGICA）", kind:"psp", initial:0, monthly:0, cardRate:0.0325,
+
+  /* ── 決済代行（自前サイト・WordPress・既存サイトに追加）── */
+  { id:"square_online", track:"psp", name:"Square オンライン決済", crossacct:true,
+    initial:0, monthly:0, cardRate:0.036,
+    methods:{card:1,conveni:0,defer:0,carrier:0,qr:0,amazonpay:0,paypal:0,bank:0},
+    payout:.9, sub:1, cross:.3, ease:.8, quoteOnly:false,
+    devLabel:"初期・月額0円",
+    pros:["店舗のSquareと同一アカウントで一元管理","0円で入金が速い（翌営業日〜）","ノーコード〜APIまで対応"],
+    cons:["コンビニ・後払い・越境に弱い","カード中心"],
+    url:"https://squareup.com/jp/ja/online-store" },
+  { id:"gmo_epsilon", track:"psp", name:"GMOイプシロン", crossacct:false,
+    initial:0, monthly:0, cardRate:0.0299, rateNote:"要確認",
+    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
+    payout:.6, sub:1, cross:.4, ease:.5, quoteOnly:false,
+    devLabel:"カード2.79%〜（プランにより変動・要確認）",
+    pros:["主要カート・自社サイトに幅広く対応","カード2.79%〜と低めの水準","30以上の決済手段を一括"],
+    cons:["料率はプラン・審査で変動（要確認）","申込〜開始に日数"],
+    url:"https://www.epsilon.jp/" },
+  { id:"stripe", track:"psp", name:"Stripe", crossacct:false,
+    initial:0, monthly:0, cardRate:0.036,
+    methods:{card:1,conveni:1,defer:0,carrier:0,qr:.8,amazonpay:0,paypal:0,bank:1},
+    payout:.6, sub:1, cross:1, ease:.5, quoteOnly:false,
+    devLabel:"初期・月額0円（従量 3.6%）",
+    pros:["API/拡張性が最強クラス","135通貨・越境に強い","定期課金や周辺機能が豊富"],
+    cons:["海外カード+2%等で積み上がる","本領は自社開発で実装工数が要る"],
+    url:"https://stripe.com/jp" },
+  { id:"komoju", track:"psp", name:"KOMOJU（DEGICA）", crossacct:false,
+    initial:0, monthly:0, cardRate:0.0325,
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:0,paypal:0,bank:1},
-    carts:{shopify:1,eccube:1,own:1,makeshop:.4}, payout:.6, sub:.7, cross:1, ease:.7, quoteOnly:false,
+    payout:.6, sub:.7, cross:1, ease:.7, quoteOnly:false,
     devLabel:"初期・月額0円（料率公開 3.25%）",
-    pros:["全料率を公式公開＝透明","初期・月額0円で65手段以上","Shopifyで使える数少ない国産系代行"],
+    pros:["全料率を公式公開＝透明","初期・月額0円で多手段に対応","越境・多言語に強い"],
     cons:["3.25%は大手交渉料率より高めになりうる","サブスク課金はカード限定"],
-    url:"https://ja.komoju.com/" },
-  { id:"gmopg", name:"GMOペイメントゲートウェイ", kind:"psp", initial:null, monthly:null, cardRate:null,
-    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
-    carts:{eccube:1,makeshop:1,colorme:1,own:1}, payout:.6, sub:1, cross:.5, ease:.3, quoteOnly:true,
-    devLabel:"料率・費用は要見積",
-    pros:["国内最大手の信頼性・実績","30以上の決済手段を一括","大規模なら料率交渉の余地"],
-    cons:["料率・費用が非公開で比較しづらい","中堅〜大規模向け・審査厳しめ"],
-    url:"https://www.gmo-pg.com/service/mulpay/" },
-  { id:"sbps", name:"SBペイメントサービス", kind:"psp", initial:null, monthly:null, cardRate:null,
-    methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
-    carts:{shopify:1,eccube:1,futureshop:1,own:1}, payout:.6, sub:1, cross:.5, ease:.4, quoteOnly:true,
-    devLabel:"料率・費用は要見積",
-    pros:["対応手段が40ブランド超で最多クラス","PayPay・ソフトバンク系に強い","主要カートを網羅"],
-    cons:["費用が非公開・費目が多く総コストが読みにくい","要見積で導入に時間"],
-    url:"https://www.sbpayment.jp/" },
-  { id:"sony", name:"ソニーペイメント（e-SCOTT）", kind:"psp", initial:0, monthly:0, cardRate:0.035,
-    methods:{card:1,conveni:1,defer:1,carrier:1,qr:.5,amazonpay:0,paypal:0,bank:1},
-    carts:{eccube:1,futureshop:1,own:1}, payout:.6, sub:1, cross:.3, ease:.5, quoteOnly:false,
-    devLabel:"EC-CUBEプラン カード3.5%",
-    pros:["ソニーブランドの信頼性","EC-CUBEプランはカード3.5%・初期/月額0円","定期購入機能を追加料金なしで提供"],
-    cons:["総合プランは料率非公開","越境・Amazon Pay/PayPalの個別対応は弱め"],
-    url:"https://www.sonypaymentservices.jp/" }
+    url:"https://ja.komoju.com/" }
 ];
 
-/* ===================== 診断質問（チャネル対応） ===================== */
-/* 共通設問（店舗/EC/両方で1回だけ聞く） */
+/* ===================== 診断質問（v2：状態/条件の2セクション＋ECトラック） ===================== */
+const VOL_OPTS=[
+  {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
+  {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
+  {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
+  {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
+  {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
+  {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
+];
+
+/* 共通（現状） */
 const Q_industry = {
-  key:"industry", title:"どんな業種・商材ですか？", note:"診断の傾向づけに使います", type:"single",
+  key:"industry", section:"state", title:"どんな業種・商材ですか？", note:"診断の傾向づけに使います", type:"single",
   opts:[
     {v:"food",ic:"i-food",l:"飲食",s:"居酒屋・カフェ・レストラン"},
     {v:"retail",ic:"i-retail",l:"小売・物販",s:"雑貨・アパレル・食品"},
@@ -685,20 +717,11 @@ const Q_industry = {
     {v:"other",ic:"i-store",l:"その他",s:""}
   ]
 };
-const Q_volume = {
-  key:"volume", title:"年間の取扱高（キャッシュレス決済額）は？",
-  note:"手数料の試算と、最適な契約形態の判定に使います", help:"これから導入の方は見込みでOK", type:"single",
-  opts:[
-    {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
-    {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
-    {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
-    {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
-    {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
-    {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
-  ]
-};
+const Q_volume = { key:"volume", section:"state", title:"年間の取扱高（キャッシュレス決済額）は？", note:"手数料の試算と最適な契約形態の判定に使います", help:"これから導入の方は見込みでOK", type:"single", opts:VOL_OPTS };
+const Q_volumeShop = { key:"volumeShop", section:"state", title:"店舗（対面）の年間取扱高は？", note:"店舗ぶんの決済額。店舗とECは別々に試算します", help:"見込みでOK", type:"single", opts:VOL_OPTS };
+const Q_volumeEc = { key:"volumeEc", section:"state", title:"ネットショップ（EC）の年間取扱高は？", note:"ECぶんの決済額", help:"見込みでOK", type:"single", opts:VOL_OPTS };
 const Q_priorities = {
-  key:"priorities", title:"特に重視したいのは？", note:"選んだ項目の重みが上がります（複数選択可）", type:"multi",
+  key:"priorities", section:"wish", title:"特に重視したいのは？", note:"選んだ項目の重みが上がります（複数選択可）", type:"multi",
   opts:[
     {v:"fee",ic:"i-yen",l:"手数料の安さ",s:"決済ごとのコストを抑えたい"},
     {v:"initial",ic:"i-gift",l:"初期費用の安さ",s:"初期・月額を抑えたい"},
@@ -707,19 +730,19 @@ const Q_priorities = {
   ]
 };
 
-/* Q0：販売チャネル */
+/* Q1：決済を受ける場所（現状） */
 const Q_CHANNEL = {
-  key:"channel", title:"どの販売チャネルの決済ですか？", note:"店舗（対面）とネットショップ（EC）で最適な決済が変わります", type:"single",
+  key:"channel", section:"state", title:"決済を受ける場所は？", note:"店舗（対面）とECで最適な決済が変わります", type:"single",
   opts:[
-    {v:"shop",ic:"i-store",l:"店舗（対面）",s:"実店舗・移動販売でお客様と対面"},
-    {v:"ec",ic:"i-qr",l:"ネットショップ（EC）",s:"通販・オンライン販売"},
+    {v:"shop",ic:"i-store",l:"店舗（対面）のみ",s:"実店舗・移動販売でお客様と対面"},
+    {v:"ec",ic:"i-qr",l:"ECサイト（オンライン）のみ",s:"通販・ネット販売"},
     {v:"both",ic:"i-globe",l:"店舗とEC 両方",s:"実店舗もネット販売もある"}
   ]
 };
 
-/* 店舗（対面）用 */
+/* 店舗（現状/希望） */
 const Q_shopStatus = {
-  key:"status", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
+  key:"status", section:"state", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
   opts:[
     {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだ決済端末を持っていない"},
     {v:"exist_hokatsu",ic:"i-card",l:"導入済み・包括事業者と契約",s:"Square・Airペイ・stera 等と契約中"},
@@ -728,7 +751,7 @@ const Q_shopStatus = {
   ]
 };
 const Q_shopMethods = {
-  key:"methods", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
+  key:"methods", section:"wish", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
     {v:"credit",ic:"i-card",l:"クレジットカード（タッチ含む）",s:"VISA / Master / JCB・NFCタッチ"},
     {v:"emoney",ic:"i-key",l:"電子マネー",s:"iD・QUICPay・交通系IC 等"},
@@ -736,7 +759,7 @@ const Q_shopMethods = {
   ]
 };
 const Q_terminal = {
-  key:"terminal", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
+  key:"terminal", section:"wish", title:"端末の使い方に近いのは？", note:"設置スタイルに合う端末を優先します", type:"single",
   opts:[
     {v:"mobile",ic:"i-mobile",l:"持ち運びたい",s:"テーブル会計・移動販売・出張"},
     {v:"counter",ic:"i-counter",l:"カウンター据置",s:"レジ横に固定して使う"},
@@ -744,39 +767,35 @@ const Q_terminal = {
   ]
 };
 const Q_pos = {
-  key:"pos", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
+  key:"pos", section:"wish", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
   opts:[
     {v:"yes",ic:"i-link",l:"必要",s:"POSレジ・売上管理と繋げたい"},
     {v:"no",ic:"i-minus",l:"特に不要",s:"決済ができれば十分"}
   ]
 };
 
-/* EC（ネットショップ）用 */
-const Q_ecStatus = {
-  key:"ecStatus", title:"EC決済の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
+/* EC（現状/希望） */
+const Q_ectrack = {
+  key:"ectrack", section:"state", title:"ECの売り方に近いのは？", note:"売り方で比較するサービスが変わります", type:"single",
   opts:[
-    {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだEC決済を入れていない"},
-    {v:"exist_hokatsu",ic:"i-card",l:"導入済み・カート内蔵/一括代行",s:"BASE・STORES・Shopify Payments 等"},
-    {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別/直接契約",s:"アクワイアラ直・大手PSP個別契約"},
-    {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
+    {v:"cart_new",ic:"i-store",l:"これからネットショップを作って売る",s:"BASE・STORES・Shopify等でこれから開設"},
+    {v:"link",ic:"i-link",l:"SNS・LINEに決済リンクを送って売りたい",s:"サイトは作らず、リンクで支払ってもらう"},
+    {v:"psp",ic:"i-globe",l:"自前サイト・WordPressがすでにある",s:"既存サイトに決済を追加したい"},
+    {v:"cart_have",ic:"i-card",l:"すでにカート（BASE/STORES/Shopify等）を利用中",s:"使っているカートを選びます"},
+    {v:"mall",ic:"i-store",l:"モール（楽天・Yahoo!・minne等）に出店",s:"モールは決済が内蔵で選べません"}
   ]
 };
-const Q_cart = {
-  key:"cart", title:"利用中（予定）のカート／サイトは？", note:"カートで使える決済が変わるため、候補を絞り込みます", type:"single",
+const Q_ecCartHave = {
+  key:"ecCart", section:"state", title:"利用中のカートは？", note:"そのカートの内蔵決済を基準にご案内します", type:"single",
   opts:[
-    {v:"shopify",ic:"i-globe",l:"Shopify",s:"越境・拡張に強い"},
-    {v:"base",ic:"i-store",l:"BASE",s:"無料・手軽"},
-    {v:"stores",ic:"i-store",l:"STORES",s:"無料・手軽"},
-    {v:"makeshop",ic:"i-store",l:"MakeShop",s:""},
-    {v:"colorme",ic:"i-store",l:"カラーミーショップ",s:""},
-    {v:"futureshop",ic:"i-store",l:"futureshop",s:""},
-    {v:"eccube",ic:"i-store",l:"EC-CUBE",s:"決済を自由に選べる"},
-    {v:"own",ic:"i-store",l:"自社開発・その他",s:"フルスクラッチ等"},
-    {v:"undecided",ic:"i-minus",l:"まだ決めていない",s:"カートも含めて検討中"}
+    {v:"base",ic:"i-store",l:"BASE",s:""},
+    {v:"stores",ic:"i-store",l:"STORES",s:""},
+    {v:"shopify",ic:"i-globe",l:"Shopify",s:""},
+    {v:"other",ic:"i-minus",l:"その他・分からない",s:""}
   ]
 };
 const Q_ecMethods = {
-  key:"ecMethods", title:"用意したいオンライン決済手段は？", note:"対応していない手段があると減点します", type:"multi",
+  key:"ecMethods", section:"wish", title:"用意したいオンライン決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
     {v:"card",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
     {v:"conveni",ic:"i-store",l:"コンビニ決済",s:"クレカ非保有層に有効"},
@@ -788,30 +807,40 @@ const Q_ecMethods = {
     {v:"bank",ic:"i-yen",l:"銀行振込・ペイジー",s:""}
   ]
 };
-const Q_sub = {
-  key:"sub", title:"定期課金（サブスク）は使いますか？", note:"必要なら継続課金に対応するサービスを優先します", type:"single",
-  opts:[
-    {v:"yes",ic:"i-link",l:"使う",s:"月額・頒布会・定期便など"},
-    {v:"no",ic:"i-minus",l:"使わない",s:"都度購入のみ"}
-  ]
-};
 
-/* チャネルに応じた設問セット（共通設問は重複させず1回だけ） */
 /* 業種で「美容・サロン」を選んだときだけ聞く条件付き設問 */
 const Q_prepay = {
-  key:"prepay", title:"事前決済（前払い）は必要ですか？", note:"予約時のオンライン前払い・回数券などに使いたい場合", type:"single",
+  key:"prepay", section:"state", title:"事前決済（前払い）は必要ですか？", note:"予約時のオンライン前払い・回数券などに使いたい場合", type:"single",
   opts:[
     {v:"yes",ic:"i-link",l:"必要",s:"予約時の前払い・回数券などに対応したい"},
     {v:"no",ic:"i-minus",l:"不要",s:"来店時のお会計だけでよい"}
   ]
 };
+
+/* チャネル＋ECトラックに応じた設問セット（現状→希望の順） */
 function questionSet(){
-  const ch = answers.channel;
+  const ch=answers.channel;
   if(!ch) return [Q_CHANNEL];
+  const tr=answers.ectrack, ecActive = tr && tr!=="mall";
   let list;
-  if(ch==="shop") list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume,Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
-  else if(ch==="ec") list=[Q_CHANNEL,Q_ecStatus,Q_cart,Q_industry,Q_volume,Q_ecMethods,Q_sub,Q_priorities];
-  else list=[Q_CHANNEL,Q_shopStatus,Q_ecStatus,Q_industry,Q_volume,Q_cart,Q_shopMethods,Q_terminal,Q_pos,Q_ecMethods,Q_sub,Q_priorities];
+  if(ch==="shop"){
+    list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume, Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
+  } else if(ch==="ec"){
+    let state=[Q_CHANNEL,Q_ectrack];
+    if(tr==="cart_have") state.push(Q_ecCartHave);
+    if(tr==="mall"){ list=state; }
+    else if(!tr){ list=state; }
+    else { list=[...state,Q_industry,Q_volume, Q_ecMethods,Q_priorities]; }
+  } else { // both
+    let state=[Q_CHANNEL,Q_shopStatus,Q_ectrack];
+    if(tr==="cart_have") state.push(Q_ecCartHave);
+    state.push(Q_industry,Q_volumeShop);
+    if(ecActive) state.push(Q_volumeEc);
+    let wish=[Q_shopMethods];
+    if(ecActive) wish.push(Q_ecMethods);
+    wish.push(Q_terminal,Q_priorities,Q_pos);
+    list=[...state,...wish];
+  }
   if(answers.industry==="beauty"){ const i=list.indexOf(Q_industry); if(i>=0) list.splice(i+1,0,Q_prepay); }
   return list;
 }
@@ -832,9 +861,14 @@ function answerText(i){
 }
 function openInitial(){ for(let i=0;i<QUESTIONS.length;i++) if(!isAnswered(i)) return i; return 0; }
 
+const SECTION_LABEL={state:"お店の現状について",wish:"ご希望について"};
 function buildWizard(){
   const box=$("accList");
+  let prevSec=null;
   box.innerHTML = QUESTIONS.map((q,i)=>{
+    const sec=q.section||"state";
+    let secHead="";
+    if(sec!==prevSec){ prevSec=sec; secHead=`<div class="wz-section">${SECTION_LABEL[sec]||""}</div>`; }
     const two = q.opts.length<=2 ? "two":"";
     const opts = `<div class="opts ${two}" role="group" data-q="${i}">`+ q.opts.map(o=>
       `<button class="opt" type="button" data-q="${i}" data-v="${o.v}" aria-pressed="false">
@@ -845,7 +879,7 @@ function buildWizard(){
     const note = q.note + (q.help?` <span class="help">${q.help}</span>`:"");
     const multiHint = q.type==="multi" ? `<p class="multi-hint">${ICON("i-check")}当てはまるものをすべて選択</p>` : "";
     const goBtn = q.type==="multi" ? `<div class="acc-go"><button class="btn btn-primary sm" type="button" data-next="${i}">次へ${ICON("i-arrow")}</button></div>` : "";
-    return `<div class="acc" data-i="${i}">
+    return secHead + `<div class="acc" data-i="${i}">
       <button class="acc-head" type="button" data-head="${i}" aria-expanded="false">
         <span class="acc-no" data-no="${i}">${i+1}</span>
         <span class="acc-q"><span class="acc-title">${q.title}</span><span class="acc-ans" data-ans="${i}"></span></span>
@@ -875,8 +909,7 @@ function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`
 
 function selectOpt(i,rawV){
   const q=QUESTIONS[i];
-  if(q.key==="channel"){ answers.channel=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
-  if(q.key==="industry"){ answers.industry=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
+  if(q.key==="channel"||q.key==="industry"||q.key==="ectrack"){ answers[q.key]=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
   const v=(q.key==="volume")?Number(rawV):rawV;
   if(q.type==="multi"){
     const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
@@ -925,8 +958,10 @@ function updateProgress(){
 $("diagBtn").onclick = ()=>{ if(QUESTIONS.every((_,i)=>isAnswered(i))) showResult(); };
 
 /* ===================== スコアリング（既存ロジック維持） ===================== */
+function shopVol(){ return answers.channel==="both" ? answers.volumeShop : answers.volume; }
+function ecVol(){ return answers.channel==="both" ? answers.volumeEc : answers.volume; }
 function scoreServices(){
-  const volume = answers.volume, methods = answers.methods||[], term = answers.terminal;
+  const volume = shopVol(), methods = answers.methods||[], term = answers.terminal;
   const pris = answers.priorities||[], needPos = answers.pos==="yes";
   const volFeeFactor = {500:0, 3000:.3, 7500:.5, 15000:.8, 35000:1.2, 70000:1.6}[volume] || 0;
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
@@ -978,24 +1013,30 @@ const LEAD_ENDPOINT = ""; // 例: "https://script.google.com/macros/s/XXXXXXXX/e
 /* 導入状況＋年間取扱高から最適ルートを判定（個別契約=常にコンサル／包括は2億で申込↔コンサル） */
 /* ===================== EC スコアリング＆ヘルパー ===================== */
 const EC_METHOD_LABEL={card:"カード",conveni:"コンビニ",defer:"後払い",carrier:"キャリア",qr:"QR/ID",amazonpay:"Amazon Pay",paypal:"PayPal",bank:"銀行振込"};
+const ECTRACK_LABEL={cart_new:"これから作る（カート型）",link:"決済リンク型",psp:"決済代行（既存サイト）",cart_have:"カート利用中",mall:"モール出店"};
 const CART_LABEL={shopify:"Shopify",base:"BASE",stores:"STORES",makeshop:"MakeShop",colorme:"カラーミー",futureshop:"futureshop",eccube:"EC-CUBE",own:"自社/その他",undecided:"未定"};
 function payoutTxtEC(p){ if(p>=.85)return "最短翌営業日"; if(p>=.6)return "週次〜"; if(p>=.4)return "月2回程度"; return "翌月末〜"; }
 function rateTextEC(s){ return s.quoteOnly ? "料率 要見積" : `カード ${(s.cardRate*100).toFixed(2)}%`; }
 function rateShortEC(s){ return s.quoteOnly ? "要見積" : (s.cardRate*100).toFixed(2)+"%"; }
 
 function scoreEC(){
-  const volume=answers.volume, methods=answers.ecMethods||[], cart=answers.cart;
+  const volume=ecVol(), methods=answers.ecMethods||[], tr=answers.ectrack;
   const pris=answers.priorities||[], needSub=answers.sub==="yes";
   const volFeeFactor = {500:0,3000:.3,7500:.5,15000:.8,35000:1.2,70000:1.6}[volume]||0;
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, ease:.6 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
-  const usable = EC_SERVICES.filter(s=> (!cart||cart==="undecided") ? true : (s.carts[cart]||0)>0 );
+  const usable = EC_SERVICES.filter(s=>{
+    if(tr==="cart_new") return s.track==="cart";
+    if(tr==="cart_have") return s.track==="cart" && ((answers.ecCart&&answers.ecCart!=="other") ? s.cart===answers.ecCart : true);
+    if(tr==="link") return s.track==="link";
+    if(tr==="psp") return s.track==="psp";
+    return true;
+  });
   const raw = usable.map(s=>{
     const rate = s.cardRate;
     const annualFee = rate!=null ? volume*10000*rate : null;
     const annualCost = (rate!=null && s.monthly!=null) ? (s.initial||0)+s.monthly*12+annualFee : null;
-    const cartFit = (cart&&cart!=="undecided") ? (s.carts[cart]||0) : 1;
-    return {s, rate, annualFee, annualCost, cartFit};
+    return {s, rate, annualFee, annualCost};
   });
   const priced = raw.filter(r=>r.annualCost!=null);
   const initOf = r=>(r.s.initial||0)+r.s.monthly*12;
@@ -1009,19 +1050,21 @@ function scoreEC(){
     let cover=1; if(methods.length){ cover=methods.filter(m=>(s.methods[m]||0)>0).length/methods.length; }
     const base = w.fee*feeS + w.initial*initS + w.payout*s.payout + w.brands*cover + w.ease*s.ease;
     const coverMult=0.25+0.75*cover;
-    const cartMult=0.4+0.6*(r.cartFit||0);
     const subMult=needSub?(s.sub>0?1:.7):1;
-    const total=base*coverMult*cartMult*subMult;
+    const total=base*coverMult*subMult;
     return {...r, feeS, initS, cover, total};
   });
   const maxTotal=Math.max(...scored.map(x=>x.total))||1;
   scored.forEach(x=> x.pct=Math.round(x.total/maxTotal*100));
   scored.sort((a,b)=>b.total-a.total);
-  return {scored, volFeeFactor, volume, methods, pris, cart, needSub};
+  return {scored, volFeeFactor, volume, methods, pris, ectrack:tr, needSub};
 }
 function whyBulletsEC(x,R){
   const s=x.s,out=[];
-  if(R.cart&&R.cart!=="undecided") out.push(`カート「<b>${CART_LABEL[R.cart]}</b>」で利用できる`);
+  if(R.ectrack==="cart_have") out.push(`ご利用中のカートで<b>そのまま使える</b>`);
+  else if(R.ectrack==="link") out.push(`サイト不要・<b>リンクを送るだけ</b>で始められる`);
+  else if(R.ectrack==="psp") out.push(`既存サイトに<b>追加できる</b>`);
+  else if(R.ectrack==="cart_new") out.push(`<b>カートと決済がセット</b>で始められる`);
   if(R.methods.length){ const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>EC_METHOD_LABEL[m]); if(!miss.length) out.push(`希望の決済（${R.methods.map(m=>EC_METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`); }
   if(R.pris.includes("fee")||R.volFeeFactor>0) out.push(s.quoteOnly?`規模が大きく<b>個別見積</b>で料率交渉の余地`:`重視した<b>手数料</b>で有利（${rateTextEC(s)}）`);
   if(R.needSub&&s.sub>0) out.push(`<b>定期課金</b>に対応`);
@@ -1153,52 +1196,71 @@ function buildShopBlock(){
 /* ---- EC（ネットショップ）ブロック ---- */
 function buildEcBlock(){
   const R=scoreEC();
-  const rt=decideRoute(answers.ecStatus, R.volume, true);
-  const top=R.scored[0], s0=top.s, isConsult=rt.route==="consult";
+  const top=R.scored[0], s0=top.s;
+  const tr=R.ectrack, over2=R.volume>=BORDER;
+  const cartName = (answers.ecCart&&answers.ecCart!=="other") ? ({base:"BASE",stores:"STORES",shopify:"Shopify"}[answers.ecCart]||"") : "";
+  const TR = ({
+    cart_new:{title:"カート一体型で始めるのがおすすめ", note:"サイトをこれから作る方向けに、カート一体型サービスを比較しました。"},
+    cart_have:{title:cartName?`ご利用中の「${cartName}」内蔵決済が基本`:"利用中カートの内蔵決済が基本", note:cartName?`ご利用中の「${cartName}」の内蔵決済を基準にご案内します。決済手段の追加やカート乗り換えも比較できます。`:"ご利用中カートの内蔵決済を基準にご案内します。"},
+    link:{title:"決済リンクで手軽に始めるのがおすすめ", note:"サイト不要で始められる、決済リンク型サービスを比較しました。"},
+    psp:{title:"決済代行を既存サイトに追加", note:"既存サイトに追加できる、決済代行サービスを比較しました。"}
+  })[tr] || {title:"あなたに合うEC決済", note:""};
+  const rt = over2
+    ? {route:"consult", title:"規模が大きいため専門相談もおすすめ", desc:"ECの年間取扱高が2億円規模になると、個別条件での契約が有利になる場合があります。専門コンサルが無料で試算します。"}
+    : {route:"aggregator", title:TR.title, desc:TR.note};
+  const isConsult = rt.route==="consult";
   const costRows = s0.quoteOnly
     ? `<tr><td>初期・月額</td><td class="num">要見積</td></tr><tr class="total"><td>年間コスト</td><td class="num">要見積</td></tr>`
     : `<tr><td>初期費用</td><td class="num">${yen(s0.initial||0)}</td></tr>
        <tr><td>月額（12ヶ月分）</td><td class="num">${yen((s0.monthly||0)*12)}</td></tr>
        <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(s0.cardRate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
        <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>`;
-  const cartNote = (R.cart&&R.cart!=="undecided") ? `<p class="cart-note">カート「<b>${CART_LABEL[R.cart]}</b>」で使える決済に絞り込んで採点しています。</p>` : "";
+  const trackNote = TR.note ? `<p class="cart-note">${TR.note}</p>` : "";
+  const shopifyNote = s0.note ? `<p class="cart-note">${s0.note}</p>` : "";
   const teaser = `
-    ${cartNote}
+    ${trackNote}
     <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
     ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
       <div class="pick-cost"><table class="cost-table">${costRows}</table></div>
+      ${shopifyNote}
     </div>`;
-  const facts = `<div class="facts"><span>${(s0.monthly||0)>0?`月額 ${yen(s0.monthly)}`:"初期・月額 0円"}</span><span>${rateTextEC(s0)}</span><span>入金 ${payoutTxtEC(s0.payout)}</span>${s0.sub>0?"<span>定期課金 対応</span>":""}${s0.cross>=.8?"<span>越境◎</span>":""}</div>`;
+  const facts = `<div class="facts"><span>${(s0.monthly||0)>0?`月額 ${yen(s0.monthly)}`:"初期・月額 0円"}</span><span>${rateTextEC(s0)}</span><span>入金 ${payoutTxtEC(s0.payout)}</span>${s0.sub>0?"<span>定期課金 対応</span>":""}${s0.cross>=.8?"<span>越境◎</span>":""}${s0.crossacct?"<span>店舗と同一アカウント</span>":""}</div>`;
   const detail = `
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBulletsEC(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
     ${facts}
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${ecConsFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     <div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div><div class="rn">${s.name}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間コスト <b>要見積</b>"}・${rateTextEC(s)}・入金${payoutTxtEC(s.payout)}</div></div><div class="rp"><div class="n num">${x.pct}%</div><small>適合</small></div></div>`;}).join("")}</div>
-    <div class="compare card"><h3>EC決済 ${R.scored.length}社 比較表${(R.cart&&R.cart!=="undecided")?`（${CART_LABEL[R.cart]}対応）`:""}</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${s.initial!=null?yen(s.initial):"—"}</td><td class="num">${s.monthly!=null?(s.monthly>0?yen(s.monthly):"0"):"—"}</td><td class="num">${rateShortEC(s)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
+    <div class="compare card"><h3>EC決済 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${s.initial!=null?yen(s.initial):"—"}</td><td class="num">${s.monthly!=null?(s.monthly>0?yen(s.monthly):"0"):"—"}</td><td class="num">${rateShortEC(s)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td></tr>`;}).join("")}</tbody></table></div></div>
     ${isConsult?"":applyCtaHtml(s0)}`;
   return {kind:'ec', R, rt, top, teaser, detail};
 }
 
 function condTableHtml(ch){
-  const rows=[];
-  rows.push(['チャネル', ch==='shop'?'店舗（対面）':ch==='ec'?'ネットショップ（EC）':'店舗とEC 両方']);
-  const ind=(Q_industry.opts.find(o=>o.v===answers.industry)||{}).l; if(ind) rows.push(['業種・商材',ind]);
-  if(answers.industry==="beauty"&&answers.prepay) rows.push(['事前決済（前払い）', answers.prepay==="yes"?"必要":"不要"]);
-  rows.push(['年間取扱高', scaleYen(answers.volume)]);
+  const state=[], wish=[];
+  state.push(['決済を受ける場所', ch==='shop'?'店舗（対面）のみ':ch==='ec'?'ECサイトのみ':'店舗とEC 両方']);
+  const ind=(Q_industry.opts.find(o=>o.v===answers.industry)||{}).l; if(ind) state.push(['業種・商材',ind]);
+  if(answers.industry==="beauty"&&answers.prepay) state.push(['事前決済（前払い）', answers.prepay==="yes"?"必要":"不要"]);
   if(ch==='shop'||ch==='both'){
-    rows.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
-    rows.push(['端末形態', TERM_LABEL[answers.terminal]||'—']);
-    rows.push(['店舗の決済手段', (answers.methods||[]).map(m=>METHOD_LABEL[m]).join('・')||'指定なし']);
-    rows.push(['レジ連携', answers.pos==='yes'?'必要':'不要']);
+    state.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
+    if(ch==='both') state.push(['店舗の取扱高', scaleYen(answers.volumeShop)]);
   }
   if(ch==='ec'||ch==='both'){
-    rows.push(['EC決済の状況', STATUS_LABEL[answers.ecStatus]||'—']);
-    rows.push(['カート', CART_LABEL[answers.cart]||'—']);
-    rows.push(['EC決済手段', (answers.ecMethods||[]).map(m=>EC_METHOD_LABEL[m]).join('・')||'指定なし']);
-    rows.push(['定期課金', answers.sub==='yes'?'使う':'使わない']);
+    state.push(['ECの売り方', ECTRACK_LABEL[answers.ectrack]||'—']);
+    if(answers.ectrack==='cart_have') state.push(['利用中カート', ({base:"BASE",stores:"STORES",shopify:"Shopify",other:"その他"}[answers.ecCart])||'—']);
+    if(ch==='both' && answers.ectrack!=='mall') state.push(['ECの取扱高', scaleYen(answers.volumeEc)]);
   }
-  rows.push(['重視点', (answers.priorities||[]).map(p=>PRI_LABEL[p]).join('・')||'指定なし']);
-  return `<table class="cond-table">${rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("")}</table>`;
+  if(ch!=='both') state.push(['年間取扱高', scaleYen(answers.volume)]);
+  if(ch==='shop'||ch==='both'){
+    wish.push(['端末形態', TERM_LABEL[answers.terminal]||'—']);
+    wish.push(['店舗の決済手段', (answers.methods||[]).map(m=>METHOD_LABEL[m]).join('・')||'指定なし']);
+    wish.push(['レジ連携', answers.pos==='yes'?'必要':'不要']);
+  }
+  if((ch==='ec'||ch==='both') && answers.ectrack!=='mall'){
+    wish.push(['EC決済手段', (answers.ecMethods||[]).map(m=>EC_METHOD_LABEL[m]).join('・')||'指定なし']);
+  }
+  wish.push(['重視点', (answers.priorities||[]).map(p=>PRI_LABEL[p]).join('・')||'指定なし']);
+  const grp=(label,rows)=> rows.length?`<tr class="ct-sec"><th colspan="2">${label}</th></tr>`+rows.map(r=>`<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join(""):"";
+  return `<table class="cond-table">${grp("お店の現状",state)}${grp("ご希望",wish)}</table>`;
 }
 function discHtml(){
   return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
@@ -1219,20 +1281,33 @@ function gateHtml(lead,cta){
     </form></div></div>`;
 }
 
+function renderMall(rc){
+  rc.innerHTML = `<div class="result-head"><div class="eyebrow">DIAGNOSIS RESULT</div><h2>モール出店の場合</h2></div>
+  <div class="mall-card"><div class="mall-t">モールでは決済がモール内蔵で、選ぶ余地がありません</div>
+  <p>楽天市場・Yahoo!ショッピング・minne 等のモールは、決済がモール側に用意されており、事業者が決済サービスを選ぶことはできません。そのため本診断の対象外です。</p>
+  <p>ご自身のネットショップ（BASE・STORES・Shopify 等）や自社サイトでも販売される場合は、そちらの決済を比較できます。</p>
+  <div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div></div>`;
+  $("resultSection").classList.remove("hidden"); $("quizCard").classList.add("hidden"); $("shindan").classList.add("hidden");
+  $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
 function showResult(){
   const ch=answers.channel;
   $("quizCard").classList.add("hidden");
   $("shindan").classList.add("hidden");
   $("resultSection").classList.remove("hidden");
   const rc=$("resultCard");
+  if(ch==="ec"&&answers.ectrack==="mall"){ renderMall(rc); return; }
   const blocks=[];
   if(ch==="shop"||ch==="both") blocks.push(buildShopBlock());
-  if(ch==="ec"||ch==="both") blocks.push(buildEcBlock());
+  if((ch==="ec"||ch==="both") && answers.ectrack!=="mall") blocks.push(buildEcBlock());
   LAST={ch, blocks};
   const twin=blocks.length===2;
   const anyConsult=blocks.some(b=>b.rt.route==="consult");
   const chHead=k=>`<h3 class="ch-head">${k==='shop'?'店舗（対面）の診断':'ネットショップ（EC）の診断'}</h3>`;
-  const head=`<div class="result-head"><div class="eyebrow">DIAGNOSIS RESULT</div><h2>診断結果</h2><p>以下の入力条件で、各サービスを同一基準で採点しました。</p>${condTableHtml(ch)}</div>`;
+  const ecBlk=blocks.find(b=>b.kind==="ec"), shBlk=blocks.find(b=>b.kind==="shop");
+  const integ = ch==="both" && ((ecBlk&&ecBlk.top.s.crossacct) || (shBlk&&["square","stores"].includes(shBlk.top.s.id)));
+  const bothMall = ch==="both" && answers.ectrack==="mall";
+  const head=`<div class="result-head"><div class="eyebrow">DIAGNOSIS RESULT</div><h2>診断結果</h2><p>以下の入力条件で、各サービスを同一基準で採点しました。</p>${condTableHtml(ch)}${integ?'<div class="integ-badge">店舗とECを1契約・同一アカウントで統合できます（Square / STORES）</div>':''}${bothMall?'<div class="cart-note">ネット販売はモール出店のため、EC決済は診断対象外です（店舗のみ診断しました）。</div>':''}</div>`;
   const teasers=blocks.map(b=>(twin?chHead(b.kind):"")+b.teaser).join("");
   const details=blocks.map(b=>(twin?chHead(b.kind):"")+b.detail).join("");
   const gateLead=anyConsult
@@ -1253,10 +1328,10 @@ function submitLead(e){
     タイムスタンプ:new Date().toISOString(),
     店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), メール:f.email.value.trim(), 電話:f.phone.value.trim(),
     チャネル: LAST.ch==='shop'?'店舗':LAST.ch==='ec'?'EC':'両方',
-    年間取扱高: scaleYen(answers.volume),
+    年間取扱高: answers.channel==="both" ? `店舗${scaleYen(answers.volumeShop)}/EC${scaleYen(answers.volumeEc)}` : scaleYen(answers.volume),
     業種: (Q_industry.opts.find(o=>o.v===answers.industry)||{}).l||"",
-    導入状況: [answers.status?('店舗:'+(STATUS_LABEL[answers.status]||'')):'', answers.ecStatus?('EC:'+(STATUS_LABEL[answers.ecStatus]||'')):''].filter(Boolean).join(' / '),
-    カート: CART_LABEL[answers.cart]||'',
+    導入状況: [answers.status?('店舗:'+(STATUS_LABEL[answers.status]||'')):'', answers.ectrack?('EC:'+(ECTRACK_LABEL[answers.ectrack]||'')):''].filter(Boolean).join(' / '),
+    カート: answers.ecCart?({base:'BASE',stores:'STORES',shopify:'Shopify',other:'その他'}[answers.ecCart]||''):'',
     推奨ルート: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}:${b.rt.route==='consult'?'個別/コンサル':'包括/申込'}`).join(' / '),
     第1位: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}=${b.top.s.name}(適合${b.top.pct}%)`).join(' / '),
     参照元: location.href
