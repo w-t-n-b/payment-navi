@@ -1244,41 +1244,49 @@ function scoreBlockHtml(top,s0,devLabel,isConsult){
    端末代・月額は含まない「手数料率の差」の概算。現料率が不明なら一般的な3.24%と仮定して明記。 */
 const ASSUMED_RATE = 0.0324;   // 料率不明時の一般的な想定（包括・不明ユーザーの試算用）
 const NEGO_TRIGGER = 0.025;    // 直契約：この料率以上ならコンサル（交渉サポート）を提案
-const NEGO_TARGET  = 0.025;    // 直契約：交渉後の目安料率（保守的＝下振れさせない）
+const NEGO_TARGET  = 0.0245;   // 直契約：交渉後の目安料率（Visa/Master 2.4%・JCB 2.5% の中間で削減額を保守的に試算）
 
-/* 直接契約（カード会社直）ユーザー向け＝包括への乗り換えは提案せず、料率交渉サポート（自社コンサル）でリード獲得。
-   ・料率2.5%以上：交渉で下げられる目安額を提示（現行 − 目安2.5% × 取扱高の概算）
-   ・料率2.5%未満：すでに良い水準として無理な提案をしない
-   ・料率不明：料率が分かれば試算する旨の相談導線のみ
-   ※サイト本丸は包括比較。直契約×大型は利用が限定的なため深追いしない設計。 */
+/* 直接契約（カード会社直）ユーザー向け＝包括への乗り換えは提案せず、料率交渉サポート（自社コンサル・完全成果報酬）でリード獲得。
+   対象は「取扱高2億円以上 × 料率2.5%以上（または不明）」。
+   ・未交渉の一般料率: Visa/Master 2.7%・JCB 3.24%（契約時期によりさらに高いことも）
+   ・弊社交渉後の目安: Visa/Master 2.4%・JCB 2.5% 程度
+   ※サイト本丸は包括比較。直契約×大型は利用が限定的なため、2億以上に絞って宣伝する設計。 */
 function consultPitchKobetsu(R){
-  const volYen = R.volume*10000;
-  if(!(answers.curRate>0)){
-    return `<div class="save-banner consult-pitch">
-      <div class="save-h">今のカード会社との直接契約、料率は適正ですか？</div>
-      <p class="save-note">現在の料率が分かれば、交渉でどれだけ下げられるかの目安を無料で試算します。下のフォームからお気軽にご相談ください。</p></div>`;
+  const volYen = R.volume*10000, over2 = R.volume>=BORDER, rate = answers.curRate, known = rate>0;
+  /* 2億未満の直契約は限定的。強い宣伝はせず軽い相談導線のみ */
+  if(!over2){
+    return `<div class="route-banner"><div class="rb-title">カード会社との直接契約、料率は適正ですか？</div>
+      <div class="rb-desc">契約内容の見直しをご希望の場合は、無料でご相談いただけます。</div></div>`;
   }
-  const curRate=answers.curRate;
-  if(curRate < NEGO_TRIGGER){
-    return `<div class="route-banner"><div class="rb-title">今の料率（${(curRate*100).toFixed(2)}%）はすでに良い水準です</div>
-      <div class="rb-desc">直接契約で十分に低い料率です。無理な乗り換えは不要。さらに条件を詰めたい場合のみ、無料でご相談ください。</div></div>`;
+  /* 2億以上 × 料率入力が2.5%未満 → すでに良い水準（無理な提案はしない） */
+  if(known && rate < NEGO_TRIGGER){
+    return `<div class="route-banner"><div class="rb-title">今の料率（${(rate*100).toFixed(2)}%）はすでに良い水準です</div>
+      <div class="rb-desc">直接契約で十分に低い料率です。無理な見直しは不要。さらに条件を詰めたい場合のみ、無料でご相談ください。</div></div>`;
   }
-  const save=(curRate-NEGO_TARGET)*volYen;
+  /* 完全成果報酬ピッチ本体（2億以上 × 2.5%以上 or 料率不明） */
+  const save = known ? (rate-NEGO_TARGET)*volYen : 0;
+  const headNum = known
+    ? `<div class="save-h">完全成果報酬で <span class="save-n num">${yen(save)}</span> / 年 の引き下げが見込めます</div>`
+    : `<div class="save-h">完全成果報酬で、カード決済手数料を引き下げます</div>`;
+  const curRow = known
+    ? `<tr><td>今の料率</td><td class="num">${(rate*100).toFixed(2)}%</td></tr>`
+    : `<tr><td>未交渉の一般的な料率</td><td class="num">Visa/Master 2.7%・JCB 3.24%</td></tr>`;
+  const diffRow = known ? `<tr class="save-diff"><td>年間削減の目安</td><td class="num">▲${yen(save)}</td></tr>` : "";
   return `<div class="save-banner consult-pitch">
-    <div class="save-h">交渉サポートで <span class="save-n num">${yen(save)}</span> / 年 下げられる可能性</div>
+    ${headNum}
     <table class="save-tbl">
-      <tr><td>今の料率</td><td class="num">${(curRate*100).toFixed(2)}%</td></tr>
-      <tr><td>交渉後の目安</td><td class="num">${(NEGO_TARGET*100).toFixed(1)}% 前後</td></tr>
-      <tr class="save-diff"><td>年間削減の目安</td><td class="num">▲${yen(save)}</td></tr>
+      ${curRow}
+      <tr><td>弊社交渉後の目安</td><td class="num">Visa/Master 2.4%・JCB 2.5%</td></tr>
+      ${diffRow}
     </table>
-    <p class="save-note">御社の規模なら、カード会社との直接契約でも料率を下げられる余地があります。弊社が交渉をサポートします（料率差×年間取扱高の概算・目安）。下のフォームから無料でご相談ください。</p>
+    <p class="save-note"><b>完全成果報酬型</b>：手数料が下がった場合のみ費用が発生し、引き下げできなければ費用は一切かかりません。カード会社との直接契約は、Visa/Masterで2.4%・JCBで2.5%程度までの引き下げが可能です（未交渉だと一般にVisa/Master 2.7%・JCB 3.24%、契約時期によりさらに高いことも）。年間取扱高2億円以上の事業者さま向けのサービスです。下のフォームから無料でご相談ください。</p>
   </div>`;
 }
 
 function switchSavingsShop(R, top){
   const status=answers.status;
   if(!status || status==="new") return "";                 // 新規は乗り換え元が無い
-  if(status==="exist_kobetsu") return consultPitchKobetsu(R); // 直契約は包括乗り換えでなく交渉サポートへ
+  if(status==="exist_kobetsu") return "";                   // 直契約は teaser 冒頭でコンサルピッチを表示（ここでは出さない）
   const known = answers.curRate>0;
   const curRate = known ? answers.curRate : ASSUMED_RATE;
   const volYen = R.volume*10000;
@@ -1305,6 +1313,11 @@ function buildShopBlock(){
   const R=scoreServices();
   const rt=decideRoute(answers.status, R.volume, false);
   const top=R.scored[0], s0=top.s, isConsult=rt.route==="consult";
+  const isKobetsu = answers.status==="exist_kobetsu";
+  /* 直契約は冒頭にコンサルピッチを出し、汎用ルートバナー＆包括乗り換え差額は出さない */
+  const topBanner = isKobetsu
+    ? consultPitchKobetsu(R)
+    : `<div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>`;
   /* 店舗のみ×前払い希望：対面端末だけでは事前決済できないため、EC/リンク決済の併用を案内（EC診断がある both/ec では EC 側で反映） */
   const prepayNote = (answers.channel==="shop" && answers.prepay==="yes")
     ? `<p class="cart-note">前払い・回数券などの<b>事前決済</b>は対面端末だけでは対応できません。オンライン前払いには <b>Square リンク決済</b> や <b>STORES</b> など EC/リンク決済の併用がおすすめです（店舗と同一アカウントで一元管理できます）。</p>`
@@ -1318,7 +1331,7 @@ function buildShopBlock(){
     : "";
   const teaser = `
     ${prepayNote}
-    <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
+    ${topBanner}
     ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
       ${catchLine}
       <div class="pick-cost"><table class="cost-table">
