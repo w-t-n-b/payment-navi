@@ -179,10 +179,13 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 @keyframes mqLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes mqRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mq-viewport:hover .mq-track{animation-play-state:paused}
-/* 面リボンは JS のパスモーフィング（複数の低速正弦波で S字をたなびかせる）で動かす。
-   形状を波打たせるため transform ではなくパス d を更新。reduced-motion では静止（JS側で制御）。 */
-.hb-ribbon .rb-band,.hb-ribbon .rb-hi{will-change:auto}
+/* 同心アーク（タッチ決済の電波モチーフ・完全フラット/グラデなし）。
+   動き=「電波が外へ広がる」＝各リングの明度(opacity)ピークを外側へ順送り＋わずかな拡大。transform/opacityのみ。 */
+.hb-ribbon .rb-ring{transform-box:view-box;transform-origin:600px 400px;animation-name:sonar;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:opacity,transform}
+@keyframes sonar{0%,100%{opacity:.55;transform:scale(.992)}50%{opacity:1;transform:scale(1.028)}}
+.hb-note{font-size:12px;color:var(--muted);margin-top:12px}
 @media(prefers-reduced-motion:reduce){
+  .hb-ribbon .rb-ring{animation:none;opacity:.9}
   .mq-track{animation:none!important;flex-wrap:wrap}
   .mq-viewport{overflow:visible}
   .mq-dup{display:none}
@@ -566,11 +569,12 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
         <div class="hb-ribbon"><svg id="heroRibbon" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
         <div class="hb-content">
           <div class="hb-neutral">決済ナビが決済事業者から受け取る広告費・報酬：<b>¥0</b></div>
-          <h1>決済選びは、比較から。<br>店舗もECも、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる中立診断。</h1>
+          <h1>決済選びは、比較から。<br><span class="hl">店舗もEC</span>も、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる中立診断。</h1>
           <div class="hb-cta">
             <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             <a class="btn btn-ghost" href="#how">診断のしくみ</a>
           </div>
+          <div class="hb-note">無料・登録不要／所要約60秒／20サービスを同一基準で採点</div>
         </div>
       </div>
       <div class="hb-marquee">
@@ -1843,50 +1847,22 @@ setChips("svcChipsEcPsp", [
   ["PayPal",false,""]
 ].map(a=>svcChip(a[0],a[1],a[2])).join(""));
 
-/* ---- バリアントB：面リボン（青同一色相グラデ・S字ベジェの帯を半透明で重ねる）＋ マーキー
-   SVGは生成のみ／動きは純CSS。グラデ使用はこのSVG内に限定した例外。 ---- */
+/* ---- バリアントB：同心アーク（タッチ決済の電波モチーフ・完全フラット/グラデなし）＋ マーキー
+   右端中央を中心に単色の同心リングを重ね、動き＝電波が外へ広がる（明度ピークを外側へ順送り）は純CSS。 ---- */
 function buildRibbon(){
   const svg=$("heroRibbon"); if(!svg) return;
   const mobile = window.matchMedia("(max-width:760px)").matches;
-  /* 青の同一色相グラデ（濃紺→ブルー→淡青／末端は透明にフェード・帯の長手＝縦方向に流す） */
-  const grads=[
-    ["rbA",[[0,"#20303f",0],[.20,"#20303f",1],[.52,"#1a6bb8",1],[.86,"#dbe9f5",1],[1,"#dbe9f5",0]]],
-    ["rbB",[[0,"#1a6bb8",0],[.24,"#155a9c",1],[.60,"#1a6bb8",1],[.90,"#dbe9f5",1],[1,"#dbe9f5",0]]],
-    ["rbC",[[0,"#20303f",0],[.30,"#1a6bb8",1],[.72,"#4d94d6",1],[1,"#dbe9f5",0]]]
-  ];
-  const defs="<defs>"+grads.map(([id,st])=>`<linearGradient id="${id}" x1="0" y1="0" x2="0.3" y2="1">${st.map(([o,c,a])=>`<stop offset="${o}" stop-color="${c}" stop-opacity="${a}"/>`).join("")}</linearGradient>`).join("")+"</defs>";
-  /* [中心x, 帯幅(太→細でリズム), 透明度0.35-0.85, グラデid, 位相rad] ／ 画面外まで突き抜け */
-  const bands = mobile
-    ? [[300,200,.55,"rbA",0],[400,90,.78,"rbB",2.1],[210,40,.5,"rbC",4.2]]
-    : [[300,200,.5,"rbA",0],[430,120,.72,"rbB",1.0],[510,55,.82,"rbC",2.1],[360,150,.6,"rbA",3.2],[555,26,.45,"rbC",4.3],[250,90,.55,"rbB",5.4]];
-  /* 要素は一度だけ生成し、以降は d 属性のみ更新（パスモーフィング） */
-  let inner=defs+'<g class="rb-g">';
-  bands.forEach(b=>{ inner+=`<path class="rb-band" fill="url(#${b[3]})" opacity="${b[2]}"/>`; });
-  bands.forEach((b,i)=>{ if(i<2) inner+=`<path class="rb-hi" fill="none" stroke="#fff" stroke-width="1" opacity="0.5"/>`; });
-  svg.innerHTML=inner+'</g>';
-  const pathEls=[...svg.querySelectorAll('.rb-band')], hiEls=[...svg.querySelectorAll('.rb-hi')];
-  const band=(p0,c1,c2,p3,off)=>`M ${(p0[0]-off).toFixed(1)} ${p0[1]} C ${(c1[0]-off).toFixed(1)} ${c1[1]}, ${(c2[0]-off).toFixed(1)} ${c2[1]}, ${(p3[0]-off).toFixed(1)} ${p3[1]} L ${(p3[0]+off).toFixed(1)} ${p3[1]} C ${(c2[0]+off).toFixed(1)} ${c2[1]}, ${(c1[0]+off).toFixed(1)} ${c1[1]}, ${(p0[0]+off).toFixed(1)} ${p0[1]} Z`;
-  const edge=(p0,c1,c2,p3,sx)=>`M ${(p0[0]+sx).toFixed(1)} ${p0[1]} C ${(c1[0]+sx).toFixed(1)} ${c1[1]}, ${(c2[0]+sx).toFixed(1)} ${c2[1]}, ${(p3[0]+sx).toFixed(1)} ${p3[1]}`;
-  function update(time){
-    for(let i=0;i<bands.length;i++){
-      const bx=bands[i][0], w=bands[i][1], ph=bands[i][4];
-      /* 3本の低速・非整数比の正弦波で制御点を別々に揺らす＝有機的にたなびく。位相ずらしで束が捻れる */
-      const s1=Math.sin(time*0.33+ph)*26, s2=Math.sin(time*0.24+ph*1.3+1.3)*34, s3=Math.sin(time*0.18+ph*0.7+2.1)*18;
-      const off=(w*(1+Math.sin(time*0.29+ph)*0.09))/2;   // 幅を緩やかに伸縮（±9%）＝ねじれ感
-      const p0=[bx,-90], c1=[bx+100+s1,190], c2=[bx-85+s2,540], p3=[bx+55+s3,890];
-      pathEls[i].setAttribute('d', band(p0,c1,c2,p3,off));
-      if(hiEls[i]) hiEls[i].setAttribute('d', edge(p0,c1,c2,p3,-off+1));
-    }
+  const pal=["#20303f","#1a4f88","#1a6bb8","#3f82c4","#5f9bd0","#84b4dd","#a7cbe8"];  // 内(濃紺)→外(淡青)・フラット単色
+  const cx=600, cy=mobile?400:430, r0=70, N=mobile?6:11, step=mobile?66:48, period=5.5;
+  let rings="";
+  for(let i=0;i<N;i++){
+    const r=r0+i*step;
+    const col=pal[Math.min(Math.round(i/(N-1)*(pal.length-1)), pal.length-1)];
+    const sw=Math.max(10, (mobile?26:40)-i*1.4).toFixed(1);          // 内側太→外側細でリズム
+    const dl=(-(i*period/N)).toFixed(2);                              // 位相を外側へ順送り＝波が外へ広がる
+    rings+=`<circle class="rb-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" style="animation-duration:${period}s;animation-delay:${dl}s"/>`;
   }
-  const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
-  if(reduce){ update(0); return; }               // 静止
-  const hero=$("heroSection");
-  let t0=null;
-  (function frame(now){
-    if(t0===null) t0=now;
-    if(!hero || !hero.classList.contains("hidden")) update((now-t0)*0.001);  // 結果画面(hidden)では停止
-    requestAnimationFrame(frame);
-  })(performance.now());
+  svg.innerHTML = rings;
 }
 function buildMarquee(){
   const shop=$("mqShop"), ec=$("mqEc"); if(!shop&&!ec) return;
