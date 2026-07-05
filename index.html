@@ -745,8 +745,8 @@ const Q_shopStatus = {
   key:"status", section:"state", title:"決済端末の導入状況は？", note:"最適な進め方が変わるため伺います", type:"single",
   opts:[
     {v:"new",ic:"i-gift",l:"これから導入（新規）",s:"まだ決済端末を持っていない"},
-    {v:"exist_hokatsu",ic:"i-card",l:"導入済み・包括事業者と契約",s:"Square・Airペイ・stera 等と契約中"},
-    {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・個別契約",s:"カード会社／アクワイアラと直接契約"},
+    {v:"exist_hokatsu",ic:"i-card",l:"導入済み・決済サービスと契約",s:"Square・Airペイ・stera 等と契約中"},
+    {v:"exist_kobetsu",ic:"i-scale",l:"導入済み・カード会社と直接契約",s:"カード会社と個別に契約している"},
     {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
   ]
 };
@@ -1003,7 +1003,7 @@ const yen = n => "¥"+Math.round(n).toLocaleString("ja-JP");
 const TERM_LABEL={mobile:"持ち運び",counter:"据置",pos:"レジ一体POS"};
 const METHOD_LABEL={credit:"クレカ",touch:"タッチ",qr:"QR",transit:"交通系",emoney:"iD/QUICPay"};
 const PRI_LABEL={fee:"手数料の安さ",initial:"初期費用の安さ",payout:"入金の速さ",brands:"対応ブランド"};
-const STATUS_LABEL={new:"新規（これから導入）",exist_hokatsu:"既存・包括事業者と契約",exist_kobetsu:"既存・個別契約",exist_unknown:"既存・契約形態は不明"};
+const STATUS_LABEL={new:"新規（これから導入）",exist_hokatsu:"既存・決済サービスと契約",exist_kobetsu:"既存・カード会社と直接契約",exist_unknown:"既存・契約形態は不明"};
 const BORDER = 20000; // 年間取扱高2億円 = 20,000万円（このラインで包括→個別/コンサルに分岐）
 function scaleYen(vman){ if(vman>=10000){ const oku=vman/10000; return (Number.isInteger(oku)?oku:oku.toFixed(1))+"億円"; } return vman.toLocaleString("ja-JP")+"万円"; }
 
@@ -1013,7 +1013,7 @@ const LEAD_ENDPOINT = ""; // 例: "https://script.google.com/macros/s/XXXXXXXX/e
 /* 導入状況＋年間取扱高から最適ルートを判定（個別契約=常にコンサル／包括は2億で申込↔コンサル） */
 /* ===================== EC スコアリング＆ヘルパー ===================== */
 const EC_METHOD_LABEL={card:"カード",conveni:"コンビニ",defer:"後払い",carrier:"キャリア",qr:"QR/ID",amazonpay:"Amazon Pay",paypal:"PayPal",bank:"銀行振込"};
-const ECTRACK_LABEL={cart_new:"これから作る（カート型）",link:"決済リンク型",psp:"決済代行（既存サイト）",cart_have:"カート利用中",mall:"モール出店"};
+const ECTRACK_LABEL={cart_new:"これから作る（カート型）",link:"決済リンク型",psp:"既存サイトに追加",cart_have:"カート利用中",mall:"モール出店"};
 const CART_LABEL={shopify:"Shopify",base:"BASE",stores:"STORES",makeshop:"MakeShop",colorme:"カラーミー",futureshop:"futureshop",eccube:"EC-CUBE",own:"自社/その他",undecided:"未定"};
 function payoutTxtEC(p){ if(p>=.85)return "最短翌営業日"; if(p>=.6)return "週次〜"; if(p>=.4)return "月2回程度"; return "翌月末〜"; }
 function rateTextEC(s){ return s.quoteOnly ? "料率 要見積" : `カード ${(s.cardRate*100).toFixed(2)}%`; }
@@ -1080,24 +1080,22 @@ function ecConsFor(s,R){
 
 function decideRoute(status, volume, isEC){
   const over2 = volume>=BORDER;
-  const A = isEC ? "カート内蔵/一括代行" : "包括事業者";
-  const kobetsu = isEC ? "個別/直接契約（アクワイアラ直・大手PSP個別）" : "個別契約（カード会社・アクワイアラ直契約）";
   if(status==="exist_kobetsu"){
-    return {route:"consult", title:`「${isEC?'個別/直接契約':'個別契約'}の最適化（専門コンサル）」がおすすめ`,
-      desc:`すでに${kobetsu}をお持ちのため、料率やプランの見直しは専門コンサルの領域です。今の条件が適正か、無料で診断できます。`};
+    return {route:"consult", title:"契約内容の見直し（無料相談）がおすすめ",
+      desc:"すでにカード会社と直接契約されているため、料率やプランの見直しは専門家の領域です。今の条件が適正か、無料で診断できます。"};
   }
   if(status==="new"){
     return over2
-      ? {route:"consult", title:`「個別契約＋専門コンサル」がおすすめ`,
-         desc:`新規導入でも年間取扱高が2億円規模になると、${A}より個別契約の方が手数料を大きく下げられる可能性があります。最適な契約設計を専門コンサルがご提案します。`}
-      : {route:"aggregator", title:`「${A}での導入」がおすすめ`,
-         desc:`年間取扱高が2億円未満の新規導入なら、初期費用ゼロで手軽に始められる${A}が最適です。あなたの条件で最もお得なサービスはこちら。`};
+      ? {route:"consult", title:"専門家への無料相談がおすすめ",
+         desc:"年間の決済が2億円規模になると、カード会社と直接契約したほうが手数料を大きく下げられる場合があります。最適な契約を専門家が無料でご提案します。"}
+      : {route:"aggregator", title:"手軽に始められる決済サービスがおすすめ",
+         desc:"年間の決済が2億円未満で新しく始めるなら、初期費用ゼロで手軽に導入できる決済サービス（Square・Airペイ等）が最適です。あなたの条件で最もお得なサービスはこちら。"};
   }
   return over2
-    ? {route:"consult", title:`「個別契約への切り替え（専門コンサル）」がおすすめ`,
-       desc:`年間取扱高が2億円を超える規模では、${A}の手数料は割高になりがちです。個別契約への切り替えでコストを下げられる可能性が高く、専門コンサルが無料で試算します。`}
-    : {route:"aggregator", title:`現状は「${A}」で十分です`,
-       desc:`年間取扱高が2億円未満なら${A}で問題ありません。より条件の良いサービスへの乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。`};
+    ? {route:"consult", title:"契約の切り替え（無料相談）がおすすめ",
+       desc:"年間の決済が2億円を超える規模では、いまの手数料は割高になりがちです。契約の切り替えでコストを下げられる可能性が高く、専門家が無料で試算します。"}
+    : {route:"aggregator", title:"今の決済サービスで十分です",
+       desc:"年間の決済が2億円未満なら、いまの決済サービスで問題ありません。より条件の良いサービスへの乗り換えでコストを下げられる場合があります。あなたの条件での最適はこちら。"};
 }
 function payoutTxt(p){
   if(p>=.9) return "最短翌営業日";
@@ -1203,10 +1201,10 @@ function buildEcBlock(){
     cart_new:{title:"カート一体型で始めるのがおすすめ", note:"サイトをこれから作る方向けに、カート一体型サービスを比較しました。"},
     cart_have:{title:cartName?`ご利用中の「${cartName}」内蔵決済が基本`:"利用中カートの内蔵決済が基本", note:cartName?`ご利用中の「${cartName}」の内蔵決済を基準にご案内します。決済手段の追加やカート乗り換えも比較できます。`:"ご利用中カートの内蔵決済を基準にご案内します。"},
     link:{title:"決済リンクで手軽に始めるのがおすすめ", note:"サイト不要で始められる、決済リンク型サービスを比較しました。"},
-    psp:{title:"決済代行を既存サイトに追加", note:"既存サイトに追加できる、決済代行サービスを比較しました。"}
+    psp:{title:"既存サイトに決済を追加", note:"既存サイトに追加できる決済サービスを比較しました。"}
   })[tr] || {title:"あなたに合うEC決済", note:""};
   const rt = over2
-    ? {route:"consult", title:"規模が大きいため専門相談もおすすめ", desc:"ECの年間取扱高が2億円規模になると、個別条件での契約が有利になる場合があります。専門コンサルが無料で試算します。"}
+    ? {route:"consult", title:"規模が大きいため専門相談もおすすめ", desc:"ECの年間の決済が2億円規模になると、カード会社と直接契約したほうが有利になる場合があります。専門家が無料で試算します。"}
     : {route:"aggregator", title:TR.title, desc:TR.note};
   const isConsult = rt.route==="consult";
   const costRows = s0.quoteOnly
@@ -1311,7 +1309,7 @@ function showResult(){
   const teasers=blocks.map(b=>(twin?chHead(b.kind):"")+b.teaser).join("");
   const details=blocks.map(b=>(twin?chHead(b.kind):"")+b.detail).join("");
   const gateLead=anyConsult
-    ? `全社の詳細比較・年間コストに加え、あなたの規模に最適な<b>個別契約を専門コンサルが無料でご提案</b>します。`
+    ? `全社の詳細比較・年間コストに加え、あなたに合う契約を<b>専門家が無料でご提案</b>します。`
     : `<b>全社の詳細比較・年間コスト・各社の申込条件</b>がすべて見られます。`;
   const ctaLabel=anyConsult?"結果を見て無料相談する":"詳細な比較結果を見る";
   rc.innerHTML = head + teasers +
@@ -1348,7 +1346,7 @@ function unlockResults(){
   const anyConsult=LAST.blocks.some(b=>b.rt.route==="consult");
   const note=document.createElement("div"); note.className="unlock-note";
   note.textContent = anyConsult
-    ? "送信ありがとうございます。専門コンサルより2営業日以内にご連絡します。以下は診断の詳細です。"
+    ? "送信ありがとうございます。専門家より2営業日以内にご連絡します。以下は診断の詳細です。"
     : "送信ありがとうございます。以下で全社の詳細と申込条件をご確認いただけます。";
   $("lockBody").prepend(note);
   wrap.scrollIntoView({behavior:"smooth",block:"start"});
