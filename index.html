@@ -154,11 +154,12 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
   .sample-tag{right:10px}
 }
 
-/* ===== ヒーロー バリアントB（Stripe型・ワイヤーリボン／青系のみ・線のみ） ===== */
+/* ===== ヒーロー バリアントB（面リボン／青同一色相グラデ・S字・半透明重ね） ===== */
 .hero-variant-b{position:relative;overflow:hidden;padding:6px 0 0}
-.hb-ribbon{position:absolute;inset:-12% -6%;z-index:0;pointer-events:none}
+.hb-top{position:relative}
+.hb-ribbon{position:absolute;top:-16%;right:-3%;width:42%;height:132%;z-index:0;pointer-events:none;overflow:hidden}
 .hb-ribbon svg{width:100%;height:100%;display:block}
-.hb-content{position:relative;z-index:1;padding:26px 0 22px;max-width:660px}
+.hb-content{position:relative;z-index:1;padding:26px 0 22px;max-width:56%}
 .hb-neutral{display:inline-block;font-size:12px;font-weight:700;color:var(--blue);border:1px solid var(--line);background:rgba(255,255,255,.74);border-radius:4px;padding:5px 10px;margin-bottom:16px}
 .hb-neutral b{color:var(--navy)}
 .hero-variant-b h1{font-size:30px;font-weight:800;color:var(--navy);line-height:1.42;letter-spacing:-.01em;margin:0 0 18px;text-wrap:balance}
@@ -178,20 +179,20 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 @keyframes mqLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes mqRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mq-viewport:hover .mq-track{animation-play-state:paused}
-/* リボンの線アニメ（transform/opacityのみ・filter/blur不使用） */
-.hb-ribbon .ribbon-spin{transform-origin:66% 46%;animation-name:ribbonSpin;animation-duration:38s;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
-.hb-ribbon path{transform-box:fill-box;transform-origin:center;animation-name:ribbonDrift;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
-@keyframes ribbonSpin{0%,100%{transform:rotate(-1.4deg) translateX(6px)}50%{transform:rotate(1.4deg) translateX(-14px)}}
-@keyframes ribbonDrift{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-9px) scaleY(1.05)}}
+/* 面リボンのアニメ（位相ずらしの捻れ・transform/opacityのみ・filter/blur不使用） */
+.hb-ribbon .rb-band,.hb-ribbon .rb-hi{transform-box:fill-box;transform-origin:center;animation-name:rbTwist;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform}
+@keyframes rbTwist{0%,100%{transform:translate(0,0) rotate(-0.7deg) skewX(-1.3deg)}50%{transform:translate(-12px,10px) rotate(0.7deg) skewX(1.3deg)}}
 @media(prefers-reduced-motion:reduce){
-  .hb-ribbon .ribbon-spin,.hb-ribbon path{animation:none}
+  .hb-ribbon .rb-band,.hb-ribbon .rb-hi{animation:none}
   .mq-track{animation:none!important;flex-wrap:wrap}
   .mq-viewport{overflow:visible}
   .mq-dup{display:none}
 }
 @media(max-width:760px){
   .hero-variant-b h1{font-size:22px}
-  .hb-content{padding:20px 0 18px;max-width:none}
+  .hb-top{display:flex;flex-direction:column}
+  .hb-content{order:1;padding:20px 0 12px;max-width:none}
+  .hb-ribbon{order:2;position:relative;top:auto;right:auto;width:100%;height:108px;margin:4px 0 0}
   .mq-label{width:96px;font-size:11px}
 }
 
@@ -562,13 +563,15 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 
     <!-- ▼▼▼ バリアントB（Stripe型・ワイヤーリボン）／現在このBを表示中。Aに戻すには本ブロックをコメントアウトし、上のAを解除 ▼▼▼ -->
     <div class="hero-variant-b">
-      <div class="hb-ribbon"><svg id="heroRibbon" class="ribbon-spin" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
-      <div class="hb-content">
-        <div class="hb-neutral">決済ナビが決済事業者から受け取る広告費・報酬：<b>¥0</b></div>
-        <h1>決済選びは、比較から。<br>店舗もECも、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる中立診断。</h1>
-        <div class="hb-cta">
-          <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-          <a class="btn btn-ghost" href="#how">診断のしくみ</a>
+      <div class="hb-top">
+        <div class="hb-ribbon"><svg id="heroRibbon" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+        <div class="hb-content">
+          <div class="hb-neutral">決済ナビが決済事業者から受け取る広告費・報酬：<b>¥0</b></div>
+          <h1>決済選びは、比較から。<br>店舗もECも、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる中立診断。</h1>
+          <div class="hb-cta">
+            <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <a class="btn btn-ghost" href="#how">診断のしくみ</a>
+          </div>
         </div>
       </div>
       <div class="hb-marquee">
@@ -1841,20 +1844,34 @@ setChips("svcChipsEcPsp", [
   ["PayPal",false,""]
 ].map(a=>svcChip(a[0],a[1],a[2])).join(""));
 
-/* ---- バリアントB：ワイヤーリボン（SVGは生成のみ／動きは純CSS）＋ マーキー ---- */
+/* ---- バリアントB：面リボン（青同一色相グラデ・S字ベジェの帯を半透明で重ねる）＋ マーキー
+   SVGは生成のみ／動きは純CSS。グラデ使用はこのSVG内に限定した例外。 ---- */
 function buildRibbon(){
   const svg=$("heroRibbon"); if(!svg) return;
-  const N = window.matchMedia("(max-width:760px)").matches ? 9 : 26;   // モバイルは本数を約1/3に
-  let p="";
-  for(let i=0;i<N;i++){
-    const t = N>1 ? i/(N-1) : .5;
-    const bias = 1 - Math.abs(t-0.5)*2;                 // 中央ほど濃く
-    const op = (0.06 + 0.19*bias).toFixed(3);
-    const y0 = 80 + t*400, y1 = y0-70 + bias*50, y2 = y0+90 - bias*40, y3 = 180 + t*220;
-    const d = `M -120 ${y0.toFixed(1)} C 320 ${y1.toFixed(1)}, 760 ${y2.toFixed(1)}, 1320 ${y3.toFixed(1)}`;  // 画面外→画面外で貫通
-    p += `<path d="${d}" fill="none" stroke="#1a6bb8" stroke-width="1" opacity="${op}" style="animation-delay:${(-i*0.7).toFixed(2)}s;animation-duration:${(24+i%5)}s"/>`;
-  }
-  svg.innerHTML = p;
+  const mobile = window.matchMedia("(max-width:760px)").matches;
+  /* 青の同一色相グラデ（濃紺→ブルー→淡青／末端は透明にフェード・帯の長手＝縦方向に流す） */
+  const grads=[
+    ["rbA",[[0,"#20303f",0],[.20,"#20303f",1],[.52,"#1a6bb8",1],[.86,"#dbe9f5",1],[1,"#dbe9f5",0]]],
+    ["rbB",[[0,"#1a6bb8",0],[.24,"#155a9c",1],[.60,"#1a6bb8",1],[.90,"#dbe9f5",1],[1,"#dbe9f5",0]]],
+    ["rbC",[[0,"#20303f",0],[.30,"#1a6bb8",1],[.72,"#4d94d6",1],[1,"#dbe9f5",0]]]
+  ];
+  const defs="<defs>"+grads.map(([id,st])=>`<linearGradient id="${id}" x1="0" y1="0" x2="0.3" y2="1">${st.map(([o,c,a])=>`<stop offset="${o}" stop-color="${c}" stop-opacity="${a}"/>`).join("")}</linearGradient>`).join("")+"</defs>";
+  /* [中心x, 帯幅(太→細でリズム), 透明度0.35-0.85, グラデid, animation-delay] ／ 画面外まで突き抜け */
+  const bands = mobile
+    ? [[300,200,.55,"rbA",0],[400,90,.78,"rbB",-8],[210,40,.5,"rbC",-16]]
+    : [[300,200,.5,"rbA",0],[430,120,.72,"rbB",-7],[510,55,.82,"rbC",-15],[360,150,.6,"rbA",-4],[555,26,.45,"rbC",-22],[250,90,.55,"rbB",-11]];
+  let paths="", hi="";
+  bands.forEach(([bx,w,op,g,delay],i)=>{
+    const j=(i%2?1:-1)*10, off=w/2;
+    const p0=[bx,-90], c1=[bx+100+j,190], c2=[bx-85+j,540], p3=[bx+55,890];  // 緩やかなS字
+    const edge=(sx)=>`M ${(p0[0]+sx).toFixed(1)} ${p0[1]} C ${(c1[0]+sx).toFixed(1)} ${c1[1]}, ${(c2[0]+sx).toFixed(1)} ${c2[1]}, ${(p3[0]+sx).toFixed(1)} ${p3[1]}`;
+    const d=`${edge(-off)} L ${(p3[0]+off).toFixed(1)} ${p3[1]} C ${(c2[0]+off).toFixed(1)} ${c2[1]}, ${(c1[0]+off).toFixed(1)} ${c1[1]}, ${(p0[0]+off).toFixed(1)} ${p0[1]} Z`;
+    const dur=(30+i*3);
+    paths+=`<path class="rb-band" d="${d}" fill="url(#${g})" opacity="${op}" style="animation-duration:${dur}s;animation-delay:${delay}s"/>`;
+    /* 帯の縁に沿う1pxの白ハイライトを、太い帯2本だけに添える（立体感） */
+    if(i<2) hi+=`<path class="rb-hi" d="${edge(-off+1)}" fill="none" stroke="#fff" stroke-width="1" opacity="0.5" style="animation-duration:${dur}s;animation-delay:${delay}s"/>`;
+  });
+  svg.innerHTML = defs+"<g class=\"rb-g\">"+paths+hi+"</g>";
 }
 function buildMarquee(){
   const shop=$("mqShop"), ec=$("mqEc"); if(!shop&&!ec) return;
