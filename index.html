@@ -252,6 +252,7 @@ section{scroll-margin-top:60px}
 .save-tbl tr:last-child td{border-bottom:none}
 .save-tbl tr.save-diff td{color:var(--score);font-size:14px}
 .save-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
+.save-banner.consult-pitch{border-top-color:var(--blue)}
 .why .wh .ic{display:none}
 .why ul{margin:0;padding-left:18px;font-size:13px}
 .why li{margin:2px 0}
@@ -1241,12 +1242,44 @@ function scoreBlockHtml(top,s0,devLabel,isConsult){
 
 /* 乗り換え差額（店舗・既存ユーザーのみ）＝ 現状の年間手数料 − 推奨の年間手数料
    端末代・月額は含まない「手数料率の差」の概算。現料率が不明なら一般的な3.24%と仮定して明記。 */
-const ASSUMED_RATE = 0.0324;
+const ASSUMED_RATE = 0.0324;   // 料率不明時の一般的な想定（包括・不明ユーザーの試算用）
+const NEGO_TRIGGER = 0.025;    // 直契約：この料率以上ならコンサル（交渉サポート）を提案
+const NEGO_TARGET  = 0.025;    // 直契約：交渉後の目安料率（保守的＝下振れさせない）
+
+/* 直接契約（カード会社直）ユーザー向け＝包括への乗り換えは提案せず、料率交渉サポート（自社コンサル）でリード獲得。
+   ・料率2.5%以上：交渉で下げられる目安額を提示（現行 − 目安2.5% × 取扱高の概算）
+   ・料率2.5%未満：すでに良い水準として無理な提案をしない
+   ・料率不明：料率が分かれば試算する旨の相談導線のみ
+   ※サイト本丸は包括比較。直契約×大型は利用が限定的なため深追いしない設計。 */
+function consultPitchKobetsu(R){
+  const volYen = R.volume*10000;
+  if(!(answers.curRate>0)){
+    return `<div class="save-banner consult-pitch">
+      <div class="save-h">今のカード会社との直接契約、料率は適正ですか？</div>
+      <p class="save-note">現在の料率が分かれば、交渉でどれだけ下げられるかの目安を無料で試算します。下のフォームからお気軽にご相談ください。</p></div>`;
+  }
+  const curRate=answers.curRate;
+  if(curRate < NEGO_TRIGGER){
+    return `<div class="route-banner"><div class="rb-title">今の料率（${(curRate*100).toFixed(2)}%）はすでに良い水準です</div>
+      <div class="rb-desc">直接契約で十分に低い料率です。無理な乗り換えは不要。さらに条件を詰めたい場合のみ、無料でご相談ください。</div></div>`;
+  }
+  const save=(curRate-NEGO_TARGET)*volYen;
+  return `<div class="save-banner consult-pitch">
+    <div class="save-h">交渉サポートで <span class="save-n num">${yen(save)}</span> / 年 下げられる可能性</div>
+    <table class="save-tbl">
+      <tr><td>今の料率</td><td class="num">${(curRate*100).toFixed(2)}%</td></tr>
+      <tr><td>交渉後の目安</td><td class="num">${(NEGO_TARGET*100).toFixed(1)}% 前後</td></tr>
+      <tr class="save-diff"><td>年間削減の目安</td><td class="num">▲${yen(save)}</td></tr>
+    </table>
+    <p class="save-note">御社の規模なら、カード会社との直接契約でも料率を下げられる余地があります。弊社が交渉をサポートします（料率差×年間取扱高の概算・目安）。下のフォームから無料でご相談ください。</p>
+  </div>`;
+}
+
 function switchSavingsShop(R, top){
   const status=answers.status;
   if(!status || status==="new") return "";                 // 新規は乗り換え元が無い
+  if(status==="exist_kobetsu") return consultPitchKobetsu(R); // 直契約は包括乗り換えでなく交渉サポートへ
   const known = answers.curRate>0;
-  if(!known && status==="exist_kobetsu") return "";          // 直契約は低率のことが多く平均仮定が不適切
   const curRate = known ? answers.curRate : ASSUMED_RATE;
   const volYen = R.volume*10000;
   const curFee = volYen*curRate, newFee = top.annualFee, diff = curFee - newFee;
