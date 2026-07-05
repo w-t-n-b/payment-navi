@@ -233,6 +233,14 @@ section{scroll-margin-top:60px}
 .cost-table tr.total td:last-child{font-size:20px;color:var(--blue)}
 .why{border:1px solid var(--line);border-radius:4px;padding:12px 14px;margin:14px 0;background:var(--sub-bg)}
 .why .wh{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+/* 業種の傾向（層2）＋1位のキャッチ（層3） */
+.pick-catch{margin-top:10px;padding:8px 11px;border-left:3px solid var(--blue);background:var(--blue-soft);color:var(--blue-d);font-weight:700;font-size:13px;border-radius:2px}
+.ind-note{border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:4px;padding:12px 14px;margin:14px 0;background:var(--sub-bg)}
+.ind-note .wh{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:5px}
+.ind-note p{margin:4px 0 0;font-size:13px;line-height:1.65}
+.ind-note .ind-axes{color:var(--muted);font-size:12px}
+.ind-note .ind-avoid{color:var(--text)}
+.ind-note .ind-avoid b{color:var(--score)}
 .why .wh .ic{display:none}
 .why ul{margin:0;padding-left:18px;font-size:13px}
 .why li{margin:2px 0}
@@ -957,6 +965,42 @@ function updateProgress(){
 }
 $("diagBtn").onclick = ()=>{ if(QUESTIONS.every((_,i)=>isAnswered(i))) showResult(); };
 
+/* ===================== 業種ロジック（おすすめロジックシート反映・3層方式） =====================
+   層1: 業種→観点の初期重み（スコアに効くのはここだけ／±0.6以内・本人重視点+1.5より必ず小さく）
+   層2: reason/avoid はスコアに入れず、結果カードの解説・注意欄に表示
+   層3: SERVICE_CATCH は1位カードの推薦文に使用
+   ※ 業種はヒント、本人の重視点が主役（中立性の担保） */
+const INDUSTRY = {
+  food:   { label:"飲食",             w:{payout:.5,pos:.3}, axes:["入金速度","レジ連携"],
+            reason:"仕入れが日々発生し資金繰りに直結。翌営業日入金が効きます（ホットペッパー利用店はAir系のレジ・予約連携も好相性）。",
+            avoid:"PayPay単体（クレカ非対応で機会損失になりがち）" },
+  retail: { label:"小売・物販",       w:{fee:.5,brands:.3}, axes:["手数料の安さ","対応の多さ"],
+            reason:"薄利多売で料率が利益に直結。幅広い客層に応えるブランド網羅も重要です。",
+            avoid:"PayPay単体" },
+  beauty: { label:"美容・サロン",     w:{pos:.5}, axes:["レジ・予約連携","分割・リボ対応"],
+            reason:"客単価が高くクレカ比率が大きい業態。予約システム連携や高単価メニューの分割ニーズが効きます。",
+            avoid:"PayPay単体" },
+  health: { label:"医療・治療院",     w:{fee:.5,initial:.3}, axes:["手数料の安さ","初期費用"],
+            reason:"会計が受付に固定され、自費診療は単価が高め。低率の据置端末が合います。",
+            avoid:"持ち運び特化の運用（会計場所が固定のため）" },
+  mobile: { label:"移動販売・イベント", w:{initial:.5,payout:.3}, axes:["初期費用の安さ","入金速度"],
+            reason:"投資は最小・機動力が命。電源/通信の制約でQR併用が強く、売上の即入金も効きます。",
+            avoid:"steraやTimes等の据置・月額固定型" },
+  other:  { label:"その他",           w:{}, axes:[], reason:"", avoid:null }
+};
+const SERVICE_CATCH = {
+  square:"迷ったらこれ。最速で始めて、最速で入金",
+  airpay:"ブランド網羅と予約・レジ連携の定番",
+  stores:"店とネットショップを1つの管理に",
+  stera:"月商が育った店の、据置オールインワン本命",
+  rakuten:"楽天ポイントがそのまま集客になる",
+  paypay:"0円で始めるQR。まずはサブの一手",
+  usen:"1台完結、飲食インフラごと任せる",
+  smaregi:"POS一体で料率最安級の本格派",
+  otegaru:"分割・リボに対応できる高単価特化",
+  timespay:"通信費も振込も込みの月額固定"
+};
+
 /* ===================== スコアリング（既存ロジック維持） ===================== */
 function shopVol(){ return answers.channel==="both" ? answers.volumeShop : answers.volume; }
 function ecVol(){ return answers.channel==="both" ? answers.volumeEc : answers.volume; }
@@ -966,6 +1010,9 @@ function scoreServices(){
   const volFeeFactor = {500:0, 3000:.3, 7500:.5, 15000:.8, 35000:1.2, 70000:1.6}[volume] || 0;
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
+  /* 層1: 業種→観点の初期重み（±0.6以内・本人重視点+1.5より小さく＝業種はヒント） */
+  const ind = INDUSTRY[answers.industry] || null;
+  if(ind) Object.entries(ind.w).forEach(([k,v])=>{ if(w[k]!==undefined) w[k]+=v; });
 
   const raw = SERVICES.map(s=>{
     const rate = s.cardRate!=null ? s.cardRate : s.qrRate;
@@ -995,7 +1042,7 @@ function scoreServices(){
   const maxTotal = Math.max(...scored.map(x=>x.total));
   scored.forEach(x=> x.pct = Math.round(x.total/maxTotal*100));
   scored.sort((a,b)=> b.total-a.total);
-  return {scored, w, volFeeFactor, needPos, term, methods, pris, volume};
+  return {scored, w, volFeeFactor, needPos, term, methods, pris, volume, ind};
 }
 
 /* ===================== 結果表示 ===================== */
@@ -1175,10 +1222,18 @@ function buildShopBlock(){
   const prepayNote = (answers.channel==="shop" && answers.prepay==="yes")
     ? `<p class="cart-note">前払い・回数券などの<b>事前決済</b>は対面端末だけでは対応できません。オンライン前払いには <b>Square リンク決済</b> や <b>STORES</b> など EC/リンク決済の併用がおすすめです（店舗と同一アカウントで一元管理できます）。</p>`
     : "";
+  const ind=R.ind;
+  /* 層3: 1位カードのキャッチ一言 */
+  const catchLine = (!isConsult && SERVICE_CATCH[s0.id]) ? `<div class="pick-catch">${SERVICE_CATCH[s0.id]}</div>` : "";
+  /* 層2: 業種の傾向（スコア非関与・解説と注意欄に表示） */
+  const indNote = (ind && ind.reason)
+    ? `<div class="ind-note"><div class="wh">業種の傾向 ― ${ind.label}</div><p>${ind.reason}</p><p class="ind-axes">この傾向から <b>${ind.axes.join("・")}</b> の観点をやや重めに採点しました（業種による重み調整は±0.6以内。主役はあなたが選んだ重視点です）。</p>${ind.avoid?`<p class="ind-avoid">この業種で<b>避けたい傾向</b>：${ind.avoid}。</p>`:""}</div>`
+    : "";
   const teaser = `
     ${prepayNote}
     <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
     ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
+      ${catchLine}
       <div class="pick-cost"><table class="cost-table">
         <tr><td>端末代</td><td class="num">${yen(s0.device)}</td></tr>
         <tr><td>月額（12ヶ月分）</td><td class="num">${yen(s0.monthly*12)}</td></tr>
@@ -1187,6 +1242,7 @@ function buildShopBlock(){
       </table></div>
     </div>`;
   const detail = `
+    ${indNote}
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
     <div class="facts"><span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
@@ -1267,7 +1323,7 @@ function condTableHtml(ch){
   return `<table class="cond-table">${grp("お店の現状",state)}${grp("ご希望",wish)}</table>`;
 }
 function discHtml(){
-  return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
+  return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
 function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
 function gateHtml(lead,cta){
