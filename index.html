@@ -425,7 +425,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 <div class="wrap">
 
   <!-- ===== HERO / LP ===== -->
-  <section class="hero">
+  <section class="hero" id="heroSection">
     <h1>あなたの店に本当に合う決済端末が、<br><span class="hl">60秒</span>でわかる。</h1>
     <p class="sub">個人店・小規模店のための決済サービスの比較診断。特定の決済事業者から報酬を受け取らず、あなたの入力条件だけで年間コスト付きに採点します。</p>
     <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
@@ -1555,9 +1555,11 @@ function renderMall(rc){
 }
 function showResult(){
   const ch=answers.channel;
+  $("heroSection").classList.add("hidden");   // 結果画面ではヒーロー（診断CTA・しくみ）を隠す
   $("quizCard").classList.add("hidden");
   $("shindan").classList.add("hidden");
   $("resultSection").classList.remove("hidden");
+  saveState(false);                            // リロード復元用に状態を保存
   const rc=$("resultCard");
   if(ch==="ec"&&answers.ectrack==="mall"){ renderMall(rc); return; }
   const blocks=[];
@@ -1619,6 +1621,7 @@ function unlockResults(){
     ? "送信ありがとうございます。専門家より2営業日以内にご連絡します。以下は診断の詳細です。"
     : "送信ありがとうございます。以下で全社の詳細と申込条件をご確認いただけます。";
   $("lockBody").prepend(note);
+  saveState(true);   // 解除済みを保存（リロードでフォーム再表示しない）
   wrap.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
@@ -1641,31 +1644,37 @@ function copyResult(){
   }).catch(()=>{ alert(text); });
 }
 
+/* ===================== 状態の保存/復元（リロードで結果画面を維持） ===================== */
+const STATE_KEY="kessai_v1";
+function saveState(unlocked){
+  try{ sessionStorage.setItem(STATE_KEY, JSON.stringify({answers, unlocked:!!unlocked, view:"result"})); }catch(e){}
+}
+function clearState(){ try{ sessionStorage.removeItem(STATE_KEY); }catch(e){} }
+function restoreState(){
+  let st; try{ st=JSON.parse(sessionStorage.getItem(STATE_KEY)||"null"); }catch(e){ return; }
+  if(!st || st.view!=="result" || !st.answers || !st.answers.channel) return;
+  Object.keys(answers).forEach(k=>delete answers[k]);
+  Object.assign(answers, st.answers);
+  QUESTIONS=questionSet();
+  showResult();
+  if(st.unlocked) unlockResults();
+}
+
 /* ===================== 画面遷移 ===================== */
-function startQuiz(){
+function resetToQuiz(scrollTop){
+  clearState();
   Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
   $("resultSection").classList.add("hidden");
+  $("heroSection").classList.remove("hidden");
   $("shindan").classList.remove("hidden");
   $("quizCard").classList.remove("hidden");
   buildWizard();
-  $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
+  if(scrollTop) window.scrollTo({top:0,behavior:"smooth"});
+  else $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function goToHero(){
-  Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
-  $("resultSection").classList.add("hidden");
-  $("shindan").classList.remove("hidden");
-  $("quizCard").classList.remove("hidden");
-  buildWizard();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function restart(){
-  Object.keys(answers).forEach(k=>delete answers[k]); QUESTIONS=questionSet();
-  $("resultSection").classList.add("hidden");
-  $("shindan").classList.remove("hidden");
-  $("quizCard").classList.remove("hidden");
-  buildWizard();
-  $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
-}
+function startQuiz(){ resetToQuiz(false); }
+function goToHero(){ resetToQuiz(true); }
+function restart(){ resetToQuiz(false); }
 $("startBtn").onclick = startQuiz;
 
 /* ===================== 初期化 ===================== */
@@ -1684,6 +1693,7 @@ $("svcChipsEcPsp").innerHTML = [
   ["PayPal",false,""]
 ].map(a=>svcChip(a[0],a[1],a[2])).join("");
 buildWizard();
+restoreState();   // リロード時、結果画面を保存状態から復元
 </script>
 </body>
 </html>
