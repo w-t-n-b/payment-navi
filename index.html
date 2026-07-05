@@ -154,6 +154,47 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
   .sample-tag{right:10px}
 }
 
+/* ===== ヒーロー バリアントB（Stripe型・ワイヤーリボン／青系のみ・線のみ） ===== */
+.hero-variant-b{position:relative;overflow:hidden;padding:6px 0 0}
+.hb-ribbon{position:absolute;inset:-12% -6%;z-index:0;pointer-events:none}
+.hb-ribbon svg{width:100%;height:100%;display:block}
+.hb-content{position:relative;z-index:1;padding:26px 0 22px;max-width:660px}
+.hb-neutral{display:inline-block;font-size:12px;font-weight:700;color:var(--blue);border:1px solid var(--line);background:rgba(255,255,255,.74);border-radius:4px;padding:5px 10px;margin-bottom:16px}
+.hb-neutral b{color:var(--navy)}
+.hero-variant-b h1{font-size:30px;font-weight:800;color:var(--navy);line-height:1.42;letter-spacing:-.01em;margin:0 0 18px;text-wrap:balance}
+.hero-variant-b h1 .hl{color:var(--blue)}
+.hb-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hb-cta .cta{margin:0}
+.hb-cta .btn-ghost{padding:11px 18px;font-size:14px}
+/* サービス名マーキー2行 */
+.hb-marquee{position:relative;z-index:1;border-top:1px solid var(--line);margin-top:20px;padding:12px 0 6px;background:rgba(255,255,255,.5)}
+.mq-row{display:flex;align-items:center;gap:14px;padding:6px 0}
+.mq-label{flex:none;width:132px;font-size:11.5px;font-weight:700;color:var(--navy)}
+.mq-viewport{position:relative;flex:1;min-width:0;overflow:hidden}
+.mq-track{display:flex;gap:8px;width:max-content;will-change:transform}
+.mq-track .chip{white-space:nowrap}
+.mq-track.mq-left{animation-name:mqLeft;animation-duration:46s;animation-timing-function:linear;animation-iteration-count:infinite}
+.mq-track.mq-right{animation-name:mqRight;animation-duration:46s;animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes mqLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes mqRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.mq-viewport:hover .mq-track{animation-play-state:paused}
+/* リボンの線アニメ（transform/opacityのみ・filter/blur不使用） */
+.hb-ribbon .ribbon-spin{transform-origin:66% 46%;animation-name:ribbonSpin;animation-duration:38s;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+.hb-ribbon path{transform-box:fill-box;transform-origin:center;animation-name:ribbonDrift;animation-timing-function:ease-in-out;animation-iteration-count:infinite}
+@keyframes ribbonSpin{0%,100%{transform:rotate(-1.4deg) translateX(6px)}50%{transform:rotate(1.4deg) translateX(-14px)}}
+@keyframes ribbonDrift{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-9px) scaleY(1.05)}}
+@media(prefers-reduced-motion:reduce){
+  .hb-ribbon .ribbon-spin,.hb-ribbon path{animation:none}
+  .mq-track{animation:none!important;flex-wrap:wrap}
+  .mq-viewport{overflow:visible}
+  .mq-dup{display:none}
+}
+@media(max-width:760px){
+  .hero-variant-b h1{font-size:22px}
+  .hb-content{padding:20px 0 18px;max-width:none}
+  .mq-label{width:96px;font-size:11px}
+}
+
 /* card / section */
 .card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 16px}
 section{scroll-margin-top:60px}
@@ -458,12 +499,15 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 
   <!-- ===== HERO / LP ===== -->
   <section class="hero" id="heroSection">
+    <!-- ═══ A/B切替 ═══ 既定=バリアントA。Bを使う場合は「バリアントA」ブロックを <!== ==> でコメントアウトし、「バリアントB」ブロックのコメントを解除する（どちらか一方のみ有効に＝h1を1つに保つ） -->
+    <!-- ▼▼▼ バリアントA（診断結果カード型・現行／デフォルト有効） ▼▼▼ -->
+    <div class="hero-variant-a">
     <div class="hero-grid">
       <div class="hero-lead">
         <div class="trust-pill">広告掲載なし・報酬による優先表示なし診断</div>
         <h1>あなたの店に本当に合う決済が、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる。</h1>
         <p class="sub">はじめての導入も、手数料の見直しも、ECも。</p>
-        <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button class="cta js-start" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <div class="cta-note">無料・登録不要／所要約60秒</div>
         <div class="hero-badges">
           <span class="hbadge"><b>20</b>サービスを同一基準で採点</span>
@@ -513,8 +557,28 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
     </div>
 
     <p class="hero-foot">年2億円以上の店舗は、料率交渉の余地も診断します。</p>
+    </div>
+    <!-- ▲▲▲ /バリアントA ▲▲▲ -->
 
-    <div class="how">
+    <!-- ▼▼▼ バリアントB（Stripe型・ワイヤーリボン）／使う時はこのブロック末尾までのコメントを外し、上のバリアントAをコメントアウト ▼▼▼
+    <div class="hero-variant-b">
+      <div class="hb-ribbon"><svg id="heroRibbon" class="ribbon-spin" viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
+      <div class="hb-content">
+        <div class="hb-neutral">決済ナビが決済事業者から受け取る広告費・報酬：<b>¥0</b></div>
+        <h1>決済選びは、比較から。<br>店舗もECも、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる中立診断。</h1>
+        <div class="hb-cta">
+          <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <a class="btn btn-ghost" href="#how">診断のしくみ</a>
+        </div>
+      </div>
+      <div class="hb-marquee">
+        <div class="mq-row"><div class="mq-label">店舗の決済端末</div><div class="mq-viewport"><div class="mq-track mq-left" id="mqShop"></div></div></div>
+        <div class="mq-row"><div class="mq-label">EC・オンライン決済</div><div class="mq-viewport"><div class="mq-track mq-right" id="mqEc"></div></div></div>
+      </div>
+    </div>
+    ▲▲▲ /バリアントB ▲▲▲ -->
+
+    <div class="how" id="how">
       <h2>診断のしくみ</h2>
       <div class="steps">
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-edit"/></svg></div><b>条件を入力</b><small>導入状況・年間取扱高・使いたい手段などに答えるだけ</small></div>
@@ -1756,23 +1820,53 @@ function resetToQuiz(scrollTop){
 function startQuiz(){ resetToQuiz(false); }
 function goToHero(){ resetToQuiz(true); }
 function restart(){ resetToQuiz(false); }
-$("startBtn").onclick = startQuiz;
+/* ヒーローA/Bどちらでも「診断をはじめる」を動かす（.js-start を束ねてバインド） */
+document.querySelectorAll(".js-start").forEach(b=>{ b.onclick = startQuiz; });
 
 /* ===================== 初期化 ===================== */
 function svcChip(name, cross, tip){ return `<span class="chip"${tip?` title="${tip}"`:""}>${cross?'<i class="cd"></i>':""}${name}</span>`; }
-$("svcChipsShop").innerHTML = SERVICES.map(s=>{ const n=s.name.replace(/（.*?）/,""); return svcChip(n, s.id==="square"||s.id==="stores"); }).join("");
-$("svcChipsEcCart").innerHTML = [
+/* バリアントA のチップ（Bをコメントアウト時は要素が無いのでガード） */
+function setChips(id,html){ const e=$(id); if(e) e.innerHTML=html; }
+setChips("svcChipsShop", SERVICES.map(s=>{ const n=s.name.replace(/（.*?）/,""); return svcChip(n, s.id==="square"||s.id==="stores"); }).join(""));
+setChips("svcChipsEcCart", [
   ["BASE",false,"BASEかんたん決済"],
   ["STORES ネットショップ",true,"STORES決済｜店舗と同一アカウント可"],
   ["Shopify",false,"Shopifyペイメント"]
-].map(a=>svcChip(a[0],a[1],a[2])).join("");
-$("svcChipsEcPsp").innerHTML = [
+].map(a=>svcChip(a[0],a[1],a[2])).join(""));
+setChips("svcChipsEcPsp", [
   ["Square オンライン",true,"店舗のSquareと同一アカウント可"],
   ["Stripe",false,""],
   ["GMOイプシロン",false,""],
   ["KOMOJU",false,""],
   ["PayPal",false,""]
-].map(a=>svcChip(a[0],a[1],a[2])).join("");
+].map(a=>svcChip(a[0],a[1],a[2])).join(""));
+
+/* ---- バリアントB：ワイヤーリボン（SVGは生成のみ／動きは純CSS）＋ マーキー ---- */
+function buildRibbon(){
+  const svg=$("heroRibbon"); if(!svg) return;
+  const N = window.matchMedia("(max-width:760px)").matches ? 9 : 26;   // モバイルは本数を約1/3に
+  let p="";
+  for(let i=0;i<N;i++){
+    const t = N>1 ? i/(N-1) : .5;
+    const bias = 1 - Math.abs(t-0.5)*2;                 // 中央ほど濃く
+    const op = (0.06 + 0.19*bias).toFixed(3);
+    const y0 = 80 + t*400, y1 = y0-70 + bias*50, y2 = y0+90 - bias*40, y3 = 180 + t*220;
+    const d = `M -120 ${y0.toFixed(1)} C 320 ${y1.toFixed(1)}, 760 ${y2.toFixed(1)}, 1320 ${y3.toFixed(1)}`;  // 画面外→画面外で貫通
+    p += `<path d="${d}" fill="none" stroke="#1a6bb8" stroke-width="1" opacity="${op}" style="animation-delay:${(-i*0.7).toFixed(2)}s;animation-duration:${(24+i%5)}s"/>`;
+  }
+  svg.innerHTML = p;
+}
+function buildMarquee(){
+  const shop=$("mqShop"), ec=$("mqEc"); if(!shop&&!ec) return;
+  const chip=(n,dup)=>`<span class="chip${dup?" mq-dup":""}"${dup?' aria-hidden="true"':''}>${n}</span>`;
+  const set=(names)=>names.map(n=>chip(n,false)).join("")+names.map(n=>chip(n,true)).join("");
+  const shopN = SERVICES.map(s=>s.name.replace(/（.*?）/,""));
+  const ecN = ["BASE","STORES ネットショップ","Shopify","Square オンライン","Stripe","GMOイプシロン","KOMOJU","PayPal"];
+  if(shop) shop.innerHTML = set(shopN);
+  if(ec) ec.innerHTML = set(ecN);
+}
+buildRibbon(); buildMarquee();
+
 buildWizard();
 restoreState();   // リロード時、結果画面を保存状態から復元
 </script>
