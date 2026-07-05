@@ -241,6 +241,17 @@ section{scroll-margin-top:60px}
 .ind-note .ind-axes{color:var(--muted);font-size:12px}
 .ind-note .ind-avoid{color:var(--text)}
 .ind-note .ind-avoid b{color:var(--score)}
+/* 乗り換え差額バナー */
+.save-banner{border:1px solid var(--blue);border-top:3px solid var(--score);border-radius:4px;padding:14px 16px;margin-top:14px;background:var(--blue-soft)}
+.save-h{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.save-n{font-size:22px;color:var(--score);font-weight:700;vertical-align:-1px}
+.save-tbl{width:100%;border-collapse:collapse;font-size:13px;border:1px solid var(--line);background:#fff}
+.save-tbl td{padding:7px 10px;border-bottom:1px solid var(--line)}
+.save-tbl td:first-child{color:var(--muted)}
+.save-tbl td:last-child{text-align:right;font-weight:700;color:var(--navy);white-space:nowrap}
+.save-tbl tr:last-child td{border-bottom:none}
+.save-tbl tr.save-diff td{color:var(--score);font-size:14px}
+.save-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
 .why .wh .ic{display:none}
 .why ul{margin:0;padding-left:18px;font-size:13px}
 .why li{margin:2px 0}
@@ -758,6 +769,17 @@ const Q_shopStatus = {
     {v:"exist_unknown",ic:"i-store",l:"導入済み・契約形態は不明",s:"どちらか分からない"}
   ]
 };
+/* 既存ユーザーにのみ表示：現在の料率（乗り換え差額の試算に使用。分からない→平均で試算） */
+const Q_curRate = {
+  key:"curRate", section:"state", title:"今のクレジットカード手数料率は？", note:"乗り換えでいくら下がるかの試算に使います", help:"分からなければ「不明」でOK（平均で試算）", type:"single",
+  opts:[
+    {v:0.024,ic:"i-yen",l:"〜2.5%",s:"かなり低め（大手・直契約など）"},
+    {v:0.028,ic:"i-yen",l:"2.5〜3.0%",s:"標準的な水準"},
+    {v:0.032,ic:"i-yen",l:"3.0〜3.5%",s:"やや高め"},
+    {v:0.037,ic:"i-yen",l:"3.5%以上",s:"高め・古い契約など"},
+    {v:0,ic:"i-store",l:"分からない",s:"一般的な3.24%で試算します"}
+  ]
+};
 const Q_shopMethods = {
   key:"methods", section:"wish", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
@@ -849,6 +871,10 @@ function questionSet(){
     wish.push(Q_terminal,Q_priorities,Q_pos);
     list=[...state,...wish];
   }
+  /* 既存ユーザー（新規以外）のみ、導入状況の直後に現在の料率を挿入 */
+  if((ch==="shop"||ch==="both") && answers.status && answers.status!=="new"){
+    const i=list.indexOf(Q_shopStatus); if(i>=0 && list.indexOf(Q_curRate)<0) list.splice(i+1,0,Q_curRate);
+  }
   if(answers.industry==="beauty"){ const i=list.indexOf(Q_industry); if(i>=0) list.splice(i+1,0,Q_prepay); }
   return list;
 }
@@ -917,8 +943,8 @@ function scrollAcc(i){ const el=$("accList").querySelector(`.acc[data-i="${i}"]`
 
 function selectOpt(i,rawV){
   const q=QUESTIONS[i];
-  if(q.key==="channel"||q.key==="industry"||q.key==="ectrack"){ answers[q.key]=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
-  const v=(q.key==="volume")?Number(rawV):rawV;
+  if(q.key==="channel"||q.key==="industry"||q.key==="ectrack"||q.key==="status"){ answers[q.key]=rawV; QUESTIONS=questionSet(); buildWizard(); return; }
+  const v=(q.key==="volume"||q.key==="curRate")?Number(rawV):rawV;
   if(q.type==="multi"){
     const arr = Array.isArray(answers[q.key])?answers[q.key].slice():[];
     const k=arr.indexOf(v); if(k>=0) arr.splice(k,1); else arr.push(v);
@@ -945,7 +971,7 @@ function optKey(e,b){
 function refreshQ(i){
   const q=QUESTIONS[i], acc=$("accList").querySelector(`.acc[data-i="${i}"]`), cur=answers[q.key];
   acc.querySelectorAll(".opt").forEach(b=>{
-    const val=(q.key==="volume")?Number(b.dataset.v):b.dataset.v;
+    const val=(q.key==="volume"||q.key==="curRate")?Number(b.dataset.v):b.dataset.v;
     const sel = q.type==="multi" ? (Array.isArray(cur)&&cur.includes(val)) : cur===val;
     b.classList.toggle("sel",sel); b.setAttribute("aria-pressed",sel);
   });
@@ -1213,6 +1239,34 @@ function scoreBlockHtml(top,s0,devLabel,isConsult){
     </div>`;
 }
 
+/* 乗り換え差額（店舗・既存ユーザーのみ）＝ 現状の年間手数料 − 推奨の年間手数料
+   端末代・月額は含まない「手数料率の差」の概算。現料率が不明なら一般的な3.24%と仮定して明記。 */
+const ASSUMED_RATE = 0.0324;
+function switchSavingsShop(R, top){
+  const status=answers.status;
+  if(!status || status==="new") return "";                 // 新規は乗り換え元が無い
+  const known = answers.curRate>0;
+  if(!known && status==="exist_kobetsu") return "";          // 直契約は低率のことが多く平均仮定が不適切
+  const curRate = known ? answers.curRate : ASSUMED_RATE;
+  const volYen = R.volume*10000;
+  const curFee = volYen*curRate, newFee = top.annualFee, diff = curFee - newFee;
+  const curTxt = `${(curRate*100).toFixed(2)}%${known?"":"（一般的な水準と仮定）"}`;
+  const newTxt = `${(top.rate*100).toFixed(2)}%`;
+  if(diff <= 0){
+    return `<div class="route-banner"><div class="rb-title">今の料率はすでに良い水準です</div>
+      <div class="rb-desc">想定 ${curTxt} → 推奨 ${newTxt}。手数料だけで見ると乗り換えメリットは小さめです。入金速度・レジ連携など料率以外の条件で比較しましょう。</div></div>`;
+  }
+  return `<div class="save-banner">
+    <div class="save-h">乗り換えで <span class="save-n num">${yen(diff)}</span> / 年 の手数料削減が見込めます</div>
+    <table class="save-tbl">
+      <tr><td>今の年間手数料（想定 ${curTxt}）</td><td class="num">${yen(curFee)}</td></tr>
+      <tr><td>推奨の年間手数料（${newTxt}）</td><td class="num">${yen(newFee)}</td></tr>
+      <tr class="save-diff"><td>差額（手数料のみ・年間）</td><td class="num">▲${yen(diff)}</td></tr>
+    </table>
+    <p class="save-note">手数料率の差だけの概算です（端末代・月額は含みません）。${known?"":"現在の料率が不明のため一般的な3.24%で試算しています。"}実際の料率は契約プラン・ブランドで異なります。</p>
+  </div>`;
+}
+
 /* ---- 店舗（対面）ブロック ---- */
 function buildShopBlock(){
   const R=scoreServices();
@@ -1240,7 +1294,8 @@ function buildShopBlock(){
         <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(top.rate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
         <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>
       </table></div>
-    </div>`;
+    </div>
+    ${switchSavingsShop(R, top)}`;
   const detail = `
     ${indNote}
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBullets(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
@@ -1302,6 +1357,8 @@ function condTableHtml(ch){
   if(answers.industry==="beauty"&&answers.prepay) state.push(['事前決済（前払い）', answers.prepay==="yes"?"必要":"不要"]);
   if(ch==='shop'||ch==='both'){
     state.push(['店舗の導入状況', STATUS_LABEL[answers.status]||'—']);
+    if(answers.status && answers.status!=='new' && answers.curRate!==undefined)
+      state.push(['現在の料率', answers.curRate>0 ? (answers.curRate*100).toFixed(2)+'%' : '不明（平均で試算）']);
     if(ch==='both') state.push(['店舗の取扱高', scaleYen(answers.volumeShop)]);
   }
   if(ch==='ec'||ch==='both'){
