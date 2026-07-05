@@ -124,6 +124,36 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 .stepc b{font-size:13px;font-weight:700;color:var(--navy);display:inline}
 .stepc small{color:var(--muted);font-size:12px;display:block;margin-top:3px}
 
+/* hero 2カラム（デザインカンプ再実装・既存トークン流用） */
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:30px;align-items:start;margin-bottom:20px}
+.hero-lead{min-width:0}
+.hero h1{font-size:27px;font-weight:800;color:var(--navy);line-height:1.42;letter-spacing:-.01em;margin:6px 0 12px;text-wrap:balance}
+.hero .sub{font-size:14.5px;color:var(--text);font-weight:500;margin:0 0 18px;max-width:36ch}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.hbadge{font-size:12px;font-weight:600;color:var(--navy);border:1px solid var(--line);border-radius:4px;padding:6px 11px;background:var(--sub-bg)}
+.hbadge b{color:var(--blue);font-weight:700}
+/* サンプル結果カード（表示例・実カードと同一のトークン） */
+.hero-visual{min-width:0}
+.sample-wrap{position:relative}
+.sample-tag{position:absolute;top:-9px;right:12px;z-index:1;background:var(--navy);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:3px}
+.sample-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.sample-score{flex:none;text-align:right;line-height:1.05}
+.sample-score .score-n{font-size:26px}
+.sample-score .score-lb{font-size:11px;color:var(--muted);margin-top:3px}
+.sample-total{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:14px 0 10px;padding-top:12px;border-top:1px solid var(--line)}
+.cost-cap{font-size:13px;color:var(--muted);font-weight:700}
+.cost-big{font-size:24px;font-weight:700;color:var(--blue)}
+.sample-cost{margin-top:0;min-width:0}
+.sample-note{font-size:12px;color:var(--muted);margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);line-height:1.5}
+/* 冒頭下の控えめな一言 */
+.hero-foot{font-size:12.5px;color:var(--muted);margin-top:14px;padding-left:12px;border-left:3px solid var(--line)}
+@media(max-width:760px){
+  .hero-grid{grid-template-columns:1fr;gap:22px}
+  .hero h1{font-size:22px}
+  .hero .sub{max-width:none}
+  .sample-tag{right:10px}
+}
+
 /* card / section */
 .card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 16px}
 section{scroll-margin-top:60px}
@@ -428,19 +458,48 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 
   <!-- ===== HERO / LP ===== -->
   <section class="hero" id="heroSection">
-    <h1>あなたの店に本当に合う決済端末が、<br><span class="hl">60秒</span>でわかる。</h1>
-    <p class="sub">個人店・小規模店のための決済サービスの比較診断。特定の決済事業者から報酬を受け取らず、あなたの入力条件だけで年間コスト付きに採点します。</p>
-    <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-    <div class="cta-note">無料・登録不要／所要約60秒</div>
+    <div class="hero-grid">
+      <div class="hero-lead">
+        <div class="trust-pill">広告掲載なし・報酬による優先表示なし診断</div>
+        <h1>あなたの店に本当に合う決済が、<span class="hl">60秒</span>で<span class="hl">「年間いくらか」</span>までわかる。</h1>
+        <p class="sub">はじめての導入も、手数料の見直しも、ECも。</p>
+        <button class="cta" id="startBtn">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <div class="cta-note">無料・登録不要／所要約60秒</div>
+        <div class="hero-badges">
+          <span class="hbadge"><b>20</b>サービスを同一基準で採点</span>
+          <span class="hbadge">広告掲載・優先表示なし</span>
+          <span class="hbadge">登録不要・約60秒</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="sample-wrap">
+          <span class="sample-tag">表示例</span>
+          <div class="pick sample-pick">
+            <span class="pick-badge">診断結果・総合1位</span>
+            <div class="sample-top">
+              <div><div class="pick-name">Square（スクエア）</div><span class="pick-tag">Reader ¥4,980〜・入金 最短翌営業日</span></div>
+              <div class="sample-score"><span class="score-n num">92</span><span class="score-d">/100</span><div class="score-lb">適合</div></div>
+            </div>
+            <div class="sample-total"><span class="cost-cap">年間コスト目安</span><span class="cost-big num">¥246,980</span></div>
+            <table class="cost-table sample-cost">
+              <tr><td>端末代</td><td class="num">¥4,980</td></tr>
+              <tr><td>月額（12ヶ月分）</td><td class="num">¥0</td></tr>
+              <tr><td>決済手数料（取扱高 968万円 × 2.5%）</td><td class="num">¥242,000</td></tr>
+            </table>
+            <p class="sample-note">入金速度を重視する飲食店の条件で採点した例</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="services-strip">
-      <div class="cap">比較対象サービス</div>
+      <div class="cap">比較する決済サービス</div>
       <div class="svc-group">
-        <div class="svc-gh">店舗の決済端末</div>
+        <div class="svc-gh">店舗に置くなら</div>
         <div class="chips" id="svcChipsShop"></div>
       </div>
       <div class="svc-group">
-        <div class="svc-gh">EC・オンライン決済</div>
+        <div class="svc-gh">ECで受けるなら</div>
         <div class="svc-sub">
           <div class="svc-sh">ネットショップ作成とセット</div>
           <div class="chips" id="svcChipsEcCart"></div>
@@ -452,6 +511,8 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       </div>
       <div class="svc-legend"><i class="cd"></i>店舗とECを同一アカウントで使えるサービス</div>
     </div>
+
+    <p class="hero-foot">年2億円以上の店舗は、料率交渉の余地も診断します。</p>
 
     <div class="how">
       <h2>診断のしくみ</h2>
