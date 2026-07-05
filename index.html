@@ -706,11 +706,9 @@ const Q_shopStatus = {
 const Q_shopMethods = {
   key:"methods", title:"店舗で使いたい決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
-    {v:"credit",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
-    {v:"touch",ic:"i-touch",l:"タッチ決済",s:"NFC非接触・Apple Pay等"},
-    {v:"qr",ic:"i-qr",l:"QRコード決済",s:"PayPay・楽天ペイ 等"},
-    {v:"transit",ic:"i-transit",l:"交通系IC",s:"Suica・PASMO 等"},
-    {v:"emoney",ic:"i-key",l:"iD・QUICPay",s:"電子マネー"}
+    {v:"credit",ic:"i-card",l:"クレジットカード（タッチ含む）",s:"VISA / Master / JCB・NFCタッチ"},
+    {v:"emoney",ic:"i-key",l:"電子マネー",s:"iD・QUICPay・交通系IC 等"},
+    {v:"qr",ic:"i-qr",l:"QRコード決済",s:"PayPay・楽天ペイ 等"}
   ]
 };
 const Q_terminal = {
@@ -756,14 +754,9 @@ const Q_cart = {
 const Q_ecMethods = {
   key:"ecMethods", title:"用意したいオンライン決済手段は？", note:"対応していない手段があると減点します", type:"multi",
   opts:[
-    {v:"card",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
-    {v:"conveni",ic:"i-store",l:"コンビニ決済",s:"クレカ非保有層に有効"},
-    {v:"defer",ic:"i-gift",l:"後払い",s:"Paidy・NP後払い 等"},
-    {v:"carrier",ic:"i-mobile",l:"キャリア決済",s:"d払い・au / ソフトバンク"},
     {v:"qr",ic:"i-qr",l:"QR・ID決済",s:"PayPay・楽天ペイ・メルペイ 等"},
-    {v:"amazonpay",ic:"i-globe",l:"Amazon Pay",s:"ID決済でCVR向上"},
-    {v:"paypal",ic:"i-globe",l:"PayPal",s:"海外・越境に強い"},
-    {v:"bank",ic:"i-yen",l:"銀行振込・ペイジー",s:""}
+    {v:"card",ic:"i-card",l:"クレジットカード",s:"VISA / Master / JCB 等"},
+    {v:"defer",ic:"i-gift",l:"その他（後払い）",s:"Paidy・NP後払い 等"}
   ]
 };
 const Q_sub = {
