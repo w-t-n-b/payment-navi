@@ -1423,7 +1423,7 @@ const BORDER = 20000; // 年間取扱高2億円 = 20,000万円（このライン
 function scaleYen(vman){ if(vman>=10000){ const oku=vman/10000; return (Number.isInteger(oku)?oku:oku.toFixed(1))+"億円"; } return vman.toLocaleString("ja-JP")+"万円"; }
 
 /* ▼ リード送信先：GASウェブアプリのURLを貼ってください（未設定でも動作＝送信スキップ） */
-const LEAD_ENDPOINT = ""; // 例: "https://script.google.com/macros/s/XXXXXXXX/exec"
+const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycby0XTVa5aKQLm7MUDl-EV11oA_7T_h6aZl-gqxeE4iJuH9lUk6zSapgB3ITMyktkqtDSQ/exec"; // GAS「決済ナビ 相談リード」ウェブアプリ→スプレッドシート
 
 /* 導入状況＋年間取扱高から最適ルートを判定（個別契約=常にコンサル／包括は2億で申込↔コンサル） */
 /* ===================== EC スコアリング＆ヘルパー ===================== */
@@ -1937,6 +1937,7 @@ function submitLead(e){
   const f=e.target; if(!f.consent.checked) return;
   const payload={
     タイムスタンプ:new Date().toISOString(),
+    種別:"診断リード",
     店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), メール:f.email.value.trim(), 電話:f.phone.value.trim(),
     チャネル: LAST.ch==='shop'?'店舗':LAST.ch==='ec'?'EC':'両方',
     年間取扱高: answers.channel==="both" ? `店舗${scaleYen(answers.volumeShop)}/EC${scaleYen(answers.volumeEc)}` : scaleYen(answers.volume),
