@@ -778,19 +778,29 @@ const SERVICES = [
 const EC_SERVICES = [
   /* ── カート型（ネットショップ作成とセット）── */
   { id:"base", track:"cart", cart:"base", name:"BASE（BASEかんたん決済）", crossacct:false,
-    initial:0, monthly:0, cardRate:0.066,
+    initial:0,
+    /* プラン制：スタンダード月0円/6.6%＋40円 と グロース月19,980円/2.9%。取扱高で最安を自動選択 */
+    plans:[
+      {name:"スタンダード", rate:0.066, monthly:0},
+      {name:"グロース", rate:0.029, monthly:19980}
+    ],
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
     payout:.3, sub:.6, cross:.6, ease:1, quoteOnly:false,
-    devLabel:"初期・月額0円（スタンダード）",
-    pros:["初期・月額0円で最も手軽に開始","決済手段が幅広く標準搭載","2026年〜海外販売も標準化"],
-    cons:["スタンダードは実質6.6%+40円と割高（グロースは2.9%）","入金が最短10営業日と遅い"],
+    devLabel:"スタンダード月0円6.6%／グロース月19,980円2.9%",
+    pros:["スタンダードは初期・月額0円で手軽に開始","月商が伸びたらグロースで2.9%","決済手段が幅広く標準搭載"],
+    cons:["スタンダードは実質6.6%＋40円/件（この試算に+40円/件は未反映）","グロースは月19,980円","入金が最短10営業日と遅い"],
     url:"https://thebase.com/" },
   { id:"stores_ec", track:"cart", cart:"stores", name:"STORES ネットショップ（STORES決済）", crossacct:true,
-    initial:0, monthly:0, cardRate:0.055,
+    initial:0,
+    /* プラン制：フリー月0円/5.5% と スタンダード月3,300円/3.6%。取扱高で最安を自動選択 */
+    plans:[
+      {name:"フリー", rate:0.055, monthly:0},
+      {name:"スタンダード", rate:0.036, monthly:3300}
+    ],
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
     payout:.3, sub:.4, cross:.2, ease:1, quoteOnly:false,
-    devLabel:"初期・月額0円（フリー）",
-    pros:["店舗のSTORESと同一アカウントで店舗＋EC統合","フリーは初期・月額0円","楽天ペイ・PayPay・atone等の国内決済網が広い"],
+    devLabel:"フリー月0円5.5%／スタンダード月3,300円3.6%",
+    pros:["店舗のSTORESと同一アカウントで店舗＋EC統合","フリーは初期・月額0円","月商が伸びたらスタンダードで3.6%"],
     cons:["フリーは5.5%〜と割高","入金が翌月末と遅い"],
     url:"https://stores.jp/ec" },
   { id:"shopify", track:"cart", cart:"shopify", name:"Shopify（Shopifyペイメント）", crossacct:false, twoTier:true,
@@ -839,12 +849,18 @@ const EC_SERVICES = [
     cons:["コンビニ・後払い・越境に弱い","カード中心"],
     url:"https://squareup.com/jp/ja/online-store" },
   { id:"gmo_epsilon", track:"psp", name:"GMOイプシロン", crossacct:false,
-    initial:0, monthly:0, cardRate:0.0299, rateNote:"要確認",
+    initial:0,
+    /* プラン制：月間売上に応じた段階制料率。表記料率は下限（lower）＝取扱高で最安プランを自動選択して試算 */
+    plans:[
+      {name:"ビギナー", rate:0.036, monthly:2980},
+      {name:"スタンダード", rate:0.0299, monthly:5980, lower:true},
+      {name:"プレミアム", rate:0.0279, monthly:9980, lower:true}
+    ],
     methods:{card:1,conveni:1,defer:1,carrier:1,qr:1,amazonpay:1,paypal:1,bank:1},
     payout:.6, sub:1, cross:.4, ease:.5, quoteOnly:false,
-    devLabel:"カード2.79%〜（プランにより変動・要確認）",
-    pros:["主要カート・自社サイトに幅広く対応","カード2.79%〜と低めの水準","30以上の決済手段を一括"],
-    cons:["料率はプラン・審査で変動（要確認）","申込〜開始に日数"],
+    devLabel:"プラン制（月額2,980〜9,980円）",
+    pros:["主要カート・自社サイトに幅広く対応","取扱高が大きいほど上位プランで割安","30以上の決済手段を一括"],
+    cons:["月額必須（無料プランなし）","料率は月間売上に応じた段階制で、表記は下限・要確認","申込〜開始に日数"],
     url:"https://www.epsilon.jp/" },
   { id:"stripe", track:"psp", name:"Stripe", crossacct:false,
     initial:0, monthly:0, cardRate:0.036,
@@ -1272,8 +1288,22 @@ const EC_METHOD_LABEL={card:"カード",conveni:"コンビニ",defer:"後払い"
 const ECTRACK_LABEL={cart_new:"これから作る（カート型）",link:"決済リンク型",psp:"既存サイトに追加",cart_have:"カート利用中",mall:"モール出店"};
 const CART_LABEL={shopify:"Shopify",base:"BASE",stores:"STORES",makeshop:"MakeShop",colorme:"カラーミー",futureshop:"futureshop",eccube:"EC-CUBE",own:"自社/その他",undecided:"未定"};
 function payoutTxtEC(p){ if(p>=.85)return "最短翌営業日"; if(p>=.6)return "週次〜"; if(p>=.4)return "月2回程度"; return "翌月末〜"; }
-function rateTextEC(s){ return s.quoteOnly ? "料率 要見積" : `カード ${(s.cardRate*100).toFixed(2)}%`; }
-function rateShortEC(s){ return s.quoteOnly ? "要見積" : (s.cardRate*100).toFixed(2)+"%"; }
+/* プラン制サービスの実効プラン：取扱高(万円)で全プランの年間コストを計算し最安を採用（＝規模で上位プランが最安になる逆転を反映） */
+function ecEff(s, volMan){
+  const volYen=volMan*10000;
+  if(s.plans && s.plans.length){
+    let best=null;
+    for(const p of s.plans){
+      const cost=(s.initial||0)+(p.monthly||0)*12+volYen*p.rate;
+      if(best===null || cost<best.cost) best={rate:p.rate, monthly:(p.monthly||0), name:p.name, lower:!!p.lower, cost};
+    }
+    return {rate:best.rate, monthly:best.monthly, initial:(s.initial||0), planName:best.name, lower:best.lower};
+  }
+  return {rate:(s.cardRate!=null?s.cardRate:null), monthly:(s.monthly!=null?s.monthly:null), initial:(s.initial||0), planName:null, lower:false};
+}
+/* 表示は採用プランの値で統一（x は scoreEC の scored 要素で x.eff を持つ） */
+function rateTextEC(x){ const s=x.s,e=x.eff; if(s.quoteOnly||e.rate==null) return "料率 要見積"; return `カード ${(e.rate*100).toFixed(2)}%${e.lower?"〜":""}`; }
+function rateShortEC(x){ const s=x.s,e=x.eff; if(s.quoteOnly||e.rate==null) return "要見積"; return (e.rate*100).toFixed(2)+"%"+(e.lower?"〜":""); }
 
 function scoreEC(){
   const volume=ecVol(), methods=answers.ecMethods||[], tr=answers.ectrack;
@@ -1291,13 +1321,14 @@ function scoreEC(){
     return true;
   });
   const raw = usable.map(s=>{
-    const rate = s.cardRate;
+    const eff = ecEff(s, volume);                 // プラン制は最安プランを採用
+    const rate = eff.rate;
     const annualFee = rate!=null ? volume*10000*rate : null;
-    const annualCost = (rate!=null && s.monthly!=null) ? (s.initial||0)+s.monthly*12+annualFee : null;
-    return {s, rate, annualFee, annualCost};
+    const annualCost = (rate!=null && eff.monthly!=null) ? (eff.initial||0)+eff.monthly*12+annualFee : null;
+    return {s, eff, rate, annualFee, annualCost};
   });
   const priced = raw.filter(r=>r.annualCost!=null);
-  const initOf = r=>(r.s.initial||0)+r.s.monthly*12;
+  const initOf = r=>(r.eff.initial||0)+(r.eff.monthly||0)*12;
   const feeLo=Math.min(...priced.map(r=>r.rate)), feeHi=Math.max(...priced.map(r=>r.rate));
   const initLo=Math.min(...priced.map(initOf)), initHi=Math.max(...priced.map(initOf));
   const invn=(x,lo,hi)=> (x==null||hi===lo)?.5:1-(x-lo)/(hi-lo);
@@ -1323,7 +1354,7 @@ function whyBulletsEC(x,R){
   else if(R.ectrack==="psp") out.push(`既存サイトに<b>追加できる</b>`);
   else if(R.ectrack==="cart_new") out.push(`<b>カートと決済がセット</b>で始められる`);
   if(R.methods.length){ const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>EC_METHOD_LABEL[m]); if(!miss.length) out.push(`希望の決済（${R.methods.map(m=>EC_METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`); }
-  if(R.pris.includes("fee")||R.volFeeFactor>0) out.push(s.quoteOnly?`規模が大きく<b>個別見積</b>で料率交渉の余地`:`重視した<b>手数料</b>で有利（${rateTextEC(s)}）`);
+  if(R.pris.includes("fee")||R.volFeeFactor>0) out.push(s.quoteOnly?`規模が大きく<b>個別見積</b>で料率交渉の余地`:`重視した<b>手数料</b>で有利（${rateTextEC(x)}）`);
   if(R.needSub&&s.sub>0) out.push(`予約時の<b>前払い・回数券（定期課金）</b>に対応`);
   if(s.cross>=.8) out.push(`<b>越境・海外決済</b>に強い`);
   return out.slice(0,4);
@@ -1421,7 +1452,7 @@ function runnersShopHtml(R){
   return `<div class="rank-head">2位以降のおすすめ（各社の公式サイトへ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}・適合${x.pct}%</div></div>${isCur?'':`<a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener">申込${ICON("i-ext")}</a>`}</div>`;}).join("")}</div>`;
 }
 function runnersEcHtml(R){
-  return `<div class="rank-head">2位以降のおすすめ（各社の公式サイトへ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間 <b>要見積</b>"}・${rateTextEC(s)}・適合${x.pct}%</div></div><a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener">申込${ICON("i-ext")}</a></div>`;}).join("")}</div>`;
+  return `<div class="rank-head">2位以降のおすすめ（各社の公式サイトへ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${x.eff.planName?` <span class="cur-tag">${x.eff.planName}</span>`:''}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間 <b>要見積</b>"}・${rateTextEC(x)}・適合${x.pct}%</div></div><a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener">申込${ICON("i-ext")}</a></div>`;}).join("")}</div>`;
 }
 function scoreBlockHtml(top,s0,devLabel,isConsult){
   return `<div class="pick">
@@ -1619,7 +1650,10 @@ function buildShopBlock(){
 /* ---- EC（ネットショップ）ブロック ---- */
 function buildEcBlock(){
   const R=scoreEC();
-  const top=R.scored[0], s0=top.s;
+  const top=R.scored[0], s0=top.s, e0=top.eff;
+  /* 採用プラン（最安）に数字を統一。ヘッダーのプラン表記・採用プランの明示 */
+  const devLabel0 = e0.planName ? `${e0.planName}プラン｜月額${yen(e0.monthly)}・カード${(e0.rate*100).toFixed(2)}%${e0.lower?"〜":""}` : s0.devLabel;
+  const planNote = e0.planName ? `<p class="cart-note"><b>${e0.planName}プラン</b>で試算（取扱高に応じて最安プランを自動選択）${e0.lower?"。料率は下限料率での試算・要確認":""}</p>` : "";
   const tr=R.ectrack, over2=R.volume>=BORDER;
   const cartName = (answers.ecCart&&answers.ecCart!=="other") ? ({base:"BASE",stores:"STORES",shopify:"Shopify"}[answers.ecCart]||"") : "";
   const TR = ({
@@ -1632,21 +1666,21 @@ function buildEcBlock(){
     ? {route:"consult", title:"規模が大きいため専門相談もおすすめ", desc:"ECの年間の決済が2億円規模になると、カード会社と直接契約したほうが有利になる場合があります。専門家が無料で試算します。"}
     : {route:"aggregator", title:TR.title, desc:TR.note};
   const isConsult = rt.route==="consult";
-  const costRows = s0.quoteOnly
+  const costRows = (s0.quoteOnly||e0.rate==null)
     ? `<tr><td>初期・月額</td><td class="num">要見積</td></tr><tr class="total"><td>年間コスト</td><td class="num">要見積</td></tr>`
-    : `<tr><td>初期費用</td><td class="num">${yen(s0.initial||0)}</td></tr>
-       <tr><td>月額（12ヶ月分）</td><td class="num">${yen((s0.monthly||0)*12)}</td></tr>
-       <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(s0.cardRate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
+    : `<tr><td>初期費用</td><td class="num">${yen(e0.initial||0)}</td></tr>
+       <tr><td>月額（12ヶ月分）</td><td class="num">${yen((e0.monthly||0)*12)}</td></tr>
+       <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(e0.rate*100).toFixed(2)}%${e0.lower?"〜":""}）</td><td class="num">${yen(top.annualFee)}</td></tr>
        <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>`;
   const trackNote = TR.note ? `<p class="cart-note">${TR.note}</p>` : "";
   const shopifyNote = s0.note ? `<p class="cart-note">${s0.note}</p>` : "";
-  const facts = `<div class="facts"><span>${(s0.monthly||0)>0?`月額 ${yen(s0.monthly)}`:"初期・月額 0円"}</span><span>${rateTextEC(s0)}</span><span>入金 ${payoutTxtEC(s0.payout)}</span>${s0.sub>0?"<span>定期課金 対応</span>":""}${s0.cross>=.8?"<span>越境◎</span>":""}${s0.crossacct?"<span>店舗と同一アカウント</span>":""}</div>`;
+  const facts = `<div class="facts"><span>${(e0.monthly||0)>0?`月額 ${yen(e0.monthly)}`:"初期・月額 0円"}</span><span>${rateTextEC(top)}</span><span>入金 ${payoutTxtEC(s0.payout)}</span>${s0.sub>0?"<span>定期課金 対応</span>":""}${s0.cross>=.8?"<span>越境◎</span>":""}${s0.crossacct?"<span>店舗と同一アカウント</span>":""}</div>`;
   const teaser = `
     ${trackNote}
     <div class="route-banner"><div class="rb-title">${rt.title}</div><div class="rb-desc">${rt.desc}</div></div>
-    ${scoreBlockHtml(top,s0,s0.devLabel,isConsult)}
+    ${scoreBlockHtml(top,s0,devLabel0,isConsult)}
       <div class="pick-cost"><table class="cost-table">${costRows}</table></div>
-      ${shopifyNote}
+      ${planNote}${shopifyNote}
     </div>
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBulletsEC(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
     ${facts}`;
@@ -1654,7 +1688,7 @@ function buildEcBlock(){
     ${isConsult?"":applyBtnHero(s0.url,s0.name)}
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${ecConsFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     ${runnersEcHtml(R)}
-    <div class="compare card"><h3>EC決済 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}</td><td class="num">${s.initial!=null?yen(s.initial):"—"}</td><td class="num">${s.monthly!=null?(s.monthly>0?yen(s.monthly):"0"):"—"}</td><td class="num">${rateShortEC(s)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td><td><a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a></td></tr>`;}).join("")}</tbody></table></div></div>`;
+    <div class="compare card"><h3>EC決済 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s,e=x.eff;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${e.planName?` <span class="cur-tag">${e.planName}</span>`:''}</td><td class="num">${e.initial!=null?yen(e.initial):"—"}</td><td class="num">${e.monthly!=null?(e.monthly>0?yen(e.monthly):"0"):"—"}</td><td class="num">${rateShortEC(x)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td><td><a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a></td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'ec', R, rt, top, teaser, detail};
 }
 
