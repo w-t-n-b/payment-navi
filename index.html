@@ -179,6 +179,34 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 .soudan-card textarea:focus{outline:none;border-color:var(--blue)}
 .soudan-card button[type=submit]{width:100%;justify-content:center;font-size:15px;padding:12px}
 .soudan-thanks{padding:16px;background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
+/* ── 緊急対応ロードマップ ── */
+.rmap-sec{margin:26px 0}
+.rmap{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.rm-card{padding:16px 16px 18px;border-left:1px solid var(--line)}
+.rm-card:first-child{border-left:none}
+.rm-when{display:inline-block;font-size:11px;font-weight:700;color:var(--blue);background:var(--blue-soft);border-radius:3px;padding:3px 8px;margin-bottom:9px}
+.rm-card.now .rm-when{color:#fff;background:var(--score)}
+.rm-ph{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.04em;margin-bottom:3px}
+.rm-h{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 7px;line-height:1.4}
+.rm-means{font-size:12px;color:var(--text);margin:0 0 6px;line-height:1.6}
+.rm-means b{color:var(--navy);font-weight:700}
+.rm-note{font-size:12px;color:var(--muted);margin:0;line-height:1.6}
+@media(max-width:640px){.rmap{grid-template-columns:1fr}.rm-card{border-left:none;border-top:1px solid var(--line)}.rm-card:first-child{border-top:none}}
+/* ── 即応パッケージ早見表 ── */
+.pkg-sec{margin:26px 0}
+.pkg-lead{font-size:13px;color:var(--text);margin:0 0 12px;line-height:1.7}
+.pkg-lead b{color:var(--navy);font-weight:700}
+.pkg-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.pkg-table{width:100%;min-width:560px;border-collapse:collapse;font-size:13px}
+.pkg-table th{text-align:left;font-size:11px;font-weight:700;color:var(--muted);background:var(--sub-bg);padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+.pkg-table td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65}
+.pkg-table tr:last-child td{border-bottom:none}
+.pkg-use{font-weight:700;color:var(--navy);white-space:nowrap}
+.pkg-name{font-weight:700;color:var(--blue);white-space:nowrap}
+.pkg-t{display:inline-block;font-size:10px;font-weight:700;border-radius:3px;padding:1px 6px;margin-left:7px;vertical-align:1px}
+.pkg-t.now{color:#fff;background:var(--score)}
+.pkg-t.main{color:var(--blue);border:1px solid var(--blue)}
+.pkg-note{font-size:11px;color:var(--muted);margin:9px 2px 0;line-height:1.6}
 .soudan-thanks b{color:var(--navy)}
 .hb-cta .cta{margin:0}
 .hb-cta .btn-ghost{padding:11px 18px;font-size:14px}
@@ -586,9 +614,9 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       <div class="hb-top">
         <div class="hb-ribbon"><svg id="heroRibbon" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
         <div class="hb-content">
-          <div class="hb-eyebrow">決済会社の切り替え・見直しでお困りの方へ</div>
-          <h1><span class="nb">対面決済の乗り換えを、</span><br><span class="nb"><span class="hl">無料でまるごとサポート</span></span></h1>
-          <p class="hb-sub2">料率の見直しから乗り換え手続きの代行まで。まずはお気軽にご相談ください。</p>
+          <div class="hb-eyebrow">ご利用中の決済が使えなくなった・見直したい方へ</div>
+          <h1><span class="nb">決済の乗り換えを、</span><br><span class="nb"><span class="hl">無料でまるごとサポート</span></span></h1>
+          <p class="hb-sub2">「今日すぐの応急対応」から「本命の料率最適化」まで、段階に分けてご案内。乗り換え手続きの代行まで対応します。まずはお気軽にご相談ください。</p>
           <div class="hb-cta">
             <a class="cta" href="#soudan">無料で相談する<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
             <button class="btn btn-ghost js-start" type="button">60秒で診断する</button>
@@ -609,6 +637,83 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
         <div class="stepc"><span class="no"></span><div class="si"><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></div><b>年間コスト試算</b><small>あなたの決済額でいくらかかるかを金額で提示</small></div>
       </div>
     </div>
+  </section>
+
+  <!-- ===== 緊急対応ロードマップ（フェーズ提案） ===== -->
+  <section class="rmap-sec">
+    <div class="section-lead">
+      <h2>乗り換えは「即日つなぎ」と「本命導入」を分けるのが安全</h2>
+      <p>決済を止めないための応急対応から、本命の料率最適化まで。段階に分けて進めます。</p>
+    </div>
+    <div class="rmap">
+      <div class="rm-card now">
+        <span class="rm-when">今日〜3日以内</span>
+        <div class="rm-ph">STEP 1</div>
+        <h3 class="rm-h">まず「決済を止めない」</h3>
+        <p class="rm-means"><b>Square・Airペイ タッチ</b> など、最短で受付を再開できる手段で応急対応。</p>
+        <p class="rm-note">決済停止による機会損失をまず回避します。</p>
+      </div>
+      <div class="rm-card">
+        <span class="rm-when">1〜2週間</span>
+        <div class="rm-ph">STEP 2</div>
+        <h3 class="rm-h">通常運用へ復旧</h3>
+        <p class="rm-means"><b>STORES・Airペイ・USEN</b> など、業種に合った手段で本運用へ戻します。</p>
+        <p class="rm-note">入金サイクルや対応ブランドを整えます。</p>
+      </div>
+      <div class="rm-card">
+        <span class="rm-when">1〜2カ月</span>
+        <div class="rm-ph">STEP 3</div>
+        <h3 class="rm-h">本命の料率最適化</h3>
+        <p class="rm-means"><b>JMS・stera・直接契約</b> など、腰を据えてコストを下げる本命を選定。</p>
+        <p class="rm-note">現行料率と移行先を比較し、無理なく最適化します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 即応パッケージ早見表 ===== -->
+  <section class="pkg-sec">
+    <div class="section-lead">
+      <h2>用途別・乗換先の早見表</h2>
+      <p>スピード重視なら、移行先は1社に絞らず用途で使い分けるのが安全です。</p>
+    </div>
+    <div class="pkg-wrap">
+      <table class="pkg-table">
+        <thead><tr><th>用途</th><th>候補</th><th>使い方の目安</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="pkg-use">最短復旧<span class="pkg-t now">即日つなぎ</span></td>
+            <td class="pkg-name">Square</td>
+            <td>最短で申込当日から決済を開始でき、入金も早いと案内。まず決済停止の避難先に向きます。</td>
+          </tr>
+          <tr>
+            <td class="pkg-use">小規模店舗の本命<span class="pkg-t now">即日つなぎ</span></td>
+            <td class="pkg-name">STORES決済</td>
+            <td>申込から最短4営業日で導入、手数料1.98%〜と案内。早期入金のニーズに近い選択肢です。</td>
+          </tr>
+          <tr>
+            <td class="pkg-use">飲食・美容・小売の汎用<span class="pkg-t now">即日つなぎ</span></td>
+            <td class="pkg-name">Airペイ</td>
+            <td>Web申込・通常審査3日程度、タッチは最短15分と案内。緊急案として使いやすい構成です。</td>
+          </tr>
+          <tr>
+            <td class="pkg-use">安定重視・カード会社系<span class="pkg-t main">本命導入</span></td>
+            <td class="pkg-name">JMS</td>
+            <td>JCB・三菱UFJニコス等が出資する決済代行。信用面を重視する店舗に向きます。</td>
+          </tr>
+          <tr>
+            <td class="pkg-use">飲食／店舗設備込み<span class="pkg-t main">本命導入</span></td>
+            <td class="pkg-name">USEN PAY</td>
+            <td>審査に1〜2週間程度。既存でUSEN機器を使う店舗との相性が良い選択肢です。</td>
+          </tr>
+          <tr>
+            <td class="pkg-use">中長期の本命<span class="pkg-t main">本命導入</span></td>
+            <td class="pkg-name">stera pack</td>
+            <td>審査は2週間〜2カ月程度。緊急復旧ではなく、腰を据えた本命移行に向きます。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pkg-note">※各社が公表・案内する目安です。審査状況や契約条件により前後します。最新は各社公式でご確認ください。当サイトは報酬による優先掲載を行っていません。</p>
   </section>
 
   <!-- ===== 相談窓口（対面決済の切替・無料相談／折り返し） ===== -->
