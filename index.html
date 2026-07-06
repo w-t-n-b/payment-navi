@@ -247,8 +247,11 @@ section{scroll-margin-top:60px}
 .opt .tick .ic{width:16px;height:16px;stroke-width:2.4}
 .opt.sel{background:var(--blue-soft);border-left-color:var(--blue)}
 .opt.sel .tick{opacity:1}
-.multi-hint{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:700}
+.multi-hint{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:700}
+.multi-hint>span{display:inline-flex;align-items:center;gap:3px}
 .multi-hint .ic{width:1em;height:1em}
+.multi-hint .selall{flex:none;font-size:12px;padding:5px 12px;color:var(--blue);border-color:var(--blue);font-weight:700}
+.multi-hint .selall:hover{background:var(--blue-soft)}
 
 .nav{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
 .btn{border:1px solid var(--line);border-radius:4px;padding:10px 18px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--text)}
@@ -1076,7 +1079,7 @@ function buildWizard(){
         <span class="tick">${ICON("i-check")}</span>
       </button>`).join("") +`</div>`;
     const note = q.note + (q.help?` <span class="help">${q.help}</span>`:"");
-    const multiHint = q.type==="multi" ? `<p class="multi-hint">${ICON("i-check")}当てはまるものをすべて選択</p>` : "";
+    const multiHint = q.type==="multi" ? `<div class="multi-hint"><span>${ICON("i-check")}当てはまるものをすべて選択</span><button class="btn sm selall" type="button" data-selall="${i}">すべて選択</button></div>` : "";
     const goBtn = q.type==="multi" ? `<div class="acc-go"><button class="btn btn-primary sm" type="button" data-next="${i}">次へ${ICON("i-arrow")}</button></div>` : "";
     return secHead + `<div class="acc" data-i="${i}">
       <button class="acc-head" type="button" data-head="${i}" aria-expanded="false">
@@ -1092,6 +1095,7 @@ function buildWizard(){
   box.querySelectorAll("[data-head]").forEach(h=> h.onclick=()=>toggleAcc(+h.dataset.head));
   box.querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>selectOpt(+b.dataset.q, b.dataset.v); b.onkeydown=e=>optKey(e,b); });
   box.querySelectorAll("[data-next]").forEach(b=> b.onclick=()=>goNext(+b.dataset.next));
+  box.querySelectorAll("[data-selall]").forEach(b=> b.onclick=()=>selectAll(+b.dataset.selall));
   refreshAll(); updateProgress(); setOpen(openInitial());
 }
 
@@ -1123,6 +1127,14 @@ function selectOpt(i,rawV){
     setTimeout(()=>goNext(i),240);
   }
 }
+/* マルチ選択：すべて選択 ⇔ すべて解除 のトグル */
+function selectAll(i){
+  const q=QUESTIONS[i]; if(q.type!=="multi") return;
+  const all=q.opts.map(o=>o.v), cur=Array.isArray(answers[q.key])?answers[q.key]:[];
+  const allSelected = all.length>0 && all.every(v=>cur.includes(v));
+  answers[q.key] = allSelected ? [] : all.slice();
+  refreshQ(i); updateProgress();
+}
 function goNext(fromI){
   let t=-1;
   for(let k=0;k<QUESTIONS.length;k++){ const j=(fromI+1+k)%QUESTIONS.length; if(!isAnswered(j)){ t=j; break; } }
@@ -1142,6 +1154,10 @@ function refreshQ(i){
     const sel = q.type==="multi" ? (Array.isArray(cur)&&cur.includes(val)) : cur===val;
     b.classList.toggle("sel",sel); b.setAttribute("aria-pressed",sel);
   });
+  if(q.type==="multi"){
+    const sa=acc.querySelector("[data-selall]");
+    if(sa){ const all=q.opts.map(o=>o.v), c=Array.isArray(cur)?cur:[]; sa.textContent = (all.length>0 && all.every(v=>c.includes(v))) ? "すべて解除" : "すべて選択"; }
+  }
   const ans=isAnswered(i);
   acc.classList.toggle("answered",ans);
   acc.querySelector(`[data-no="${i}"]`).innerHTML = ans ? ICON("i-check") : (i+1);
