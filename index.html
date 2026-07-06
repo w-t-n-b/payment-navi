@@ -165,7 +165,21 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 .hero-variant-b h1{font-size:30px;font-weight:800;color:var(--navy);line-height:1.4;letter-spacing:-.01em;margin:0 0 18px}
 .hero-variant-b h1 .hl{color:var(--blue)}
 .hero-variant-b h1 .nb{white-space:nowrap}
+.hb-eyebrow{display:inline-block;font-size:12px;font-weight:700;color:var(--blue);border:1px solid var(--line);background:rgba(255,255,255,.74);border-radius:4px;padding:5px 10px;margin-bottom:14px}
+.hb-sub2{font-size:14px;color:var(--text);font-weight:500;margin:0 0 18px;max-width:34ch}
 .hb-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+/* 相談窓口（無料相談・折り返し） */
+.soudan-sec{margin:22px 0}
+.soudan-card{border-top:3px solid var(--blue)}
+.soudan-badge{display:inline-block;font-size:11px;font-weight:700;color:#fff;background:var(--score);border-radius:3px;padding:2px 8px;margin-bottom:8px}
+.soudan-card h2{font-size:19px;font-weight:800;color:var(--navy);margin:0 0 6px}
+.soudan-lead{font-size:13px;color:var(--text);margin:0 0 14px;line-height:1.7}
+.soudan-card .lead-form{max-width:520px}
+.soudan-card textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text);resize:vertical}
+.soudan-card textarea:focus{outline:none;border-color:var(--blue)}
+.soudan-card button[type=submit]{width:100%;justify-content:center;font-size:15px;padding:12px}
+.soudan-thanks{padding:16px;background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
+.soudan-thanks b{color:var(--navy)}
 .hb-cta .cta{margin:0}
 .hb-cta .btn-ghost{padding:11px 18px;font-size:14px}
 /* サービス名マーキー2行 */
@@ -572,16 +586,17 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       <div class="hb-top">
         <div class="hb-ribbon"><svg id="heroRibbon" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg></div>
         <div class="hb-content">
-          <h1><span class="nb">店舗もECも、</span><br><span class="nb"><span class="hl">年間コスト</span>を一括比較</span></h1>
+          <div class="hb-eyebrow">決済会社の切り替え・見直しでお困りの方へ</div>
+          <h1><span class="nb">対面決済の乗り換えを、</span><br><span class="nb"><span class="hl">無料でまるごとサポート</span></span></h1>
+          <p class="hb-sub2">料率の見直しから乗り換え手続きの代行まで。まずはお気軽にご相談ください。</p>
           <div class="hb-cta">
-            <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-            <a class="btn btn-ghost" href="#how">診断のしくみ</a>
+            <a class="cta" href="#soudan">無料で相談する<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <button class="btn btn-ghost js-start" type="button">60秒で診断する</button>
           </div>
         </div>
       </div>
       <div class="hb-marquee">
-        <div class="mq-row"><div class="mq-label">店舗の決済端末</div><div class="mq-viewport"><div class="mq-track mq-left" id="mqShop"></div></div></div>
-        <div class="mq-row"><div class="mq-label">EC・オンライン決済</div><div class="mq-viewport"><div class="mq-track mq-right" id="mqEc"></div></div></div>
+        <div class="mq-row"><div class="mq-label">対応の決済端末</div><div class="mq-viewport"><div class="mq-track mq-left" id="mqShop"></div></div></div>
       </div>
     </div>
     <!-- ▲▲▲ /バリアントB ▲▲▲ -->
@@ -596,10 +611,29 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
     </div>
   </section>
 
+  <!-- ===== 相談窓口（対面決済の切替・無料相談／折り返し） ===== -->
+  <section id="soudan" class="soudan-sec">
+    <div class="card soudan-card">
+      <div class="soudan-badge">無料・秘密厳守</div>
+      <h2>対面決済の切り替え・無料相談</h2>
+      <p class="soudan-lead">いま使っている決済会社の見直し・乗り換えを、専門スタッフが<b>無料でご相談</b>。料率の比較から<b>乗り換え手続きの代行</b>まで対応します。下記をご入力いただければ、担当より<b>折り返しご連絡</b>します。</p>
+      <form id="soudanForm" class="lead-form" autocomplete="on">
+        <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
+        <div class="lf-row"><input name="name" placeholder="お名前" required></div>
+        <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required></div>
+        <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス（任意）"></div>
+        <div class="lf-row"><textarea name="note" placeholder="ご相談内容（任意：現在お使いの決済会社・お困りごと など）" rows="2"></textarea></div>
+        <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+        <button type="submit" class="btn btn-primary">無料相談を申し込む<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。しつこい営業はいたしません。</p>
+      </form>
+    </div>
+  </section>
+
   <!-- ===== 診断ウィザード ===== -->
   <section id="shindan">
     <div class="section-lead">
-      <h2>お店の条件を教えてください</h2>
+      <h2>まず自分で比べたい方は、60秒診断</h2>
     </div>
     <div class="card" id="quizCard">
       <div class="wz-top">
@@ -1026,13 +1060,17 @@ const Q_prepay = {
 };
 
 /* チャネル＋ECトラックに応じた設問セット（現状→希望の順） */
+/* 対面のみ公開フラグ（全東信対応の緊急公開）。true の間は EC を完全に隠し、対面（店舗）固定で運用 */
+const SHOP_ONLY = true;
 function questionSet(){
+  if(SHOP_ONLY) answers.channel="shop";          // チャネルを対面に固定（設問も出さない）
   const ch=answers.channel;
   if(!ch) return [Q_CHANNEL];
   const tr=answers.ectrack, ecActive = tr && tr!=="mall";
   let list;
   if(ch==="shop"){
     list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume, Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
+    if(SHOP_ONLY) list=list.filter(q=>q!==Q_CHANNEL);
   } else if(ch==="ec"){
     let state=[Q_CHANNEL,Q_ectrack];
     if(tr==="cart_have") state.push(Q_ecCartHave);
@@ -1811,6 +1849,20 @@ function submitLead(e){
   if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
   else { console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップして解除します。", payload); done(); }
 }
+/* 相談窓口フォーム → 送信（GASへPOST・未設定なら送信スキップ）→ サンクス表示 */
+function submitSoudan(e){
+  e.preventDefault();
+  const f=e.target; if(!f.consent.checked) return;
+  const payload={
+    タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
+    店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), メール:f.email.value.trim(),
+    相談内容:f.note.value.trim(), 参照元:location.href
+  };
+  const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
+  const done=()=>{ f.innerHTML=`<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>`; };
+  if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
+  else { console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：相談送信をスキップ（実際には届きません）", payload); done(); }
+}
 function unlockResults(){
   const wrap=$("lockWrap"); if(!wrap) return;
   wrap.classList.remove("lock-locked");
@@ -1924,6 +1976,8 @@ function buildMarquee(){
 }
 buildRibbon(); buildMarquee();
 
+const soudanForm=$("soudanForm"); if(soudanForm) soudanForm.onsubmit=submitSoudan;
+QUESTIONS=questionSet();   // 対面のみ公開時は初期からチャネル固定の設問セットに
 buildWizard();
 restoreState();   // リロード時、結果画面を保存状態から復元
 </script>
