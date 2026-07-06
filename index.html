@@ -13,13 +13,13 @@
 </script>
 <title>全東信ご利用店舗の決済停止・入金遅延・端末乗換 緊急相談窓口｜決済ナビ</title>
 <meta name="description" content="全東信をご利用中の店舗様へ。決済停止・入金遅延・端末の乗り換えを専門スタッフが最短で整理。応急対応から乗り換え手続きの代行まで無料でご案内します。秘密厳守・折り返し対応。">
-<link rel="canonical" href="https://w-t-n-b.github.io/payment-navi/">
+<link rel="canonical" href="https://kessai-navi.com/">
 <meta name="theme-color" content="#1a6bb8">
 <!-- OGP -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="全東信ご利用店舗の 決済停止・入金遅延・端末乗換 緊急相談窓口｜決済ナビ">
 <meta property="og:description" content="全東信をご利用中の店舗様へ。決済停止・入金遅延・端末の乗り換えを専門スタッフが最短で整理。応急対応から乗り換え手続きの代行まで無料でご案内します。">
-<meta property="og:url" content="https://w-t-n-b.github.io/payment-navi/">
+<meta property="og:url" content="https://kessai-navi.com/">
 <meta property="og:site_name" content="決済ナビ">
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
   "@context":"https://schema.org",
   "@type":"WebApplication",
   "name":"決済ナビ",
-  "url":"https://w-t-n-b.github.io/payment-navi/",
+  "url":"https://kessai-navi.com/",
   "applicationCategory":"BusinessApplication",
   "operatingSystem":"Web",
   "description":"個人店・小規模店舗向けの、広告なし・中立の店舗・ECキャッシュレス決済 診断ツール。各社を年間コストで比較します。",
@@ -1909,7 +1909,7 @@ function copyResult(){
   const R=scoreServices();
   const lines=[`【決済ナビ 診断結果】年間取扱高 約${scaleYen(R.volume)}`,""];
   R.scored.forEach((x,i)=>{ lines.push(`${i+1}位 ${x.s.name}（適合${x.pct}%）年間コスト目安 ${yen(x.annualCost)}／${rateText(x.s)}`); });
-  lines.push("","※2026年7月時点の参考値。契約前に各社公式で最新条件をご確認ください。","診断: 決済ナビ https://w-t-n-b.github.io/payment-navi/");
+  lines.push("","※2026年7月時点の参考値。契約前に各社公式で最新条件をご確認ください。","診断: 決済ナビ https://kessai-navi.com/");
   const text=lines.join("\n");
   navigator.clipboard?.writeText(text).then(()=>{
     const b=$("copyBtn"); const o=b.innerHTML; b.innerHTML=`${ICON("i-check")}コピーしました`; setTimeout(()=>b.innerHTML=o,1800);

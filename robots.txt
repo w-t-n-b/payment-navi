@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://w-t-n-b.github.io/payment-navi/sitemap.xml
+Sitemap: https://kessai-navi.com/sitemap.xml
