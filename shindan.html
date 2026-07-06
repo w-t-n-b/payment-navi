@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7VBZPKHWNB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7VBZPKHWNB');
+</script>
 <title>60秒診断｜対面キャッシュレス決済を年間コストで中立比較｜決済ナビ</title>
 <meta name="description" content="広告なし・完全中立。お店の条件を60秒入力するだけで、対面のキャッシュレス決済を同一基準で採点し、年間コスト付きで比較診断します。特定事業者からの報酬・優先表示は一切なし。登録不要。">
 <link rel="canonical" href="https://w-t-n-b.github.io/payment-navi/shindan.html">
@@ -1845,6 +1853,7 @@ function showResult(){
 function submitLead(e){
   e.preventDefault();
   const f=e.target; if(!f.consent.checked) return;
+  if(window.gtag)gtag('event','diag_lead_submit');
   const payload={
     タイムスタンプ:new Date().toISOString(),
     種別:"診断リード",
@@ -1940,7 +1949,7 @@ function resetToQuiz(scrollTop){
   if(scrollTop) window.scrollTo({top:0,behavior:"smooth"});
   else $("shindan").scrollIntoView({behavior:"smooth",block:"start"});
 }
-function startQuiz(){ resetToQuiz(false); }
+function startQuiz(){ if(window.gtag)gtag('event','diag_start'); resetToQuiz(false); }
 function goToHero(){ resetToQuiz(true); }
 function restart(){ resetToQuiz(false); }
 /* ヒーローA/Bどちらでも「診断をはじめる」を動かす（.js-start を束ねてバインド） */

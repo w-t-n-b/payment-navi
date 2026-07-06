@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7VBZPKHWNB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7VBZPKHWNB');
+</script>
 <title>全東信ご利用店舗の決済停止・入金遅延・端末乗換 緊急相談窓口｜決済ナビ</title>
 <meta name="description" content="全東信をご利用中の店舗様へ。決済停止・入金遅延・端末の乗り換えを専門スタッフが最短で整理。応急対応から乗り換え手続きの代行まで無料でご案内します。秘密厳守・折り返し対応。">
 <link rel="canonical" href="https://w-t-n-b.github.io/payment-navi/">
@@ -623,7 +631,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
           <h1><span class="nb">決済停止・入金遅延・端末乗換を、</span><br><span class="nb"><span class="hl">最短で整理します</span></span></h1>
           <p class="hb-sub2">決済が止まった／入金が遅れている／端末を切り替えたい——専門スタッフが状況を整理し、最短の応急対応から乗り換え手続きの代行まで無料でご案内します。まずはお気軽にご相談ください。</p>
           <div class="hb-cta">
-            <a class="cta" href="#soudan">今すぐ無料で相談する<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a class="cta" href="#soudan" onclick="window.gtag&amp;&amp;gtag('event','cta_soudan_click')">今すぐ無料で相談する<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></a>
           </div>
         </div>
       </div>
@@ -1854,6 +1862,7 @@ function submitLead(e){
 function submitSoudan(e){
   e.preventDefault();
   const f=e.target; if(!f.consent.checked) return;
+  if(window.gtag)gtag('event','soudan_submit',{form:'緊急相談'});
   const payload={
     タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
     店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), メール:f.email.value.trim(),
