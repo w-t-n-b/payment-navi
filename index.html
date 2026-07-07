@@ -472,8 +472,8 @@ tr.hl td{background:var(--blue-soft)}
 .lock-sub{font-size:13px;color:var(--muted);margin:6px 0 16px;line-height:1.6}
 .lead-form{text-align:left}
 .lf-row{margin-bottom:8px}
-.lead-form input:not([type=checkbox]){width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text)}
-.lead-form input:focus{outline:none;border-color:var(--blue)}
+.lead-form input:not([type=checkbox]),.lead-form select{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text);background:#fff}
+.lead-form input:focus,.lead-form select:focus{outline:none;border-color:var(--blue)}
 .lf-consent{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin:8px 0 12px}
 .lf-consent input{margin-top:2px;flex:none}
 .lead-form button[type=submit]{width:100%;justify-content:center}
@@ -654,6 +654,15 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
         <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
         <div class="lf-row"><input name="name" placeholder="お名前" required></div>
         <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required></div>
+        <div class="lf-row"><select name="timeslot" aria-label="お電話のご希望時間帯">
+          <option value="">お電話のご希望時間帯（任意）</option>
+          <option>できるだけ早く</option>
+          <option>午前（9〜12時）</option>
+          <option>昼（12〜15時）</option>
+          <option>午後（15〜18時）</option>
+          <option>夕方以降（18〜21時）</option>
+          <option>いつでも可</option>
+        </select></div>
         <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
         <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
         <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
@@ -1878,7 +1887,7 @@ function submitSoudan(e){
   if(window.gtag)gtag('event','soudan_submit',{form:'緊急相談'});
   const payload={
     タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
-    店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), メール:f.email.value.trim(),
+    店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), 希望時間帯:f.timeslot.value, メール:f.email.value.trim(),
     相談内容:f.note.value.trim(), 参照元:location.href
   };
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";

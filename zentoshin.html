@@ -99,6 +99,20 @@ details[open] summary{border-bottom:1px solid var(--line)}
 details .a{padding:12px 0;font-size:14px;line-height:1.8}
 .src{font-size:13px;color:var(--muted);line-height:1.9}
 footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
+/* 記事内 相談フォーム */
+.soudan-inline{text-align:left}
+.soudan-inline h3,.soudan-inline>p{text-align:center}
+.lead-form{margin-top:4px}
+.lf-row{margin-bottom:8px}
+.lead-form input:not([type=checkbox]),.lead-form select,.lead-form textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text);background:#fff}
+.lead-form textarea{resize:vertical}
+.lead-form input:focus,.lead-form select:focus,.lead-form textarea:focus{outline:none;border-color:var(--blue)}
+.lf-consent{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin:8px 0 12px}
+.lf-consent input{margin-top:2px;flex:none}
+.soudan-inline .cta{width:100%;justify-content:center;border:none;cursor:pointer;font-size:15px}
+.lf-note{font-size:11px;color:var(--muted);margin:10px 0 0;text-align:center;line-height:1.5}
+.soudan-thanks{padding:16px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
+.soudan-thanks b{color:var(--navy)}
 </style>
 </head>
 <body>
@@ -116,7 +130,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <div class="updated">最終更新：2026年7月7日 ／ 運営：決済ナビ運営事務局</div>
 
   <div class="callout">
-    <b>お急ぎの方へ：</b>カード決済を止めないためには、早急な代替手段の確保が有効です。何から手をつければよいか分からない場合は、<a href="index.html#soudan">無料の緊急相談窓口</a>で専門スタッフが状況を整理し、最短の乗り換えまでご案内します（相談無料・秘密厳守）。
+    <b>お急ぎの方へ：</b>カード決済を止めないためには、早急な代替手段の確保が有効です。何から手をつければよいか分からない場合は、<a href="#soudan-inline">無料の緊急相談窓口</a>で専門スタッフが状況を整理し、最短の乗り換えまでご案内します（相談無料・秘密厳守）。
   </div>
 
   <h2>何が起きたか（2026年7月6日）</h2>
@@ -170,11 +184,29 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <p>売上金・債権に関する正確な取り扱いは、<strong>破産管財人からの通知</strong>や<strong>弁護士等の専門家</strong>にご確認ください。当サイトは、決済の乗り換え・再開といった<strong>「これからの決済」の実務</strong>をサポートするもので、債権回収の代理は行いません。</p>
   <p style="font-size:14px"><a href="zentoshin-nyukin.html"><b>▶ 入金・売上金はどうなる？をさらに詳しく（破産債権・債権届出の流れ）</b></a></p>
 
-  <div class="cta-box">
+  <section id="soudan-inline" class="cta-box soudan-inline">
     <h3>全東信の乗り換え、無料でご相談ください</h3>
-    <p>決済停止を止める応急対応から、乗り換え手続きの代行まで。専門スタッフが折り返しご連絡します（相談無料・秘密厳守）。</p>
-    <a class="cta" href="index.html#soudan" onclick="window.gtag&amp;&amp;gtag('event','cta_soudan_click',{from:'zentoshin'})">無料で緊急相談する →</a>
-  </div>
+    <p>決済停止を止める応急対応から、乗り換え手続きの代行まで。専門スタッフが折り返しご連絡します（相談無料・秘密厳守）。このページから直接ご相談いただけます。</p>
+    <form class="lead-form soudanFormInline" autocomplete="on">
+      <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required></div>
+      <div class="lf-row"><select name="timeslot" aria-label="お電話のご希望時間帯">
+        <option value="">お電話のご希望時間帯（任意）</option>
+        <option>できるだけ早く</option>
+        <option>午前（9〜12時）</option>
+        <option>昼（12〜15時）</option>
+        <option>午後（15〜18時）</option>
+        <option>夕方以降（18〜21時）</option>
+        <option>いつでも可</option>
+      </select></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
+      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+      <button type="submit" class="cta">無料で緊急相談する →</button>
+      <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
+    </form>
+  </section>
 
   <h2>よくある質問</h2>
   <details><summary>全東信が破産しました。今使っているカード決済はどうなりますか？</summary><div class="a">破産手続きの開始により、これまでの立替入金や決済サービスは継続されない可能性が高いです。カード決済そのものを止めないため、早急に別の決済代行・端末への切り替えが必要になります。最短で当日〜数営業日に受付を再開できる手段もあります。無料の緊急相談窓口で状況を整理し、乗り換え手続きの代行までご案内します。</div></details>
@@ -197,5 +229,24 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
   </footer>
 </div>
+<script>
+(function(){
+  var EP="https://script.google.com/macros/s/AKfycby0XTVa5aKQLm7MUDl-EV11oA_7T_h6aZl-gqxeE4iJuH9lUk6zSapgB3ITMyktkqtDSQ/exec";
+  var f=document.querySelector(".soudanFormInline"); if(!f) return;
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!f.consent.checked) return;
+    if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',page:location.pathname});
+    var payload={
+      タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
+      店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
+      希望時間帯:f.timeslot.value, メール:f.email.value.trim(), 相談内容:f.note.value.trim(), 参照元:location.href
+    };
+    var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
+    var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };
+    fetch(EP,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
+  });
+})();
+</script>
 </body>
 </html>
