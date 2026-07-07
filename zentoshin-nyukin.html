@@ -107,6 +107,17 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 .lf-note{font-size:11px;color:var(--muted);margin:10px 0 0;text-align:center;line-height:1.5}
 .soudan-thanks{padding:16px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
 .soudan-thanks b{color:var(--navy)}
+.lf-times{border:1px solid var(--line);border-radius:4px;padding:9px 10px 5px;margin:0}
+.lf-times legend{font-size:12px;color:var(--muted);padding:0 4px}
+.lf-times label{display:inline-flex;align-items:center;gap:6px;margin:0 6px 5px 0;padding:6px 11px;border:1px solid var(--line);border-radius:20px;font-size:13px;color:var(--text);cursor:pointer;background:#fff}
+.lf-times label:has(input:checked){border-color:var(--blue);background:var(--blue-soft);color:var(--navy);font-weight:700}
+.lf-times input{accent-color:var(--blue);flex:none}
+.soudan-tel-alt{max-width:520px;margin:16px auto 0;padding-top:14px;border-top:1px dashed var(--line);text-align:center}
+.soudan-tel-alt__t{display:block;font-size:12px;color:var(--muted);margin:0 0 8px}
+.soudan-tel{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:6px;color:var(--navy);text-decoration:none}
+.soudan-tel svg{width:18px;height:18px;flex:none}
+.soudan-tel .num{font-size:19px;font-weight:800;letter-spacing:.5px;color:var(--blue-d)}
+.soudan-tel-note{max-width:520px;margin:8px auto 0;font-size:12px;color:var(--muted);line-height:1.7}
 </style>
 </head>
 <body>
@@ -139,6 +150,31 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     <b>注意：</b>破産債権は、<b>全額が戻るとは限りません</b>。回収できる金額は破産財団の状況により決まり、配当が少額または無配当となる可能性もあります。回収可能性や手続きは事案ごとに異なるため、<b>必ず破産管財人からの通知・弁護士等の専門家の案内に従ってください。</b>
   </div>
 
+  <section id="soudan-mid" class="cta-box soudan-inline">
+    <h3>新しい導入先を決めたい ― でも「何が最適か」は店舗ごとに違います</h3>
+    <p>これからの入金を止めないためにも、乗り換えは早めが安全です。ただし『どれが一番良い』は業種・取扱高・入金スピードで変わります。迷う前に、まずは無料相談を。専門スタッフがお店に合う乗り換え先を整理してご案内します（相談無料・秘密厳守）。</p>
+    <form class="lead-form soudanFormInline" data-pos="記事中" autocomplete="on">
+      <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
+      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
+      <div class="lf-row"><fieldset class="lf-times">
+        <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
+        <label><input type="checkbox" name="timeslot" value="できるだけ早く"><span>できるだけ早く</span></label>
+        <label><input type="checkbox" name="timeslot" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="昼（12〜17時）"><span>昼（12〜17時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夕方〜夜（17〜21時）"><span>夕方〜夜（17〜21時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夜帯（21時以降）"><span>夜帯（21時以降）</span></label>
+        <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
+      </fieldset></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
+      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+      <button type="submit" class="cta">無料で相談する →</button>
+      <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
+    </form>
+  </section>
+
   <h2>今後の一般的な流れ</h2>
   <table>
     <tr><th>段階</th><th>一般的な内容</th></tr>
@@ -165,25 +201,34 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <section id="soudan-inline" class="cta-box soudan-inline">
     <h3>入金・乗り換えの不安、無料でご相談ください</h3>
     <p>これからの決済を止めないための乗り換えを、専門スタッフが無料でサポート。折り返しご連絡します（相談無料・秘密厳守）。このページから直接ご相談いただけます。<br>※未入金・債権の回収代理は行いません。乗り換え・決済再開の実務をサポートします。</p>
-    <form class="lead-form soudanFormInline" autocomplete="on">
-      <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
-      <div class="lf-row"><input name="name" placeholder="お名前" required></div>
-      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required></div>
-      <div class="lf-row"><select name="timeslot" aria-label="お電話のご希望時間帯">
-        <option value="">お電話のご希望時間帯（任意）</option>
-        <option>できるだけ早く</option>
-        <option>午前（9〜12時）</option>
-        <option>昼（12〜15時）</option>
-        <option>午後（15〜18時）</option>
-        <option>夕方以降（18〜21時）</option>
-        <option>いつでも可</option>
-      </select></div>
-      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
+    <form class="lead-form soudanFormInline" data-pos="記事末" autocomplete="on">
+      <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
+      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
+      <div class="lf-row"><fieldset class="lf-times">
+        <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
+        <label><input type="checkbox" name="timeslot" value="できるだけ早く"><span>できるだけ早く</span></label>
+        <label><input type="checkbox" name="timeslot" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="昼（12〜17時）"><span>昼（12〜17時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夕方〜夜（17〜21時）"><span>夕方〜夜（17〜21時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夜帯（21時以降）"><span>夜帯（21時以降）</span></label>
+        <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
+      </fieldset></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
       <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
       <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
       <button type="submit" class="cta">無料で緊急相談する →</button>
       <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
     </form>
+    <div class="soudan-tel-alt">
+      <span class="soudan-tel-alt__t">お電話でのご相談も承っています</span>
+      <a class="soudan-tel" href="tel:05054972017" onclick="window.gtag&amp;&amp;gtag('event','cta_tel_click')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+        <span class="num">050-5497-2017</span>
+      </a>
+      <p class="soudan-tel-note">平日10:00〜17:00は直接おつなぎします（混み合う場合は折り返しでのご対応）。<b>確実に受け付けできるフォーム送信がおすすめ</b>です。24時間受付・折り返し漏れがありません。</p>
+    </div>
   </section>
 
   <h2>よくある質問</h2>
@@ -214,19 +259,21 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 <script>
 (function(){
   var EP="https://script.google.com/macros/s/AKfycby0XTVa5aKQLm7MUDl-EV11oA_7T_h6aZl-gqxeE4iJuH9lUk6zSapgB3ITMyktkqtDSQ/exec";
-  var f=document.querySelector(".soudanFormInline"); if(!f) return;
-  f.addEventListener("submit",function(e){
-    e.preventDefault();
-    if(!f.consent.checked) return;
-    if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',page:location.pathname});
-    var payload={
-      タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
-      店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
-      希望時間帯:f.timeslot.value, メール:f.email.value.trim(), 相談内容:f.note.value.trim(), 参照元:location.href
-    };
-    var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
-    var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };
-    fetch(EP,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
+  document.querySelectorAll(".soudanFormInline").forEach(function(f){
+    f.addEventListener("submit",function(e){
+      e.preventDefault();
+      if(!f.consent.checked) return;
+      var pos=f.getAttribute('data-pos')||'';
+      if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',pos:pos,page:location.pathname});
+      var payload={
+        タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
+        会社名:f.company.value.trim(), 店舗名:f.shop.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
+        希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(), 相談内容:f.note.value.trim(), フォーム位置:pos, 参照元:location.href
+      };
+      var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
+      var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };
+      fetch(EP,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
+    });
   });
 })();
 </script>
