@@ -12,13 +12,27 @@
   gtag('config', 'G-W0Y35XQ681');
 </script>
 <script>
-/* パートナー流入計測: ?ref=CODE を保存し、GA4送信・リード付与に使用（決済ナビ） */
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
 (function(){try{
-  var q=new URLSearchParams(location.search).get('ref');
-  if(q){q=q.replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);if(q)sessionStorage.setItem('knavi_ref',q);}
-  var ref=sessionStorage.getItem('knavi_ref')||'';
-  window.KNAVI_REF=ref;
-  if(ref&&window.gtag){gtag('event','partner_visit',{ref:ref,page:location.pathname});gtag('set','user_properties',{partner_ref:ref});}
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
 }catch(e){}})();
 </script>
 <title>全東信 破産で入金・売上金はどうなる？加盟店が確認すべきこと【2026年7月】｜決済ナビ</title>
@@ -43,7 +57,7 @@
   "headline":"全東信 破産で入金・売上金はどうなる？加盟店が確認すべきこと",
   "description":"全東信の破産により、未入金の売上金がどうなるか（破産債権・債権届出の一般的な流れ）と、加盟店が今すぐ確認すべきことを整理した解説記事。",
   "datePublished":"2026-07-07",
-  "dateModified":"2026-07-07",
+  "dateModified":"2026-07-08",
   "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
   "publisher":{"@type":"Organization","name":"決済ナビ"},
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/zentoshin-nyukin.html"}
@@ -143,7 +157,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <p class="crumb"><a href="zentoshin.html">全東信の破産 総合ガイド</a> ＞ 入金・売上金はどうなる</p>
   <h1>全東信 破産で入金・売上金はどうなる？<br>加盟店が確認すべきこと</h1>
   <p class="lead">全東信の破産で、いちばん不安なのが「まだ入金されていない売上金はどうなるのか」です。破産債権・債権届出の一般的な流れと、加盟店が今すぐ確認・実行すべきことを整理しました。</p>
-  <div class="updated">最終更新：2026年7月7日 ／ 運営：決済ナビ運営事務局</div>
+  <div class="updated">最終更新：2026年7月8日（JMSとの関係を追記） ／ 運営：決済ナビ運営事務局</div>
 
   <div class="callout">
     <b>先に結論：</b>まだ入金されていない売上金は、<b>従来の支払期限どおりには支払われず</b>、一般に<b>「破産債権」</b>として破産手続きの中で扱われます。<b>債権届出</b>などの手続きが必要になる場合があり、全額が戻るとは限りません（取り扱いは事案により異なります）。正確なことは<b>破産管財人（印藤弘二弁護士）の通知や弁護士等の専門家</b>にご確認ください。一方で、<b>これからの決済（入金）を止めない乗り換え</b>は今すぐ着手できます。
@@ -241,6 +255,10 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     </div>
   </section>
 
+  <h2 id="jms">JMS（ジェイエムエス）を使っている場合、入金はどうなる？</h2>
+  <p><strong>JMS（ジェイエムエス）は全東信とは別の会社</strong>です。JMSと直接契約している加盟店の入金が、全東信の破産で直ちに止まるわけではありません。ただし、代理店やサービス名を経由している場合など、契約の形によっては確認が必要です。まずは<strong>入金元の名義・契約書</strong>をご確認ください。</p>
+  <p style="font-size:14px"><a href="zentoshin.html#jms"><b>▶ 全東信とJMSの関係をさらに詳しく</b></a></p>
+
   <h2>よくある質問</h2>
   <details><summary>全東信の未入金の売上金は戻ってきますか？</summary><div class="a">まだ入金されていない売上金は、従来の支払期限どおりには弁済されず、一般に破産手続きの中で「破産債権」として扱われます。債権届出などの手続きが必要になる場合があり、回収できるか・いくら戻るかは破産財団の状況により決まるため、全額が戻るとは限りません。具体的な取り扱いは、破産管財人（印藤弘二弁護士）からの通知や弁護士等の専門家にご確認ください。</div></details>
   <details><summary>全東信の破産で、これからの入金はどうなりますか？</summary><div class="a">破産手続きの開始により、これまでの早期入金（立替）は継続されません。また全東信で使っていたクレジット端末は今後使用できなくなり、カード決済を再開するには改めてカード会社との加盟店契約（新しい決済代行への申込・審査）が必要です。入金の早いサービスへ早めに乗り換えることで、資金繰りの空白を小さくできます。</div></details>
@@ -280,6 +298,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
         会社名:f.company.value.trim(), 店舗名:f.shop.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
         希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(), 相談内容:f.note.value.trim(), フォーム位置:pos, 提携元:(window.KNAVI_REF||''), 参照元:location.href
       };
+      try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
       var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
       var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };
       fetch(EP,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);

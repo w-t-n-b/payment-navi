@@ -12,13 +12,27 @@
   gtag('config', 'G-W0Y35XQ681');
 </script>
 <script>
-/* パートナー流入計測: ?ref=CODE を保存し、GA4送信・リード付与に使用（決済ナビ） */
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
 (function(){try{
-  var q=new URLSearchParams(location.search).get('ref');
-  if(q){q=q.replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);if(q)sessionStorage.setItem('knavi_ref',q);}
-  var ref=sessionStorage.getItem('knavi_ref')||'';
-  window.KNAVI_REF=ref;
-  if(ref&&window.gtag){gtag('event','partner_visit',{ref:ref,page:location.pathname});gtag('set','user_properties',{partner_ref:ref});}
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
 }catch(e){}})();
 </script>
 <title>60秒診断｜対面キャッシュレス決済を年間コストで中立比較｜決済ナビ</title>
@@ -1884,6 +1898,7 @@ function submitLead(e){
     第1位: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}=${b.consulting?'直接契約への引き下げ相談':b.top.s.name+'(適合'+b.top.pct+'%)'}`).join(' / '),
     提携元:(window.KNAVI_REF||''), 参照元: location.href
   };
+  try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
   const done=()=>unlockResults();
   if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
@@ -1898,6 +1913,7 @@ function submitSoudan(e){
     店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), メール:f.email.value.trim(),
     相談内容:f.note.value.trim(), 提携元:(window.KNAVI_REF||''), 参照元:location.href
   };
+  try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
   const done=()=>{ f.innerHTML=`<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>`; };
   if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
