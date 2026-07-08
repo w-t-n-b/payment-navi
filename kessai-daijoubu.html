@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W0Y35XQ681"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W0Y35XQ681');
+</script>
+<script>
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
+(function(){try{
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
+}catch(e){}})();
+</script>
+<title>自分の決済代行・端末は大丈夫？全東信の破産で不安な加盟店が確認すべきこと【2026年7月】｜決済ナビ</title>
+<meta name="description" content="全東信は使っていないけれど、破産のニュースで「自分の決済代行・端末は大丈夫？」と不安な加盟店様へ。まず確認すべき契約先の見分け方、決済会社が万一止まったときに起きること、今できる備え（多重化・入金サイクルの把握）を整理しました。無料の点検相談・60秒診断もご案内します。">
+<link rel="canonical" href="https://kessai-navi.com/kessai-daijoubu.html">
+<meta name="theme-color" content="#1a6bb8">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自分の決済代行・端末は大丈夫？全東信の破産で不安な加盟店が確認すべきこと">
+<meta property="og:description" content="全東信は使っていないけど不安な方へ。契約先の確認方法、決済会社が止まると何が起きるか、今できる備えを整理。無料の点検相談・診断も。">
+<meta property="og:url" content="https://kessai-navi.com/kessai-daijoubu.html">
+<meta property="og:site_name" content="決済ナビ">
+<meta property="og:locale" content="ja_JP">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"自分の決済代行・端末は大丈夫？全東信の破産で不安な加盟店が確認すべきこと",
+  "description":"全東信の破産を受けて、他社を利用する加盟店が自分の決済代行・端末の安全性を確認する方法と、今できる備えを整理した解説記事。",
+  "datePublished":"2026-07-08",
+  "dateModified":"2026-07-08",
+  "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
+  "publisher":{"@type":"Organization","name":"決済ナビ"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/kessai-daijoubu.html"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"全東信は使っていませんが、自分の決済代行が心配です。どう確認すればいいですか？","acceptedAnswer":{"@type":"Answer","text":"まず自分がどの決済代行会社と、どんな契約（通常の入金サイクルか、早期入金・立替型か）を結んでいるかを、明細・契約書・入金元の名義で確認しましょう。代理店経由の申込だと契約先が分かりにくいことがあります。多くの決済代行は通常どおり稼働していますが、契約内容や入金サイクルを把握しておくこと自体が備えになります。不安な場合は無料で契約内容の点検相談をご利用いただけます。"}},
+    {"@type":"Question","name":"決済代行会社が倒産したら、加盟店の売上金や端末はどうなりますか？","acceptedAnswer":{"@type":"Answer","text":"一般論として、決済会社が破産手続きに入ると、未入金の売上金は破産債権として扱われ、債権届出などの手続きが必要になる場合があります。また端末が使えなくなり、決済を続けるには別の決済代行への申込・審査が必要になることがあります。具体的な取り扱いは事案により異なるため、実際に起きた場合は破産管財人の通知や専門家にご確認ください。"}},
+    {"@type":"Question","name":"不安なので、今のうちに乗り換えたほうがいいですか？","acceptedAnswer":{"@type":"Answer","text":"必ず乗り換えるべき、というものではありません。まずは契約先・入金サイクルの把握と、決済手段を1社に依存しない「多重化」を検討するのが現実的です。今の条件が良ければそのまま、料率や入金に不満があれば見直し、という判断になります。お店の状況に合わせて無料で整理のお手伝いをします。"}}
+  ]
+}
+</script>
+<style>
+:root{--bg:#fff;--sub-bg:#f7f9fa;--blue:#1a6bb8;--blue-d:#155a9c;--navy:#20303f;--text:#333;--muted:#767676;--line:#ddd;--score:#eb6100;--blue-soft:#f0f6fb}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.site-inner{max-width:820px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700;color:var(--navy);text-decoration:none;cursor:pointer}.logo b{color:var(--blue)}
+.back{font-size:12px;color:var(--muted)}
+.er-banner{display:block;background:var(--score);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 16px;text-decoration:none}
+.er-banner:hover{background:#d55700;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+.crumb{font-size:12px;color:var(--muted);margin:0 0 10px}
+h1{font-size:24px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
+.lead{color:var(--text);font-size:15px;margin:0 0 6px}
+.updated{color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
+h2{font-size:19px;font-weight:800;color:var(--navy);margin:32px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
+h3{font-size:15px;font-weight:700;color:var(--navy);margin:18px 0 6px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px;padding-left:22px}li{margin:6px 0}
+strong,b{color:var(--navy)}
+.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:14px 16px;margin:0 0 18px;font-size:14px;line-height:1.8}
+.note{font-size:13px;color:var(--muted);background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:6px 0 14px;line-height:1.75}
+.check{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px 6px;margin:8px 0 16px}
+.check li{margin:0 0 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;border:1px solid var(--line);margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--sub-bg);font-weight:700;color:var(--navy);white-space:nowrap}
+.cta-box{background:var(--sub-bg);border:1px solid var(--line);border-top:3px solid var(--score);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.cta-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.cta-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.diag-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.diag-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;text-decoration:none}
+.cta:hover{background:var(--blue-d);text-decoration:none}
+details{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:0 14px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 0;font-size:14px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q ";color:var(--blue);font-weight:800}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .a{padding:12px 0;font-size:14px;line-height:1.8}
+.related{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:22px 0 0;background:var(--sub-bg)}
+.related b{color:var(--navy)}.related ul{margin:8px 0 0}
+.src{font-size:13px;color:var(--muted);line-height:1.9}
+footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
+/* 記事内 相談フォーム */
+.soudan-inline{text-align:left}
+.soudan-inline h3,.soudan-inline>p{text-align:center}
+.lead-form{margin-top:4px}
+.lf-row{margin-bottom:8px}
+.lead-form input:not([type=checkbox]),.lead-form select,.lead-form textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text);background:#fff}
+.lead-form textarea{resize:vertical}
+.lead-form input:focus,.lead-form select:focus,.lead-form textarea:focus{outline:none;border-color:var(--blue)}
+.lf-consent{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin:8px 0 12px}
+.lf-consent input{margin-top:2px;flex:none}
+.soudan-inline .cta{width:100%;justify-content:center;border:none;cursor:pointer;font-size:15px}
+.lf-note{font-size:11px;color:var(--muted);margin:10px 0 0;text-align:center;line-height:1.5}
+.soudan-thanks{padding:16px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
+.soudan-thanks b{color:var(--navy)}
+.lf-times{border:1px solid var(--line);border-radius:4px;padding:9px 10px 5px;margin:0}
+.lf-times legend{font-size:12px;color:var(--muted);padding:0 4px}
+.lf-times label{display:inline-flex;align-items:center;gap:6px;margin:0 6px 5px 0;padding:6px 11px;border:1px solid var(--line);border-radius:20px;font-size:13px;color:var(--text);cursor:pointer;background:#fff}
+.lf-times label:has(input:checked){border-color:var(--blue);background:var(--blue-soft);color:var(--navy);font-weight:700}
+.lf-times input{accent-color:var(--blue);flex:none}
+.soudan-tel-alt{max-width:520px;margin:16px auto 0;padding-top:14px;border-top:1px dashed var(--line);text-align:center}
+.soudan-tel-alt__t{display:block;font-size:12px;color:var(--muted);margin:0 0 8px}
+.soudan-tel{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:6px;color:var(--navy);text-decoration:none}
+.soudan-tel svg{width:18px;height:18px;flex:none}
+.soudan-tel .num{font-size:19px;font-weight:800;letter-spacing:.5px;color:var(--blue-d)}
+.soudan-tel-note{max-width:520px;margin:8px auto 0;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="site-inner">
+    <a class="logo" href="index.html">決済<b>ナビ</b></a>
+    <a class="back" href="index.html">緊急相談窓口へ →</a>
+  </div>
+</header>
+<a class="er-banner" href="index.html#soudan">決済の停止・入金・乗り換えでお困りの方は、無料の緊急相談窓口へ<span aria-hidden="true"> →</span></a>
+
+<div class="wrap">
+  <p class="crumb"><a href="zentoshin.html">全東信 破産 総合ガイド</a> ＞ 自分の決済は大丈夫？</p>
+  <h1>自分の決済代行・端末は大丈夫？<br>全東信の破産で不安な加盟店が確認すべきこと</h1>
+  <p class="lead">「全東信は使っていないけれど、決済代行が破産すると聞いて自分のところも大丈夫か不安…」という加盟店様へ。まず落ち着いて確認すべきポイントと、万一に備えて今できることを整理しました。特定の会社が危ない・安全という話ではなく、<strong>自分の契約を把握し、決済を止めないための備え</strong>の考え方です。</p>
+  <div class="updated">最終更新：2026年7月8日 ／ 運営：決済ナビ運営事務局</div>
+
+  <div class="callout">
+    <b>先に結論：</b>多くの決済代行は通常どおり稼働しています。過度に不安になる必要はありません。ただし<strong>①自分の契約先と入金サイクルを把握しておく／②決済手段を1社に依存しない</strong>——この2つは、どの店舗にとっても有効な備えです。契約内容を点検したい方は<a href="#soudan-mid">無料の相談</a>もご利用いただけます。
+  </div>
+
+  <h2>まず確認：自分は「どの会社」と「どんな契約」か</h2>
+  <p>不安の多くは「自分が誰と契約しているか分からない」ことから来ます。まずは次を確認しましょう。代理店・サービス名だけでは、実際の決済代行会社が分かりにくいことがあります。</p>
+  <ul class="check">
+    <li><b>契約先（決済代行会社）の名前</b>— 契約書・申込書控えで確認。代理店経由なら「実際の決済代行会社」はどこかも。</li>
+    <li><b>入金サイクルのタイプ</b>— 通常の入金（カード会社の規定サイクル）か、<b>早期入金・立替型</b>（本来より早く立て替えて入金）か。</li>
+    <li><b>入金元の名義</b>— 実際に振り込まれている名義を通帳で確認。想定と違う名義なら要チェック。</li>
+    <li><b>連絡先・サポート窓口</b>— 何かあったときにすぐ連絡できるか。</li>
+  </ul>
+  <p class="note">「早期入金・立替型」は資金繰りに便利な一方、立て替える事業者側の資金構造に依存します。良し悪しではなく、<strong>仕組みを理解して使う</strong>ことが大切です。</p>
+
+  <section id="soudan-mid" class="cta-box soudan-inline">
+    <h3>「うちの契約、これ大丈夫？」を無料で点検します</h3>
+    <p>契約先が分からない・入金サイクルが不安・料率が妥当か見てほしい——そんな点検だけのご相談も歓迎です。専門スタッフが中立的に整理してご案内します（相談無料・秘密厳守・その場で契約を迫ることはありません）。</p>
+    <form class="lead-form soudanFormInline" data-pos="記事中" autocomplete="on">
+      <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
+      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
+      <div class="lf-row"><fieldset class="lf-times">
+        <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
+        <label><input type="checkbox" name="timeslot" value="できるだけ早く"><span>できるだけ早く</span></label>
+        <label><input type="checkbox" name="timeslot" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="昼（12〜17時）"><span>昼（12〜17時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夕方〜夜（17〜21時）"><span>夕方〜夜（17〜21時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夜帯（21時以降）"><span>夜帯（21時以降）</span></label>
+        <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
+      </fieldset></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
+      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+      <button type="submit" class="cta">無料で相談する →</button>
+      <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
+    </form>
+  </section>
+
+  <h2>もし決済会社が止まったら、加盟店に何が起きる？（一般論）</h2>
+  <p>実際に決済代行が破産・停止した場合、一般的には次のようなことが起こり得ます。全東信のケースは、その分かりやすい例でした。</p>
+  <table>
+    <tr><th>起こり得ること</th><th>加盟店への影響</th></tr>
+    <tr><th>立替・早期入金の停止</th><td>早く入金されていた分がストップし、資金繰りに影響。</td></tr>
+    <tr><th>未入金の売上金</th><td>まだ入金されていない分は「破産債権」として扱われ、債権届出などの手続きが必要になる場合があります。全額が戻るとは限りません。</td></tr>
+    <tr><th>端末・決済の停止</th><td>端末が使えなくなり、決済を続けるには別の決済代行への申込・審査が必要に。</td></tr>
+  </table>
+  <p class="note">これは「必ず起きる」という話ではなく、<strong>備えの必要性</strong>を示す一般的な整理です。実際の取り扱いは事案により異なります。</p>
+
+  <h2>今できる備え（不安を“行動”に変える）</h2>
+  <ol class="check">
+    <li><b>契約先・入金サイクルを把握しておく</b> — 上の確認リストを一度チェック。</li>
+    <li><b>決済手段を1社に依存しない（多重化）</b> — メインに加えて、すぐ使えるサブの決済手段を1つ持っておくと、万一のときも決済を止めずに済みます。</li>
+    <li><b>早期入金に過度に依存しない資金設計</b> — 立替入金前提で回している場合は、止まったときの資金繰りを一度シミュレーションしておく。</li>
+    <li><b>売上・入金の記録を残す</b> — 未入金が発生した際に、金額・期間をすぐ示せるように。</li>
+  </ol>
+
+  <div class="diag-box">
+    <h3>今の決済、条件は妥当？ 60秒で比べてみる</h3>
+    <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、今の条件と比べた候補・年間コストの目安が分かります。乗り換えなくても、現状把握に使えます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'daijoubu'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>不安チェックリスト（当てはまったら点検を）</h2>
+  <ul class="check">
+    <li>自分の決済代行会社の名前が、すぐに言えない</li>
+    <li>「早期入金・立替」で入金を受けているが、仕組みをよく知らない</li>
+    <li>決済手段がメイン1社だけで、止まったときの代替がない</li>
+    <li>料率や入金サイクルが今のままで妥当か、比べたことがない</li>
+  </ul>
+  <p>ひとつでも当てはまるなら、乗り換えるかどうかは別として、<strong>一度“点検”しておく</strong>価値があります。無料でお手伝いします。</p>
+
+  <section id="soudan-inline" class="cta-box soudan-inline">
+    <h3>自分の決済が不安な方へ ― 無料で点検・整理します</h3>
+    <p>「契約先が分からない」「立替入金が不安」「料率が妥当か知りたい」——どんな状態でも大丈夫です。専門スタッフが中立的に現状を整理し、必要なら乗り換え先やお手続きまで無料でご案内します（相談無料・秘密厳守）。</p>
+    <form class="lead-form soudanFormInline" data-pos="記事末" autocomplete="on">
+      <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
+      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
+      <div class="lf-row"><fieldset class="lf-times">
+        <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
+        <label><input type="checkbox" name="timeslot" value="できるだけ早く"><span>できるだけ早く</span></label>
+        <label><input type="checkbox" name="timeslot" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="昼（12〜17時）"><span>昼（12〜17時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夕方〜夜（17〜21時）"><span>夕方〜夜（17〜21時）</span></label>
+        <label><input type="checkbox" name="timeslot" value="夜帯（21時以降）"><span>夜帯（21時以降）</span></label>
+        <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
+      </fieldset></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
+      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
+      <button type="submit" class="cta">無料で相談する →</button>
+      <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
+    </form>
+    <div class="soudan-tel-alt">
+      <span class="soudan-tel-alt__t">お電話でのご相談も承っています</span>
+      <a class="soudan-tel" href="tel:05054972017" onclick="window.gtag&amp;&amp;gtag('event','cta_tel_click')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
+        <span class="num">050-5497-2017</span>
+      </a>
+      <p class="soudan-tel-note">平日10:00〜17:00は直接おつなぎします（混み合う場合は折り返しでのご対応）。<b>確実に受け付けできるフォーム送信がおすすめ</b>です。24時間受付・折り返し漏れがありません。</p>
+    </div>
+  </section>
+
+  <h2>よくある質問</h2>
+  <details><summary>全東信は使っていませんが、自分の決済代行が心配です。どう確認すればいいですか？</summary><div class="a">まず自分がどの決済代行会社と、どんな契約（通常の入金サイクルか、早期入金・立替型か）を結んでいるかを、明細・契約書・入金元の名義で確認しましょう。代理店経由の申込だと契約先が分かりにくいことがあります。多くの決済代行は通常どおり稼働していますが、契約内容や入金サイクルを把握しておくこと自体が備えになります。不安な場合は無料で契約内容の点検相談をご利用いただけます。</div></details>
+  <details><summary>決済代行会社が倒産したら、加盟店の売上金や端末はどうなりますか？</summary><div class="a">一般論として、決済会社が破産手続きに入ると、未入金の売上金は破産債権として扱われ、債権届出などの手続きが必要になる場合があります。また端末が使えなくなり、決済を続けるには別の決済代行への申込・審査が必要になることがあります。具体的な取り扱いは事案により異なるため、実際に起きた場合は破産管財人の通知や専門家にご確認ください。</div></details>
+  <details><summary>不安なので、今のうちに乗り換えたほうがいいですか？</summary><div class="a">必ず乗り換えるべき、というものではありません。まずは契約先・入金サイクルの把握と、決済手段を1社に依存しない「多重化」を検討するのが現実的です。今の条件が良ければそのまま、料率や入金に不満があれば見直し、という判断になります。お店の状況に合わせて無料で整理のお手伝いをします。</div></details>
+
+  <div class="related">
+    <b>あわせて読みたい</b>
+    <ul>
+      <li><a href="zentoshin.html">全東信の破産 加盟店の対処法｜総合ガイド</a></li>
+      <li><a href="zentoshin-norikae.html">全東信の乗り換え先 徹底比較（Square・Airペイ・JMS・stera・STORES）</a></li>
+      <li><a href="zentoshin-nyukin.html">全東信 破産で入金・売上金はどうなる？</a></li>
+      <li><a href="shindan.html">60秒診断で、お店に合う決済と年間コストを自分で比べる</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
+  </footer>
+</div>
+<script>
+(function(){
+  var EP="https://script.google.com/macros/s/AKfycby0XTVa5aKQLm7MUDl-EV11oA_7T_h6aZl-gqxeE4iJuH9lUk6zSapgB3ITMyktkqtDSQ/exec";
+  document.querySelectorAll(".soudanFormInline").forEach(function(f){
+    f.addEventListener("submit",function(e){
+      e.preventDefault();
+      if(!f.consent.checked) return;
+      var pos=f.getAttribute('data-pos')||'';
+      if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',pos:pos,ref:(window.KNAVI_REF||''),page:location.pathname});
+      var payload={
+        タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
+        会社名:f.company.value.trim(), 店舗名:f.shop.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
+        希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(), 相談内容:f.note.value.trim(), フォーム位置:pos, 提携元:(window.KNAVI_REF||''), 参照元:location.href
+      };
+      try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
+      var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
+      var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };
+      fetch(EP,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done);
+    });
+  });
+})();
+</script>
+</body>
+</html>
