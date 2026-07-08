@@ -11,6 +11,16 @@
   gtag('js', new Date());
   gtag('config', 'G-W0Y35XQ681');
 </script>
+<script>
+/* パートナー流入計測: ?ref=CODE を保存し、GA4送信・リード付与に使用（決済ナビ） */
+(function(){try{
+  var q=new URLSearchParams(location.search).get('ref');
+  if(q){q=q.replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);if(q)sessionStorage.setItem('knavi_ref',q);}
+  var ref=sessionStorage.getItem('knavi_ref')||'';
+  window.KNAVI_REF=ref;
+  if(ref&&window.gtag){gtag('event','partner_visit',{ref:ref,page:location.pathname});gtag('set','user_properties',{partner_ref:ref});}
+}catch(e){}})();
+</script>
 <title>全東信 破産の影響｜加盟店への5つの影響と今すぐの対策【2026年7月】｜決済ナビ</title>
 <meta name="description" content="クレジットカード決済代行「全東信」の破産で、加盟店にはどんな影響があるのか。立替入金の停止・未入金の売上金・カード決済の継続性・資金繰りなど、店舗が受ける影響と今すぐの対策を整理しました。無料の緊急相談窓口も。">
 <link rel="canonical" href="https://kessai-navi.com/zentoshin-eikyou.html">
@@ -235,7 +245,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   </p>
 
   <footer>
-    決済ナビ ｜ 特定の決済事業者から報酬を受け取らず、中立の立場で情報提供しています。掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
     運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="zentoshin.html">全東信 総合ガイド</a>
   </footer>
 </div>
@@ -247,11 +257,11 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
       e.preventDefault();
       if(!f.consent.checked) return;
       var pos=f.getAttribute('data-pos')||'';
-      if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',pos:pos,page:location.pathname});
+      if(window.gtag)gtag('event','soudan_submit',{form:'記事内相談',pos:pos,ref:(window.KNAVI_REF||''),page:location.pathname});
       var payload={
         タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
         会社名:f.company.value.trim(), 店舗名:f.shop.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(),
-        希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(), 相談内容:f.note.value.trim(), フォーム位置:pos, 参照元:location.href
+        希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(), 相談内容:f.note.value.trim(), フォーム位置:pos, 提携元:(window.KNAVI_REF||''), 参照元:location.href
       };
       var btn=f.querySelector('button[type=submit]'); if(btn){btn.disabled=true; btn.textContent="送信中…";}
       var done=function(){ f.innerHTML='<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>'; };

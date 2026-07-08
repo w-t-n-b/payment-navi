@@ -11,6 +11,16 @@
   gtag('js', new Date());
   gtag('config', 'G-W0Y35XQ681');
 </script>
+<script>
+/* パートナー流入計測: ?ref=CODE を保存し、GA4送信・リード付与に使用（決済ナビ） */
+(function(){try{
+  var q=new URLSearchParams(location.search).get('ref');
+  if(q){q=q.replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);if(q)sessionStorage.setItem('knavi_ref',q);}
+  var ref=sessionStorage.getItem('knavi_ref')||'';
+  window.KNAVI_REF=ref;
+  if(ref&&window.gtag){gtag('event','partner_visit',{ref:ref,page:location.pathname});gtag('set','user_properties',{partner_ref:ref});}
+}catch(e){}})();
+</script>
 <title>全東信ご利用店舗の決済停止・入金遅延・端末乗換 緊急相談窓口｜決済ナビ</title>
 <meta name="description" content="全東信をご利用中の店舗様へ。決済停止・入金遅延・端末の乗り換えを専門スタッフが最短で整理。応急対応から乗り換え手続きの代行まで無料でご案内します。秘密厳守・折り返し対応。">
 <link rel="canonical" href="https://kessai-navi.com/">
@@ -723,7 +733,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
   </div>
 
   <footer>
-    決済ナビ ｜ 特定の決済事業者から報酬を受け取らず、入力条件のみで採点しています。<br>
+    決済ナビ ｜ 診断の順位は、ご入力の条件をもとに算出しています。<br>
     掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
     <a href="privacy.html">プライバシーポリシー</a>
   </footer>
@@ -1814,7 +1824,7 @@ function condTableHtml(ch){
   return `<table class="cond-table">${grp("お店の現状",state)}${grp("ご希望",wish)}</table>`;
 }
 function discHtml(){
-  return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
+  return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
 function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
 function gateHtml(lead,cta){
@@ -1904,11 +1914,11 @@ function submitLead(e){
 function submitSoudan(e){
   e.preventDefault();
   const f=e.target; if(!f.consent.checked) return;
-  if(window.gtag)gtag('event','soudan_submit',{form:'緊急相談'});
+  if(window.gtag)gtag('event','soudan_submit',{form:'緊急相談',ref:(window.KNAVI_REF||'')});
   const payload={
     タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
     会社名:f.company.value.trim(), 店舗名:f.shop.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), 希望時間帯:[...f.querySelectorAll('input[name="timeslot"]:checked')].map(x=>x.value).join(' / '), メール:f.email.value.trim(),
-    相談内容:f.note.value.trim(), 参照元:location.href
+    相談内容:f.note.value.trim(), 提携元:(window.KNAVI_REF||''), 参照元:location.href
   };
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
   const done=()=>{ f.innerHTML=`<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>`; };

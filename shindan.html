@@ -11,6 +11,16 @@
   gtag('js', new Date());
   gtag('config', 'G-W0Y35XQ681');
 </script>
+<script>
+/* パートナー流入計測: ?ref=CODE を保存し、GA4送信・リード付与に使用（決済ナビ） */
+(function(){try{
+  var q=new URLSearchParams(location.search).get('ref');
+  if(q){q=q.replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);if(q)sessionStorage.setItem('knavi_ref',q);}
+  var ref=sessionStorage.getItem('knavi_ref')||'';
+  window.KNAVI_REF=ref;
+  if(ref&&window.gtag){gtag('event','partner_visit',{ref:ref,page:location.pathname});gtag('set','user_properties',{partner_ref:ref});}
+}catch(e){}})();
+</script>
 <title>60秒診断｜対面キャッシュレス決済を年間コストで中立比較｜決済ナビ</title>
 <meta name="description" content="広告なし・完全中立。お店の条件を60秒入力するだけで、対面のキャッシュレス決済を同一基準で採点し、年間コスト付きで比較診断します。特定事業者からの報酬・優先表示は一切なし。登録不要。">
 <link rel="canonical" href="https://kessai-navi.com/shindan.html">
@@ -50,7 +60,7 @@
   "@context":"https://schema.org",
   "@type":"FAQPage",
   "mainEntity":[
-    {"@type":"Question","name":"このツールはなぜ中立だと言えるの？","acceptedAnswer":{"@type":"Answer","text":"特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。"}},
+    {"@type":"Question","name":"診断の順位はどうやって決まるの？","acceptedAnswer":{"@type":"Answer","text":"順位は、あなたが入力した条件（業種・取扱高・重視点など）だけをもとに機械的に算出しています。手作業で特定の順位に並べ替えることはありません。"}},
     {"@type":"Question","name":"料率・費用のデータはいつ時点のもの？","acceptedAnswer":{"@type":"Answer","text":"2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。"}},
     {"@type":"Question","name":"診断結果の順位はどうやって決まるの？","acceptedAnswer":{"@type":"Answer","text":"手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と年間取扱高で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同一の計算式で採点しています。"}},
     {"@type":"Question","name":"個人情報は登録・保存されますか？","acceptedAnswer":{"@type":"Answer","text":"登録は不要です。入力内容は診断の計算にのみ使い、サーバーや端末には保存しません。"}},
@@ -684,8 +694,8 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
   <div class="band-grey">
   <!-- ===== FAQ ===== -->
   <section class="faq">
-    <div class="section-lead"><h2>よくある質問</h2><p>中立性の担保とデータの考え方について</p></div>
-    <details><summary><span class="q">Q</span>このツールはなぜ中立だと言えるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">特定の決済事業者から報酬や広告費を受け取っていません。順位はあなたの入力条件だけで機械的に算出しており、お金を払った事業者を上位に出す優先表示枠もありません。</div></details>
+    <div class="section-lead"><h2>よくある質問</h2><p>順位の決め方とデータの考え方について</p></div>
+    <details><summary><span class="q">Q</span>診断の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">順位は、あなたが入力した条件（業種・取扱高・重視点など）だけをもとに機械的に算出しています。手作業で特定の順位に並べ替えることはありません。</div></details>
     <details><summary><span class="q">Q</span>料率・費用のデータはいつ時点のもの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">2026年7月時点で各社公式サイトを確認した参考値です。キャンペーンや契約プランで変わるため、契約前に必ず各社公式サイトで最新条件をご確認ください。</div></details>
     <details><summary><span class="q">Q</span>診断結果の順位はどうやって決まるの？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">手数料・初期費用・入金速度・対応ブランド・レジ連携の5観点を、あなたの重視点と年間取扱高で重みづけし、端末形態と決済手段の適合度を掛け合わせて算出しています。全社を同じ計算式で採点しています。</div></details>
     <details><summary><span class="q">Q</span>個人情報は登録・保存されますか？<svg class="ic cr" aria-hidden="true"><use href="#i-chev"/></svg></summary><div class="a">診断そのものは登録不要・匿名でご利用いただけます。詳細な結果やご相談をご希望の場合のみ、任意で連絡先をご入力いただきます。いただいた情報は<a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に基づき、結果の詳細表示とご相談対応にのみ利用し、第三者には提供しません。</div></details>
@@ -701,7 +711,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
   </div>
 
   <footer>
-    決済ナビ ｜ 特定の決済事業者から報酬を受け取らず、入力条件のみで採点しています。<br>
+    決済ナビ ｜ 診断の順位は、ご入力の条件をもとに算出しています。<br>
     掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
     <a href="privacy.html">プライバシーポリシー</a>
   </footer>
@@ -1792,7 +1802,7 @@ function condTableHtml(ch){
   return `<table class="cond-table">${grp("お店の現状",state)}${grp("ご希望",wish)}</table>`;
 }
 function discHtml(){
-  return `<div class="disc"><b>診断の考え方（中立性について）：</b> 特定サービスから報酬を受け取らず、順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
+  return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
 function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
 function gateHtml(lead,cta){
@@ -1858,7 +1868,7 @@ function showResult(){
 function submitLead(e){
   e.preventDefault();
   const f=e.target; if(!f.consent.checked) return;
-  if(window.gtag)gtag('event','diag_lead_submit');
+  if(window.gtag)gtag('event','diag_lead_submit',{ref:(window.KNAVI_REF||'')});
   const payload={
     タイムスタンプ:new Date().toISOString(),
     種別:"診断リード",
@@ -1872,7 +1882,7 @@ function submitLead(e){
     利用中サービス: answers.curService ? ((SERVICES.find(s=>s.id===answers.curService)||{}).name||(answers.curService==='other'?'その他・不明':'')) : '',
     推奨ルート: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}:${b.consulting?'直接契約引き下げコンサル':(b.rt.route==='consult'?'個別/コンサル':'包括/申込')}`).join(' / '),
     第1位: LAST.blocks.map(b=>`${b.kind==='shop'?'店舗':'EC'}=${b.consulting?'直接契約への引き下げ相談':b.top.s.name+'(適合'+b.top.pct+'%)'}`).join(' / '),
-    参照元: location.href
+    提携元:(window.KNAVI_REF||''), 参照元: location.href
   };
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
   const done=()=>unlockResults();
@@ -1886,7 +1896,7 @@ function submitSoudan(e){
   const payload={
     タイムスタンプ:new Date().toISOString(), 種別:"対面決済 切替相談",
     店舗会社名:f.company.value.trim(), お名前:f.name.value.trim(), 電話:f.phone.value.trim(), メール:f.email.value.trim(),
-    相談内容:f.note.value.trim(), 参照元:location.href
+    相談内容:f.note.value.trim(), 提携元:(window.KNAVI_REF||''), 参照元:location.href
   };
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
   const done=()=>{ f.innerHTML=`<div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（通常1〜2営業日）。お急ぎの場合もこちらからご対応します。</div>`; };
