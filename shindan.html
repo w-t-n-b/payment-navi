@@ -1071,6 +1071,13 @@ const Q_terminal = {
     {v:"pos",ic:"i-pos",l:"レジ一体型POS",s:"会計・売上管理もまとめたい"}
   ]
 };
+const Q_ownDevice = {
+  key:"ownDevice", section:"wish", title:"決済に使うスマホ・タブレット（iPad）は？", note:"「無い・端末だけで完結させたい」なら、端末1台で使えるオールインワンを優先します", type:"single",
+  opts:[
+    {v:"have",ic:"i-mobile",l:"持っている／用意できる",s:"スマホ・iPadに繋いで使う端末でもOK"},
+    {v:"none",ic:"i-counter",l:"無い／端末だけで完結させたい",s:"届いた端末1台だけで使いたい"}
+  ]
+};
 const Q_pos = {
   key:"pos", section:"wish", title:"レジ・予約システムとの連携は必要？", note:"必要なら連携に強いサービスを優先します", type:"single",
   opts:[
@@ -1132,7 +1139,7 @@ function questionSet(){
   const tr=answers.ectrack, ecActive = tr && tr!=="mall";
   let list;
   if(ch==="shop"){
-    list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume, Q_shopMethods,Q_terminal,Q_priorities,Q_pos];
+    list=[Q_CHANNEL,Q_shopStatus,Q_industry,Q_volume, Q_shopMethods,Q_terminal,Q_ownDevice,Q_priorities,Q_pos];
     if(SHOP_ONLY) list=list.filter(q=>q!==Q_CHANNEL);
   } else if(ch==="ec"){
     let state=[Q_CHANNEL,Q_ectrack];
@@ -1147,7 +1154,7 @@ function questionSet(){
     if(ecActive) state.push(Q_volumeEc);
     let wish=[Q_shopMethods];
     if(ecActive) wish.push(Q_ecMethods);
-    wish.push(Q_terminal,Q_priorities,Q_pos);
+    wish.push(Q_terminal,Q_ownDevice,Q_priorities,Q_pos);
     list=[...state,...wish];
   }
   /* 既存ユーザー（新規以外）のみ、導入状況の直後に追加設問を挿入
@@ -1330,6 +1337,8 @@ const SERVICE_CATCH = {
 /* ===================== スコアリング（既存ロジック維持） ===================== */
 function shopVol(){ return answers.channel==="both" ? answers.volumeShop : answers.volume; }
 function ecVol(){ return answers.channel==="both" ? answers.volumeEc : answers.volume; }
+/* 別途スマホ・タブレット（iPad等）が必要な機種＝カードリーダー型。他は端末単体で完結するオールインワン */
+const NEEDS_DEVICE = { square:true, airpay:true, stores:true };
 function scoreServices(){
   const volume = shopVol(), methods = answers.methods||[], term = answers.terminal;
   const pris = answers.priorities||[], needPos = answers.pos==="yes";
@@ -1361,8 +1370,11 @@ function scoreServices(){
     if(methods.length){ cover = methods.filter(m=>s.methods[m]>0).length/methods.length; }
     const coverMult = 0.25 + 0.75*cover;
     const fitMult = (0.35 + 0.65*termFit) * coverMult;
+    // スマホ/iPadが無い（端末単体希望）なら、別途スマホ・タブレットが必要な機種を減点
+    const needsDevice = NEEDS_DEVICE[s.id];
+    const deviceMult = (answers.ownDevice==="none" && needsDevice) ? 0.4 : 1;
     const base = w.fee*feeS + w.initial*initS + w.payout*payS + w.brands*brandS + w.pos*posS;
-    const total = base * fitMult;
+    const total = base * fitMult * deviceMult;
     return {...r, feeS, initS, cover, termFit, total};
   });
   const maxTotal = Math.max(...scored.map(x=>x.total));
@@ -1505,6 +1517,7 @@ function whyBullets(x, R){
   if(R.pris.includes("payout")) out.push(`重視した<b>入金速度</b>が速い（${payoutTxt(s.payout)}）`);
   if(R.pris.includes("brands")) out.push(`重視した<b>対応ブランド</b>が広い`);
   if(R.needPos) out.push(`<b>レジ連携</b>の要望に対応`);
+  if(answers.ownDevice==="none" && !NEEDS_DEVICE[s.id]) out.push(`<b>スマホ・iPad不要</b>で端末だけで決済が完結`);
   if(R.methods.length){
     const miss=R.methods.filter(m=>!(s.methods[m]>0)).map(m=>METHOD_LABEL[m]);
     if(miss.length===0) out.push(`選んだ決済手段（${R.methods.map(m=>METHOD_LABEL[m]).join("・")}）に<b>すべて対応</b>`);
@@ -1818,6 +1831,7 @@ function condTableHtml(ch){
   if(ch!=='both') state.push(['年間取扱高', scaleYen(answers.volume)]);
   if(ch==='shop'||ch==='both'){
     wish.push(['端末形態', TERM_LABEL[answers.terminal]||'—']);
+    if(answers.ownDevice) wish.push(['スマホ/iPad', answers.ownDevice==='none'?'無し（端末単体で使いたい）':'有り']);
     wish.push(['店舗の決済手段', (answers.methods||[]).map(m=>METHOD_LABEL[m]).join('・')||'指定なし']);
     wish.push(['レジ連携', answers.pos==='yes'?'必要':'不要']);
   }
