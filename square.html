@@ -202,38 +202,11 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   </table>
   <p class="note">「今のままでOK」も立派な結論です。無理に乗り換える必要はありません。<a href="kessai-check.html">自分の決済代行は大丈夫？（全般の確認ポイント）</a>もあわせてご覧ください。</p>
 
-  <section id="soudan-inline" class="cta-box soudan-inline">
-    <h3>迷ったら、無料で点検・相談もできます</h3>
-    <p>「今のSquareのままでいい？」「もっと合う選択肢は？」——中立的に整理してご案内します。診断だけでも、相談だけでもOKです（相談無料・秘密厳守・その場で契約を迫ることはありません）。</p>
-    <form class="lead-form soudanFormInline" data-pos="記事末" autocomplete="on">
-      <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
-      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
-      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
-      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
-      <div class="lf-row"><fieldset class="lf-times">
-        <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
-        <label><input type="checkbox" name="timeslot" value="できるだけ早く"><span>できるだけ早く</span></label>
-        <label><input type="checkbox" name="timeslot" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
-        <label><input type="checkbox" name="timeslot" value="昼（12〜17時）"><span>昼（12〜17時）</span></label>
-        <label><input type="checkbox" name="timeslot" value="夕方〜夜（17〜21時）"><span>夕方〜夜（17〜21時）</span></label>
-        <label><input type="checkbox" name="timeslot" value="夜帯（21時以降）"><span>夜帯（21時以降）</span></label>
-        <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
-      </fieldset></div>
-      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
-      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済・お困りごと など）" rows="2" required></textarea></div>
-      <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
-      <button type="submit" class="cta">無料で相談する →</button>
-      <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
-    </form>
-    <div class="soudan-tel-alt">
-      <span class="soudan-tel-alt__t">お電話でのご相談も承っています</span>
-      <a class="soudan-tel" href="tel:05054972017" onclick="window.gtag&amp;&amp;gtag('event','cta_tel_click')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>
-        <span class="num">050-5497-2017</span>
-      </a>
-      <p class="soudan-tel-note">平日10:00〜17:00は直接おつなぎします（混み合う場合は折り返しでのご対応）。<b>確実に受け付けできるフォーム送信がおすすめ</b>です。24時間受付・折り返し漏れがありません。</p>
-    </div>
-  </section>
+    <div class="diag-box">
+    <h3>まずは60秒の無料診断で、今の決済をチェック</h3>
+    <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、お店に合う決済と年間コストの目安が分かります。診断のあと、必要なら乗り換え先のご案内もできます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'square'})">60秒の無料診断をする →</a>
+  </div>
 
   <h2>よくある質問</h2>
   <details><summary>Squareは全東信のように倒産する心配はありますか？</summary><div class="a">Squareは米国の上場企業グループ（Block, Inc.）が運営する決済サービスで、日本でも広く使われており、現時点で通常どおり稼働しています。特定のサービスの将来を保証するものではありませんが、公表されている経営不安のような情報は特にありません。なお全東信は「早期入金（立替）」を主とする決済代行で、Squareとは仕組みが異なります。どの決済でも、入金サイクルの把握や決済手段の多重化といった備えをしておくと安心です。</div></details>
