@@ -734,7 +734,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 
 <script>
 /* =========================================================================
-   決済サービス データ（対面BtoC向け・主要10社）
+   決済サービス データ（対面BtoC向け・主要11社）
    ※ 料率/費用は変動します。この配列を更新すれば全診断に反映されます。
    ※ 参考値：2026年7月時点。各社公式を確認。契約前に各公式で要確認。
    決済手段キー: credit touch qr transit emoney  値=対応度0〜1
@@ -764,6 +764,17 @@ const SERVICES = [
     pros:["対応92ブランドで交通系ICまで網羅","端末0円＋月額0円＋振込手数料0円","Airレジとシームレスに連携"],
     cons:["iPad/iPhoneが別途必要","標準クレカ3.24%は高め（2.48%は条件付き審査）"],
     url:"https://airregi.jp/payment/"
+  },
+  {
+    id:"alpha", name:"アルファノート（アルファポータブル）",
+    device:0, monthly:0, cardRate:0.03, qrRate:0.037,
+    methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
+    terminal:{mobile:1,counter:.9,pos:.6}, soloOk:true,
+    payout:.6, brands:.9, pos:.55,
+    devLabel:"モバイル型オールインワン（初期0円・月額0円）",
+    pros:["iPad・スマホ不要、端末1台で決済が完結","初期0円・月額0円・解約金0円のプランあり","約70種の決済に対応、持ち運びもできる"],
+    cons:["実際の料率は現在の料率・業種で決まる（表示は目安・要見積）","電子マネー追加は初期+10,000円・月額+1,500円"],
+    url:"https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral"
   },
   {
     id:"stores", name:"STORES決済",
@@ -1480,8 +1491,8 @@ function payoutTxt(p){
   if(p>=.55) return "月2回程度";
   return "月3〜6回";
 }
-function rateText(s){ return s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
-function rateShort(s){ return s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%" : (s.qrRate*100).toFixed(2)+"%(QR)"; }
+function rateText(s){ const suf=s.id==='alpha'?'〜':''; return s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
+function rateShort(s){ const suf=s.id==='alpha'?'〜':''; return s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
 
 /* 「なぜこの順位か」— ユーザー条件が効いた点を文章化（中立性の証明） */
 function whyBullets(x, R){
@@ -1527,22 +1538,24 @@ function escapeXml(s){return s.replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"
 
 let LAST=null;
 
+/* 申込クリック計測：アルファ＝提携先は cta_apply_alphanote、その他は cta_apply */
+function trackApply(id){ if(window.gtag)gtag('event', id==='alpha'?'cta_apply_alphanote':'cta_apply', {service:id, page:location.pathname, ref:(window.KNAVI_REF||'')}); }
 function applyCtaHtml(s0){
   return `<div class="apply-cta card"><div class="wh">申込・公式サイト</div>
-    <p>条件が最も合う上位社の公式サイトから申し込めます（掲載順は診断スコア順・報酬による優遇なし）。</p>
-    <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener">${s0.name} の公式サイトへ${ICON("i-ext")}</a></div>`;
+    <p>条件が最も合う上位社の申込先へ進めます（掲載順は診断スコア順。一部に当サイトの提携先を含みます）。</p>
+    <a class="btn btn-primary" href="${s0.url}" target="_blank" rel="noopener" onclick="trackApply('${s0.id}')">${s0.name} の申込ページへ${ICON("i-ext")}</a></div>`;
 }
 /* 1位の大きな申込CTA（ゲート前・上位に配置） */
-function applyBtnHero(url,name){
-  return `<a class="btn btn-primary apply-hero" href="${url}" target="_blank" rel="noopener">${name} の公式サイトで申し込む${ICON("i-ext")}</a>
-    <p class="apply-neutral">掲載順は診断スコア順・報酬による優遇はありません。下位の各社も下記から申し込めます。</p>`;
+function applyBtnHero(url,name,id){
+  return `<a class="btn btn-primary apply-hero" href="${url}" target="_blank" rel="noopener" onclick="trackApply('${id}')">${name} で申し込む${ICON("i-ext")}</a>
+    <p class="apply-neutral">掲載順は診断スコア順です（一部に当サイトの提携先を含みます）。下位の各社も下記から申し込めます。</p>`;
 }
 /* 2位以降のランキング＋各社への申込リンク（ゲート前に表示） */
 function runnersShopHtml(R){
-  return `<div class="rank-head">2位以降のおすすめ（各社の公式サイトへ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}・適合${x.pct}%</div></div>${isCur?'':`<a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener">申込${ICON("i-ext")}</a>`}</div>`;}).join("")}</div>`;
+  return `<div class="rank-head">2位以降のおすすめ（各社の申込先へ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}・適合${x.pct}%</div></div>${isCur?'':`<a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">申込${ICON("i-ext")}</a>`}</div>`;}).join("")}</div>`;
 }
 function runnersEcHtml(R){
-  return `<div class="rank-head">2位以降のおすすめ（各社の公式サイトへ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${x.eff.planName?` <span class="cur-tag">${x.eff.planName}</span>`:''}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間 <b>要見積</b>"}・${rateTextEC(x)}・適合${x.pct}%</div></div><a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener">申込${ICON("i-ext")}</a></div>`;}).join("")}</div>`;
+  return `<div class="rank-head">2位以降のおすすめ（各社の申込先へ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${x.eff.planName?` <span class="cur-tag">${x.eff.planName}</span>`:''}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間 <b>要見積</b>"}・${rateTextEC(x)}・適合${x.pct}%</div></div><a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">申込${ICON("i-ext")}</a></div>`;}).join("")}</div>`;
 }
 function scoreBlockHtml(top,s0,devLabel,isConsult){
   return `<div class="pick">
@@ -1726,14 +1739,14 @@ function buildShopBlock(){
     ${compareTeaserShop(R)}`;
   /* detail（ゲート後・ペイオフ）＝ 申込CTA・正確な差額・2位以降＋申込リンク・詳細比較 */
   const detail = `
-    ${isCurTop?"":applyBtnHero(s0.url,s0.name)}
+    ${isCurTop?"":applyBtnHero(s0.url,s0.name,s0.id)}
     ${compareVsCurrentShop(R)}
     ${indNote}
     <div class="facts"><span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     ${runnersShopHtml(R)}
     <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
-    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
+    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'shop', R, rt, top, teaser, detail};
 }
 
@@ -1775,7 +1788,7 @@ function buildEcBlock(){
     <div class="why"><div class="wh">なぜこの順位？ ― あなたの条件がこう効きました</div><ul>${whyBulletsEC(top,R).map(b=>`<li>${b}</li>`).join("")}</ul></div>
     ${facts}`;
   const detail = `
-    ${isConsult?"":applyBtnHero(s0.url,s0.name)}
+    ${isConsult?"":applyBtnHero(s0.url,s0.name,s0.id)}
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${ecConsFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     ${runnersEcHtml(R)}
     <div class="compare card"><h3>EC決済 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>初期</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s,e=x.eff;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${e.planName?` <span class="cur-tag">${e.planName}</span>`:''}</td><td class="num">${e.initial!=null?yen(e.initial):"—"}</td><td class="num">${e.monthly!=null?(e.monthly>0?yen(e.monthly):"0"):"—"}</td><td class="num">${rateShortEC(x)}</td><td class="num">${x.annualCost!=null?yen(x.annualCost):"要見積"}</td><td>${payoutTxtEC(s.payout)}</td><td class="num">${x.pct}%</td><td><a href="${s.url}" target="_blank" rel="noopener">公式${ICON("i-ext")}</a></td></tr>`;}).join("")}</tbody></table></div></div>`;
