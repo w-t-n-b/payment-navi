@@ -158,6 +158,11 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
   .sc-line{background:#06C755}
 }
+.next-steps{background:#fff7ed;border:1px solid #f6d9b8;border-left:4px solid var(--score);border-radius:8px;padding:16px 18px;margin:24px 0}
+.next-steps h3{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.next-steps>p{font-size:13px;color:var(--muted);margin:0 0 8px}
+.next-steps ul{margin:0;padding-left:20px}
+.next-steps li{margin:8px 0;font-size:14px;line-height:1.7}
 </style>
 </head>
 <body>
@@ -241,6 +246,17 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     <h3>まずは60秒の無料診断で、今の決済をチェック</h3>
     <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、お店に合う決済と年間コストの目安が分かります。診断のあと、必要なら乗り換え先のご案内もできます。</p>
     <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'kessai-check-end'})">60秒の無料診断をする →</a>
+  </div>
+
+  <div class="next-steps">
+    <h3>全東信の加盟店の方へ ― 状況別の「次のステップ」</h3>
+    <p>記事を読んで方向性が見えたら、あなたの状況に合うページへ。</p>
+    <ul>
+      <li><b>今すぐ・端末1台で早く再開したい</b> → <a href="all-in-one.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'all-in-one',page:location.pathname})">iPad不要ですぐ使える端末</a>（<a href="alphanote.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'alphanote',page:location.pathname})">アルファポータブル</a>）</li>
+      <li><b>乗り換え先をじっくり比較したい</b> → <a href="zentoshin-norikae.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'norikae',page:location.pathname})">主要9社を手数料・入金で徹底比較</a></li>
+      <li><b>夜間・接待飲食（キャバクラ・スナック等）の店舗</b> → <a href="night-business.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'night-business',page:location.pathname})">審査に不安な店舗の乗り換え先</a></li>
+      <li><b>何が合うか分からない</b> → <a href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'shindan',page:location.pathname})">60秒の無料診断</a>で比較</li>
+    </ul>
   </div>
 
   <h2>よくある質問</h2>
