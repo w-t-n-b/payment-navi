@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W0Y35XQ681"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W0Y35XQ681');
+</script>
+<script>
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
+(function(){try{
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
+}catch(e){}})();
+</script>
+<title>JMS（ジェイエムエス）は全東信と関係ある？大丈夫か・信頼性と乗り換え先【2026年7月】</title>
+<meta name="description" content="JMS（ジェイエムエス）はJCB・三菱UFJニコス・UCカードが出資する決済代行で、全東信とは別の会社です。破産でJMSの決済が止まるわけではありません。JMSの信頼性・仕組みと、全東信との違い、乗り換え先としての実力、今すぐ端末1台で早く始めたい場合の代替まで整理しました。">
+<link rel="canonical" href="https://kessai-navi.com/jms.html">
+<meta name="theme-color" content="#1a6bb8">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMS（ジェイエムエス）は全東信と関係ある？大丈夫か・信頼性">
+<meta property="og:description" content="JMSはJCB・三菱UFJニコス等が出資する決済代行で、全東信とは別会社。決済は止まりません。信頼性と、全東信からの乗り換え先としての実力を整理。">
+<meta property="og:url" content="https://kessai-navi.com/jms.html">
+<meta property="og:site_name" content="決済ナビ">
+<meta property="og:locale" content="ja_JP">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"JMS（ジェイエムエス）は全東信と関係ある？大丈夫か・信頼性と乗り換え先",
+  "description":"全東信の破産を受け、JMS（ジェイエムエス）を利用・検討する加盟店向けに、JMSの出資・信頼性・仕組みの事実と、全東信との違い、乗り換え先としての実力を整理した解説記事。",
+  "datePublished":"2026-07-10",
+  "dateModified":"2026-07-10",
+  "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
+  "publisher":{"@type":"Organization","name":"決済ナビ"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/jms.html"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"JMSは全東信のように倒産する心配はありますか？","acceptedAnswer":{"@type":"Answer","text":"JMS（株式会社ジェイエムエス）はJCB・三菱UFJニコス・UCカードが出資して2000年に設立されたカード会社系の決済代行で、加盟店は23万店を超えます。特定のサービスの将来を保証するものではありませんが、公表されている経営不安のような情報は特にありません。なお全東信は「早期入金（立替）」を主とする決済代行で、JMSとは会社も仕組みも異なります。どの決済でも、入金サイクルの把握や決済手段の多重化といった備えをしておくと安心です。"}},
+    {"@type":"Question","name":"全東信とJMSは関係がありますか？","acceptedAnswer":{"@type":"Answer","text":"別の会社・別のサービスです。全東信の破産手続きによって、JMSの決済が止まるわけではありません。ご自身の契約先が全東信なのかJMSなのか分かりにくい場合は、明細・契約書・入金元の名義をご確認ください。"}},
+    {"@type":"Question","name":"全東信からの乗り換え先として、JMSはどうですか？","acceptedAnswer":{"@type":"Answer","text":"JMSはJCB・三菱UFJニコス等が出資するカード会社系で、信頼性・安定性を重視する店舗に向く「本命」の選択肢です。一方で審査・端末設置に一定の時間がかかるため、今すぐ・端末1台で早く決済を再開したい場合は、最短即日発送のオールインワン端末（アルファポータブル等）と比較検討するのがおすすめです。60秒の無料診断で、お店の条件に合う候補を比べられます。"}}
+  ]
+}
+</script>
+<style>
+:root{--bg:#fff;--sub-bg:#f7f9fa;--blue:#1a6bb8;--blue-d:#155a9c;--navy:#20303f;--text:#333;--muted:#767676;--line:#ddd;--score:#eb6100;--blue-soft:#f0f6fb}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.site-inner{max-width:820px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700;color:var(--navy);text-decoration:none;cursor:pointer}.logo b{color:var(--blue)}
+.back{font-size:12px;color:var(--muted)}
+.er-banner{display:block;background:var(--score);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 16px;text-decoration:none}
+.er-banner:hover{background:#d55700;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+.crumb{font-size:12px;color:var(--muted);margin:0 0 10px}
+h1{font-size:24px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
+.lead{color:var(--text);font-size:15px;margin:0 0 6px}
+.updated{color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
+h2{font-size:19px;font-weight:800;color:var(--navy);margin:32px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
+h3{font-size:16px;font-weight:800;color:var(--navy);margin:20px 0 6px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px;padding-left:22px}li{margin:6px 0}
+strong,b{color:var(--navy)}
+.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:14px 16px;margin:0 0 18px;font-size:14px;line-height:1.8}
+.note{font-size:13px;color:var(--muted);background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:6px 0 14px;line-height:1.75}
+.check{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px 6px;margin:8px 0 16px}
+.check li{margin:0 0 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;border:1px solid var(--line);margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--sub-bg);font-weight:700;color:var(--navy);white-space:nowrap}
+.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.apply-box{background:#fff7ed;border:1px solid #f6d9b8;border-top:3px solid var(--score);border-radius:8px;padding:22px 18px;margin:22px 0;text-align:center}
+.apply-box h3{margin:0 0 6px;font-size:18px;color:var(--navy)}
+.apply-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta-apply{background:var(--score);font-size:16px;padding:14px 26px}
+.cta-apply:hover{background:#d55700}
+.apply-note{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6}
+.diag-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.diag-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta-box{background:var(--sub-bg);border:1px solid var(--line);border-top:3px solid var(--score);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.cta-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.cta-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;text-decoration:none}
+.cta:hover{background:var(--blue-d);text-decoration:none}
+details{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:0 14px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 0;font-size:14px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q ";color:var(--blue);font-weight:800}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .a{padding:12px 0;font-size:14px;line-height:1.8}
+.related{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:22px 0 0;background:var(--sub-bg)}
+.related b{color:var(--navy)}.related ul{margin:8px 0 0}
+.src{font-size:13px;color:var(--muted);line-height:1.9}
+footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
+/* 記事内 相談フォーム */
+.soudan-inline{text-align:left}
+.soudan-inline h3,.soudan-inline>p{text-align:center}
+.lead-form{margin-top:4px}
+.lf-row{margin-bottom:8px}
+.lead-form input:not([type=checkbox]),.lead-form select,.lead-form textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 11px;font-size:14px;font-family:inherit;color:var(--text);background:#fff}
+.lead-form textarea{resize:vertical}
+.lead-form input:focus,.lead-form select:focus,.lead-form textarea:focus{outline:none;border-color:var(--blue)}
+.lf-consent{display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--muted);margin:8px 0 12px}
+.lf-consent input{margin-top:2px;flex:none}
+.soudan-inline .cta{width:100%;justify-content:center;border:none;cursor:pointer;font-size:15px}
+.lf-note{font-size:11px;color:var(--muted);margin:10px 0 0;text-align:center;line-height:1.5}
+.soudan-thanks{padding:16px;background:#fff;border:1px solid var(--line);border-radius:6px;font-size:14px;text-align:center;line-height:1.7}
+.soudan-thanks b{color:var(--navy)}
+.lf-times{border:1px solid var(--line);border-radius:4px;padding:9px 10px 5px;margin:0}
+.lf-times legend{font-size:12px;color:var(--muted);padding:0 4px}
+.lf-times label{display:inline-flex;align-items:center;gap:6px;margin:0 6px 5px 0;padding:6px 11px;border:1px solid var(--line);border-radius:20px;font-size:13px;color:var(--text);cursor:pointer;background:#fff}
+.lf-times label:has(input:checked){border-color:var(--blue);background:var(--blue-soft);color:var(--navy);font-weight:700}
+.lf-times input{accent-color:var(--blue);flex:none}
+.soudan-tel-alt{max-width:520px;margin:16px auto 0;padding-top:14px;border-top:1px dashed var(--line);text-align:center}
+.soudan-tel-alt__t{display:block;font-size:12px;color:var(--muted);margin:0 0 8px}
+.soudan-tel{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px;border:1.5px solid var(--blue);background:var(--blue-soft);border-radius:6px;color:var(--navy);text-decoration:none}
+.soudan-tel svg{width:18px;height:18px;flex:none}
+.soudan-tel .num{font-size:19px;font-weight:800;letter-spacing:.5px;color:var(--blue-d)}
+.soudan-tel-note{max-width:520px;margin:8px auto 0;font-size:12px;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="site-inner">
+    <a class="logo" href="index.html">決済<b>ナビ</b></a>
+    <a class="back" href="index.html">緊急相談窓口へ →</a>
+  </div>
+</header>
+<a class="er-banner" href="index.html#soudan">決済の停止・入金・乗り換えでお困りの方は、無料の緊急相談窓口へ<span aria-hidden="true"> →</span></a>
+
+<div class="wrap">
+  <p class="crumb"><a href="kessai-check.html">自分の決済は大丈夫？</a> ＞ JMSは全東信と関係ある？</p>
+  <h1>JMS（ジェイエムエス）は全東信と関係ある？大丈夫？<br>信頼性と、全東信からの乗り換え先としての実力</h1>
+  <p class="lead">決済代行「全東信」の破産のニュースで、「自分が使っている（または検討中の）<strong>JMSは全東信と関係あるの？大丈夫？</strong>」と気になった方へ。まず結論と、JMSの信頼性・仕組み、そして<strong>全東信からの乗り換え先としての実力</strong>を整理しました。</p>
+  <div class="updated">最終更新：2026年7月10日 ／ 運営：決済ナビ運営事務局</div>
+
+  <div class="callout">
+    <b>先に結論：</b>JMS（株式会社ジェイエムエス）は<strong>JCB・三菱UFJニコス・UCカードが出資するカード会社系の決済代行</strong>で、全東信とは<strong>まったく別の会社</strong>です。全東信の破産でJMSの決済が止まるわけではありません。むしろ信頼性・安定性を重視する店舗には、全東信からの<strong>乗り換え先の有力候補（本命）</strong>にもなります。まずは<a href="#diag">60秒の無料診断</a>で、お店に合う条件を確かめてみましょう。
+  </div>
+
+  <h2>JMS（ジェイエムエス）はどんな会社？（事実の整理）</h2>
+  <p>JMS（株式会社ジェイエムエス）は、<strong>JCB・三菱UFJニコス・UCカードの出資により2000年に設立された、カード会社系の決済代行会社</strong>です。契約店舗は全国23万店を超え、主要な国際ブランドのクレジット・デビット・電子マネー・コード決済・Apple Pay などをまとめて契約できます。特徴を整理すると次のとおりです。</p>
+  <table>
+    <tr><th>運営・出資</th><td>JCB・三菱UFJニコス・UCカードが出資（2000年設立）。カード会社系で信頼性・安定性が強み。</td></tr>
+    <tr><th>導入実績</th><td>契約加盟店 全国23万店超。</td></tr>
+    <tr><th>対応ブランド</th><td>Visa・Mastercard・JCB・AMEX・Diners・銀聯・DISCOVER 等に加え、電子マネー・QR・Apple Pay まで幅広く対応。</td></tr>
+    <tr><th>手数料（目安）</th><td>中小企業応援プログラムで2.48%の案内。プラン・業種により変動。分割・リボ・ボーナス払いにも対応と案内。</td></tr>
+    <tr><th>端末・入金</th><td>端末「おてがるPay（VEGA3000）」は0円キャンペーンの案内。入金は月2回・月6回から選択。</td></tr>
+    <tr><th>仕組み</th><td>カード会社系の加盟店契約・決済代行。<strong>全東信のような「早期入金（立替）」を主軸にしたモデルとは異なります。</strong></td></tr>
+  </table>
+  <p class="note">※数値は公表・案内されている目安です（2026年7月時点）。最新かつ正確な条件はJMS公式サイトでご確認ください。</p>
+
+  <h2>全東信の破産から学べること（JMS利用店・検討中の方へ）</h2>
+  <p>全東信は「カード会社より先に売上を立て替えて入金する（早期入金）」を主とする決済代行で、破産によりその立替入金や決済の継続が難しくなりました。JMSは会社も仕組みも異なりますが、この出来事から<strong>どの決済ユーザーにも共通する教訓</strong>が得られます。</p>
+  <ul class="check">
+    <li><b>入金サイクルを把握しておく</b> — いつ・どの口座に・どのくらいで入金されるかを理解しておく。</li>
+    <li><b>決済手段を1社に依存しない</b> — メインに加えて、すぐ使えるサブを1つ持っておくと、万一のトラブル時も決済を止めずに済みます。</li>
+    <li><b>早期入金・立替に過度に依存しない</b> — 立替前提で資金を回している場合は、止まったときのシミュレーションを。</li>
+    <li><b>条件を定期的に見直す</b> — 手数料・入金・対応ブランドは、業種や取扱高によって“もっと合う選択肢”が見つかることがあります。</li>
+  </ul>
+
+  <div id="diag" class="diag-box">
+    <h3>JMSとほかの決済、あなたのお店にはどれが最適？ 60秒で診断</h3>
+    <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、お店に合う候補と年間コストの目安が分かります。全東信からの乗り換え比較にも使えます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'jms'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>JMSは「本命」向き。ただし今すぐ・早く使いたい場合は</h2>
+  <p>JMSはカード会社系で、信頼性・対応ブランドの広さが強みの<strong>「本命」向きの決済代行</strong>です。腰を据えて長く使う乗り換え先として堅実な選択肢になります。一方で、加盟店審査や端末（おてがるPay）の設置・設定には一定の時間がかかるため、<strong>「今日明日にでも決済を再開したい」「まず1台だけで早く始めたい」</strong>という緊急のニーズには、より速い選択肢が向く場合があります。</p>
+  <p>その代表が<strong>アルファポータブル</strong>。画面・通信（SIM）・レシートプリンターが本体に内蔵で、<strong>スマホ・iPad が無くても端末だけで決済が完結</strong>します。最短即日で発送され、数日でお手元に届いた日から使えます（お申し込み当日から使えるわけではありません）。<strong>じっくり本命を選ぶならJMS、まず早く決済を戻すならアルファ</strong>、という使い分けも有効です。</p>
+
+  <div class="apply-box">
+    <h3>今すぐ・端末1台で早く再開したいなら</h3>
+    <p>端末だけで決済が完結するアルファポータブル。約70種類の決済に対応、初期費用・月額・解約金0円のプランもあります。</p>
+    <a class="cta cta-apply" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{from:'jms'})">アルファポータブルを申し込む →</a>
+    <p class="apply-note">お申し込み・審査後、最短即日で発送。数日でお手元に届き、届いたその日から使えます。<a href="all-in-one.html">iPad不要ですぐ使える決済端末の詳しい解説はこちら</a>。</p>
+  </div>
+
+  <h2>JMSが気になる方の動き方（まとめ）</h2>
+  <table>
+    <tr><th>こんな場合</th><th>おすすめの動き</th></tr>
+    <tr><td>今JMSを使っていて条件に満足</td><td>基本はそのままでOK。入金サイクルの把握と、サブ決済の用意だけしておくと安心。</td></tr>
+    <tr><td>信頼性・安定性を最重視したい</td><td>カード会社系のJMSは有力候補。対応ブランドの広さも確認を。</td></tr>
+    <tr><td>今すぐ・端末1台で早く再開したい</td><td>最短即日発送のアルファポータブル等のオールインワン端末を検討。</td></tr>
+    <tr><td>手数料・入金で損していないか不安</td><td>業種・取扱高で最適解は変わります。診断で今の条件と比較を。</td></tr>
+    <tr><td>全東信からの乗り換え先を決めたい</td><td>本命候補（JMS等）と、まず早く再開できる手段を組み合わせるのが安全。診断・比較で整理。</td></tr>
+  </table>
+  <p class="note">「今のままでOK」も立派な結論です。<a href="kessai-check.html">自分の決済代行は大丈夫？（全般の確認ポイント）</a>もあわせてご覧ください。</p>
+
+    <div class="diag-box">
+    <h3>まずは60秒の無料診断で、お店に合う決済を比べる</h3>
+    <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、お店に合う決済と年間コストの目安が分かります。診断のあと、必要なら乗り換え先のご案内もできます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'jms-bottom'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>よくある質問</h2>
+  <details><summary>JMSは全東信のように倒産する心配はありますか？</summary><div class="a">JMS（株式会社ジェイエムエス）はJCB・三菱UFJニコス・UCカードが出資して2000年に設立されたカード会社系の決済代行で、加盟店は23万店を超えます。特定のサービスの将来を保証するものではありませんが、公表されている経営不安のような情報は特にありません。なお全東信は「早期入金（立替）」を主とする決済代行で、JMSとは会社も仕組みも異なります。どの決済でも、入金サイクルの把握や決済手段の多重化といった備えをしておくと安心です。</div></details>
+  <details><summary>全東信とJMSは関係がありますか？</summary><div class="a">別の会社・別のサービスです。全東信の破産手続きによって、JMSの決済が止まるわけではありません。ご自身の契約先が全東信なのかJMSなのか分かりにくい場合は、明細・契約書・入金元の名義をご確認ください。</div></details>
+  <details><summary>全東信からの乗り換え先として、JMSはどうですか？</summary><div class="a">JMSはJCB・三菱UFJニコス等が出資するカード会社系で、信頼性・安定性を重視する店舗に向く「本命」の選択肢です。一方で審査・端末設置に一定の時間がかかるため、今すぐ・端末1台で早く決済を再開したい場合は、最短即日発送のオールインワン端末（アルファポータブル等）と比較検討するのがおすすめです。60秒の無料診断で、お店の条件に合う候補を比べられます。</div></details>
+
+  <div class="related">
+    <b>あわせて読みたい</b>
+    <ul>
+      <li><a href="all-in-one.html">iPad・スマホ不要ですぐ使える決済端末は？（オールインワン端末）</a></li>
+      <li><a href="alphanote.html">アルファノート（アルファポータブル）とは？iPad不要のオールインワン端末を詳しく</a></li>
+      <li><a href="kessai-check.html">自分の決済代行・端末は大丈夫？確認ポイントと備え</a></li>
+      <li><a href="zentoshin-norikae.html">決済の乗り換え先 徹底比較（手数料・入金・導入スピード）</a></li>
+      <li><a href="shindan.html">60秒診断で、お店に合う決済と年間コストを自分で比べる</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
+  </footer>
+</div>
+</body>
+</html>
