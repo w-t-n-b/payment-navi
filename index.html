@@ -550,6 +550,13 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
 .line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
 .line-btn:hover{background:#05b34c;text-decoration:none}
 .line-btn svg{width:22px;height:22px;flex:none}
+.sticky-cta{display:none}
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
+  .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
+  .sc-line{background:#06C755}
+}
 </style>
 </head>
 <body>
@@ -701,8 +708,8 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
       <p class="soudan-lead">決済が使えない・急いで乗り換えたい方の<b>緊急相談を無料で受付</b>中。料率の比較から<b>乗り換え手続きの代行</b>まで、専門スタッフが対応します。下記をご入力いただければ、担当より<b>折り返しご連絡</b>します（通常1〜2営業日／お急ぎの場合もこちらから）。</p>
       <form id="soudanForm" class="lead-form" autocomplete="on">
         <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
-        <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
-        <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+        <div class="lf-row"><input name="company" placeholder="会社名" autocomplete="organization"></div>
+        <div class="lf-row"><input name="name" placeholder="お名前" autocomplete="name"></div>
         <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
         <div class="lf-row"><fieldset class="lf-times">
           <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
@@ -714,7 +721,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
           <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
         </fieldset></div>
         <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
-        <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+        <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2"></textarea></div>
         <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
         <button type="submit" class="btn btn-primary">無料相談を申し込む<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
         <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
@@ -1861,7 +1868,7 @@ function gateHtml(lead,cta){
     <p class="lock-sub">${lead}</p>
     <form id="leadForm" class="lead-form" autocomplete="on">
       <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
-      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" autocomplete="name"></div>
       <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
       <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
       <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
@@ -2070,5 +2077,9 @@ buildRibbon(); buildMarquee();
 const soudanForm=$("soudanForm"); if(soudanForm) soudanForm.onsubmit=submitSoudan;
 /* このページ（緊急お問い合わせ窓口）は診断ウィザードを持たない。診断は shindan.html */
 </script>
+  <div class="sticky-cta">
+    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで相談</a>
+    <a class="sc-main" style="background:#1a6bb8" href="#soudan" onclick="window.gtag&amp;&amp;gtag('event','cta_soudan_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">無料で相談</a>
+  </div>
 </body>
 </html>

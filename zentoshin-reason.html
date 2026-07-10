@@ -155,6 +155,13 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 .line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
 .line-btn:hover{background:#05b34c;text-decoration:none}
 .line-btn svg{width:22px;height:22px;flex:none}
+.sticky-cta{display:none}
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
+  .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
+  .sc-line{background:#06C755}
+}
 </style>
 </head>
 <body>
@@ -175,6 +182,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <div class="callout">
     <b>要点：</b>全東信の破産は、①<b>早期入金（立替）モデルの資金構造</b>、②<b>コロナ禍による飲食店の業績悪化</b>、③<b>2024年に報じられた不正な加盟店契約問題による信用失墜</b>が重なったものと各社が報じています。さらに、<b>約20年前からの粉飾決算で、実態は約605億円の債務超過だった疑い</b>も指摘されています（東京商工リサーチ調査）。負債総額は約1,259億円。全東信を使っていた加盟店の方は、決済を止めないための<a href="#soudan-inline">無料の緊急相談窓口</a>で乗り換え・再開を整理できます。
   </div>
+  <p style="text-align:center;margin:2px 0 20px"><a class="cta" data-hero="1" href="#soudan-inline" onclick="window.gtag&amp;&amp;gtag('event','cta_soudan_click',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">無料で相談 →</a></p>
 
   <h2>そもそも全東信はどんな会社・ビジネスだった？</h2>
   <p>株式会社全東信（2006年9月設立・資本金45億円・大阪市中央区）は、<strong>クレジットカード売上の「早期決済代行」</strong>を手がける会社でした。飲食業を中心に、加盟店の売上を<strong>カード会社より先に立て替えて入金する「早期入金（立替）」</strong>を主力サービスとし、その手数料で収益を得ていました。2026年7月6日に大阪地方裁判所へ自己破産を申請し、同日、破産手続き開始決定を受けたと各社が報じています。負債総額は約1,259億2,900万円（2025年3月期末時点）とされ、破産管財人には印藤弘二弁護士（はばたき綜合法律事務所）が選任されています。</p>
@@ -246,8 +254,8 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     <p>「なぜ潰れたか」より大事なのは、これからの決済を止めないこと。現状の整理から、決済を止めないための応急対応・乗り換え手続きの代行まで、専門スタッフが折り返しご連絡します（相談無料・秘密厳守）。このページから直接ご相談いただけます。</p>
     <form class="lead-form soudanFormInline" data-pos="記事末" autocomplete="on">
       <div class="lf-row"><input name="shop" placeholder="店舗名" required autocomplete="off"></div>
-      <div class="lf-row"><input name="company" placeholder="会社名（任意）" autocomplete="organization"></div>
-      <div class="lf-row"><input name="name" placeholder="お名前" required autocomplete="name"></div>
+      <div class="lf-row"><input name="company" placeholder="会社名" autocomplete="organization"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" autocomplete="name"></div>
       <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
       <div class="lf-row"><fieldset class="lf-times">
         <legend>ご希望の連絡時間帯（任意・複数選択可）</legend>
@@ -259,7 +267,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
         <label><input type="checkbox" name="timeslot" value="いつでも可"><span>いつでも可</span></label>
       </fieldset></div>
       <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false"></div>
-      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2" required></textarea></div>
+      <div class="lf-row"><textarea name="note" placeholder="ご相談内容（現在お使いの決済会社・お困りごと など）" rows="2"></textarea></div>
       <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
       <button type="submit" class="cta">無料で緊急相談する →</button>
       <p class="lf-note">ご入力内容はご相談対応にのみ利用し、第三者へ提供しません。</p>
@@ -327,5 +335,9 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   });
 })();
 </script>
+  <div class="sticky-cta">
+    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで相談</a>
+    <a class="sc-main" style="background:#1a6bb8" href="#soudan-inline" onclick="window.gtag&amp;&amp;gtag('event','cta_soudan_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">無料で相談</a>
+  </div>
 </body>
 </html>

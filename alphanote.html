@@ -129,6 +129,13 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 .line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
 .line-btn:hover{background:#05b34c;text-decoration:none}
 .line-btn svg{width:22px;height:22px;flex:none}
+.sticky-cta{display:none}
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
+  .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
+  .sc-line{background:#06C755}
+}
 </style>
 </head>
 <body>
@@ -149,6 +156,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <div class="callout">
     <b>ひとことで言うと：</b>アルファポータブルは<strong>iPad・スマホ不要のオールインワン決済端末</strong>。70種類の決済に対応し、初期費用・月額・解約金0円のプランもあります。<strong>最短即日で発送</strong>され、届いたその日から使えます。<a href="#apply">申し込みはこちら</a>。
   </div>
+  <p style="text-align:center;margin:2px 0 20px"><a class="cta cta-apply" data-hero="1" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">申し込む →</a></p>
 
   <h2>アルファポータブルの基本スペック</h2>
   <div style="overflow-x:auto">
@@ -257,5 +265,9 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
     運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
   </footer>
 </div>
+  <div class="sticky-cta">
+    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで相談</a>
+    <a class="sc-main" style="background:#eb6100" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">申し込む</a>
+  </div>
 </body>
 </html>
