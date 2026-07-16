@@ -501,6 +501,11 @@ tr.hl td{background:var(--blue-soft)}
 .lf-consent input{margin-top:2px;flex:none}
 .lead-form button[type=submit]{width:100%;justify-content:center}
 .lf-note{font-size:11px;color:var(--muted);margin:10px 0 0;text-align:center;line-height:1.5}
+.lead-box{margin-top:20px;border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:6px;background:var(--sub-bg)}
+.lead-box .lock-card{border:none;background:transparent;text-align:left}
+.lead-box .lock-title{font-size:16px}
+.lead-box .lead-form input{background:#fff}
+.soudan-thanks{font-size:14px;color:var(--navy);line-height:1.8;text-align:center;padding:8px 0}
 .unlock-note{border:1px solid var(--line);border-left:4px solid var(--blue);background:var(--sub-bg);padding:10px 12px;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px}
 .unlock-note .ic{display:none}
 
@@ -1846,18 +1851,19 @@ function discHtml(){
   return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
 function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
-function gateHtml(lead,cta){
-  return `<div class="lock-gate" id="lockGate"><div class="lock-card">
-    <div class="lock-title">続きは無料で全部見られます</div>
-    <p class="lock-sub">${lead}</p>
+/* 結果は無料開放。フォームは「任意の無料相談」として結果の下に置く（＝ゲート撤廃・完了率改善） */
+function leadBoxHtml(lead,cta){
+  return `<div class="lead-box" id="leadBox"><div class="lock-card" style="max-width:none">
+    <div class="lock-title">${lead.title}</div>
+    <p class="lock-sub">${lead.sub}</p>
     <form id="leadForm" class="lead-form" autocomplete="on">
       <div class="lf-row"><input name="company" placeholder="店舗・会社名" required></div>
-      <div class="lf-row"><input name="name" placeholder="お名前" required></div>
-      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required></div>
-      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号（任意）"></div>
+      <div class="lf-row"><input type="tel" name="phone" placeholder="電話番号" required inputmode="tel" autocomplete="tel"></div>
+      <div class="lf-row"><input type="email" name="email" placeholder="メールアドレス" required inputmode="email" autocapitalize="off" spellcheck="false"></div>
+      <div class="lf-row"><input name="name" placeholder="お名前" autocomplete="name"></div>
       <label class="lf-consent"><input type="checkbox" name="consent" required><span><a href="privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>に同意して送信します</span></label>
       <button type="submit" class="btn btn-primary">${cta}${ICON("i-arrow")}</button>
-      <p class="lf-note">診断は無料・中立です。入力情報は結果の詳細表示とご相談対応にのみ利用し、第三者へ提供しません。</p>
+      <p class="lf-note">相談は無料です。お問い合わせから、土日・時間帯を問わず原則24時間以内にご返信します。入力情報はご相談対応にのみ利用し、第三者へ提供しません。</p>
     </form></div></div>`;
 }
 
@@ -1872,6 +1878,7 @@ function renderMall(rc){
 }
 function showResult(){
   const ch=answers.channel;
+  if(window.gtag)gtag('event','diag_complete',{ref:(window.KNAVI_REF||'')});  // 全問回答＝結果到達（ゲート離脱と設問離脱の分離用）
   $("heroSection").classList.add("hidden");   // 結果画面ではヒーロー（診断CTA・しくみ）を隠す
   $("quizCard").classList.add("hidden");
   $("shindan").classList.add("hidden");
@@ -1895,12 +1902,13 @@ function showResult(){
   const head=`<div class="result-head"><div class="eyebrow">DIAGNOSIS RESULT</div><h2>診断結果</h2><p>${headSub}</p>${condTableHtml(ch)}${integ?'<div class="integ-badge">店舗とECを1契約・同一アカウントで統合できます（Square / STORES）</div>':''}${bothMall?'<div class="cart-note">ネット販売はモール出店のため、EC決済は診断対象外です（店舗のみ診断しました）。</div>':''}</div>`;
   const teasers=blocks.map(b=>(twin?chHead(b.kind):"")+b.teaser).join("");
   const details=blocks.map(b=>(twin?chHead(b.kind):"")+b.detail).join("");
-  const gateLead=anyConsult
-    ? `あなたに合う契約を<b>専門家が無料でご提案</b>します。まずはご相談ください。`
-    : `1位の<b>申込先</b>・2位以降の全ランキング・<b>正確な乗り換え節約額</b>・全社比較がすべて見られます。`;
-  const ctaLabel=anyConsult?"無料で相談する":"結果を全部見る（無料）";
+  const lead=anyConsult
+    ? {title:"あなたに合う契約を、専門家が無料でご提案します", sub:`診断結果をふまえ、最適な契約・乗り換えを無料でご案内します。まずはお気軽にご相談ください。`}
+    : {title:"この結果について、無料で相談する（任意）", sub:`「うちの場合どれがいい？」「今より安くなる？」など、診断結果をもとに専門スタッフが無料でご案内します。ご自身で申し込みたい方は上のボタンからそのまま進めます。`};
+  const ctaLabel=anyConsult?"無料で相談する":"無料で相談する";
   rc.innerHTML = head + teasers +
-    `<div class="lock-wrap lock-locked" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div>${gateHtml(gateLead,ctaLabel)}</div>`;
+    `<div class="lock-wrap" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div></div>` +
+    leadBoxHtml(lead,ctaLabel);
   const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
   $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -1927,9 +1935,9 @@ function submitLead(e){
   };
   try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
   const btn=f.querySelector('button[type="submit"]'); btn.disabled=true; btn.textContent="送信中…";
-  const done=()=>unlockResults();
+  const done=()=>{ const box=$("leadBox"); if(box) box.innerHTML=`<div class="lock-card" style="max-width:none"><div class="soudan-thanks"><b>送信ありがとうございます。</b><br>担当より折り返しご連絡します（土日・時間帯を問わず、原則24時間以内にご返信します）。</div></div>`; };
   if(LEAD_ENDPOINT){ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}).then(done).catch(done); }
-  else { console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップして解除します。", payload); done(); }
+  else { console.warn("[決済ナビ] LEAD_ENDPOINT 未設定：送信をスキップします。", payload); done(); }
 }
 /* 相談窓口フォーム → 送信（GASへPOST・未設定なら送信スキップ）→ サンクス表示 */
 function submitSoudan(e){

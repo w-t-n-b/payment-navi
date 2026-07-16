@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W0Y35XQ681"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W0Y35XQ681');
+</script>
+<script>
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
+(function(){try{
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
+}catch(e){}})();
+</script>
+<title>決済端末の選び方｜個人店・小規模店が手数料・入金・端末タイプで失敗しない比較【2026年】｜決済ナビ</title>
+<meta name="description" content="キャッシュレス決済端末はどう選ぶ？個人店・小規模店・個人事業主向けに、失敗しない選び方を「手数料・入金サイクル・端末タイプ（iPad要否）」の3つの軸で整理。オールインワン型・スマホ+リーダー型・据置型の違い、業種・シーン別の考え方、費用の見方までを比較。自分の店に合う端末は60秒の無料診断で確認できます。">
+<link rel="canonical" href="https://kessai-navi.com/kessai-erabikata.html">
+<meta name="theme-color" content="#1a6bb8">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="決済端末の選び方｜個人店・小規模店が手数料・入金・端末タイプで失敗しない比較">
+<meta property="og:description" content="キャッシュレス決済端末の選び方を、手数料・入金サイクル・端末タイプ（iPad要否）の3軸で整理。端末タイプ比較・業種別の考え方・費用の見方まで。自分の店に合う端末は60秒診断で確認。">
+<meta property="og:url" content="https://kessai-navi.com/kessai-erabikata.html">
+<meta property="og:site_name" content="決済ナビ">
+<meta property="og:locale" content="ja_JP">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"決済端末の選び方｜個人店・小規模店が手数料・入金・端末タイプで失敗しない比較",
+  "description":"キャッシュレス決済端末の選び方を、手数料・入金サイクル・端末タイプ（iPad要否）の3つの軸で整理し、端末タイプの違い・業種別の考え方・費用の見方までをまとめた解説記事。",
+  "datePublished":"2026-07-16",
+  "dateModified":"2026-07-16",
+  "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
+  "publisher":{"@type":"Organization","name":"決済ナビ"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/kessai-erabikata.html"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"決済端末は何を基準に選べばいいですか？","acceptedAnswer":{"@type":"Answer","text":"大きく3つの軸で選ぶと失敗が少なくなります。①決済手数料（クレジット・QR・電子マネーの料率）、②入金サイクル（売上がいつ振り込まれるか＝資金繰り）、③端末タイプ（スマホ・iPadが必要か、端末1台で完結するか）です。加えて、初期費用・月額・使いたい決済手段（タッチ決済やQRの幅）も確認します。最適な組み合わせは業種・客単価・月商で変わるため、条件を入れて比べられる60秒診断が近道です。"}},
+    {"@type":"Question","name":"スマホやiPadを持っていなくても決済端末は導入できますか？","acceptedAnswer":{"@type":"Answer","text":"できます。画面・通信・レシートプリンターが本体に内蔵された「オールインワン型」なら、スマホ・iPadがなくても端末1台で決済が完結します。SIM内蔵タイプはWi-Fiがない場所や屋外イベント・移動販売でも使えます。逆に「スマホ＋カードリーダー型」は別途スマホ・iPadが必要です。"}},
+    {"@type":"Question","name":"個人事業主・小さな店でもカード決済は導入できますか？","acceptedAnswer":{"@type":"Answer","text":"はい。個人事業主・小規模店でも導入できるサービスは多く、初期費用・月額・解約金が0円のプランもあります。売上規模が小さいうちは、固定費（月額）が0円で、使った分の手数料だけがかかるタイプが始めやすい傾向です。審査はありますが、必要書類を整えればスムーズです。"}},
+    {"@type":"Question","name":"決済端末の費用はどれくらいかかりますか？","acceptedAnswer":{"@type":"Answer","text":"費用は「端末代（初期費用）＋月額＋決済手数料」で見ます。端末代・月額が0円のプランもあり、その場合は売上に対する決済手数料（目安3%前後〜）が主なコストです。QR・電子マネーを追加すると料率や費用が変わることがあります。年間コストは月商×料率が大きく効くため、取扱高を入れて試算するのが確実です。"}}
+  ]
+}
+</script>
+<style>
+:root{--bg:#fff;--sub-bg:#f7f9fa;--blue:#1a6bb8;--blue-d:#155a9c;--navy:#20303f;--text:#333;--muted:#767676;--line:#ddd;--score:#eb6100;--blue-soft:#f0f6fb}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.site-inner{max-width:820px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700;color:var(--navy);text-decoration:none;cursor:pointer}.logo b{color:var(--blue)}
+.back{font-size:12px;color:var(--muted)}
+.er-banner{display:block;background:var(--score);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 16px;text-decoration:none}
+.er-banner:hover{background:#d55700;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+.crumb{font-size:12px;color:var(--muted);margin:0 0 10px}
+h1{font-size:24px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
+.lead{color:var(--text);font-size:15px;margin:0 0 6px}
+.updated{color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
+h2{font-size:19px;font-weight:800;color:var(--navy);margin:32px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
+h3{font-size:15px;font-weight:700;color:var(--navy);margin:18px 0 6px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px;padding-left:22px}li{margin:6px 0}
+strong,b{color:var(--navy)}
+.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:14px 16px;margin:0 0 18px;font-size:14px;line-height:1.8}
+.note{font-size:13px;color:var(--muted);background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:6px 0 14px;line-height:1.75}
+.check{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px 6px;margin:8px 0 16px}
+.check li{margin:0 0 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;border:1px solid var(--line);margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--sub-bg);font-weight:700;color:var(--navy);white-space:nowrap}
+.cta-box{background:var(--sub-bg);border:1px solid var(--line);border-top:3px solid var(--score);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.cta-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.cta-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.diag-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.diag-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;text-decoration:none}
+.cta:hover{background:var(--blue-d);text-decoration:none}
+.cta.cta-apply{background:var(--score)}
+.cta.cta-apply:hover{background:#d55700}
+.apply-note{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6}
+details{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:0 14px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 0;font-size:14px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q ";color:var(--blue);font-weight:800}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .a{padding:12px 0;font-size:14px;line-height:1.8}
+.related{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:22px 0 0;background:var(--sub-bg)}
+.related b{color:var(--navy)}.related ul{margin:8px 0 0}
+.src{font-size:13px;color:var(--muted);line-height:1.9}
+footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
+.line-cta{background:#f4faf6;border:1px solid #cfe8d7;border-radius:8px;padding:11px 14px;margin:18px 0;text-align:center}
+.line-cta h3{margin:0 0 3px;font-size:14px;color:#20303f}
+.line-cta p{font-size:12px;color:#777;margin:0 0 9px}
+.line-btn{display:inline-flex;align-items:center;gap:6px;background:#06C755;color:#fff;font-weight:700;font-size:13px;padding:8px 16px;border-radius:8px;text-decoration:none}
+.line-btn:hover{background:#05b34c;text-decoration:none}
+.line-btn svg{width:22px;height:22px;flex:none}
+.sticky-cta{display:none}
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
+  .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
+  .sticky-cta a.sc-sub{background:#eef2f5;color:#20303f;border:1px solid #cdd6dd;font-weight:700}
+}
+.next-steps{background:#fff7ed;border:1px solid #f6d9b8;border-left:4px solid var(--score);border-radius:8px;padding:16px 18px;margin:24px 0}
+.next-steps h3{margin:0 0 4px;font-size:16px;color:var(--navy)}
+.next-steps>p{font-size:13px;color:var(--muted);margin:0 0 8px}
+.next-steps ul{margin:0;padding-left:20px}
+.next-steps li{margin:8px 0;font-size:14px;line-height:1.7}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="site-inner">
+    <a class="logo" href="index.html">決済<b>ナビ</b></a>
+    <a class="back" href="shindan.html">60秒診断 →</a>
+  </div>
+</header>
+<a class="er-banner" href="shindan.html">自分の店に合う決済端末を知りたい方は、60秒の無料診断でチェック<span aria-hidden="true"> →</span></a>
+
+<div class="wrap">
+  <p class="crumb"><a href="index.html">決済ナビ</a> ＞ 決済端末の選び方</p>
+  <h1>決済端末の選び方<br>個人店・小規模店が「手数料・入金・端末タイプ」で失敗しない比較</h1>
+  <p class="lead">キャッシュレス決済端末は種類が多く、「どれを選べばいいか分からない」という声をよく聞きます。実は、押さえるべきポイントは多くありません。この記事では、個人店・小規模店・個人事業主の方が<strong>失敗しない選び方を「手数料・入金サイクル・端末タイプ」の3つの軸</strong>で整理します。読み終えたら、自分の店の条件を入れて比べるだけです。</p>
+  <div class="updated">最終更新：2026年7月16日 ／ 運営：決済ナビ運営事務局</div>
+
+  <div class="callout">
+    <b>先に結論：</b>決済端末は<strong>①手数料（料率）②入金サイクル（資金繰り）③端末タイプ（iPad要否）</strong>の3点で選ぶと失敗しません。ただし最適な組み合わせは業種・客単価・月商で変わります。<strong>自分の店に合う端末</strong>は、条件を入れるだけの<a href="shindan.html">60秒の無料診断</a>で候補と年間コストの目安がすぐ分かります。
+  </div>
+  <p style="text-align:center;margin:2px 0 20px"><a class="cta" data-hero="1" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断で自分に合う端末を見る →</a></p>
+
+  <h2>決済端末を選ぶ「3つの軸」</h2>
+  <p>数十社のサービスがありますが、比べるべき観点は次の3つに集約できます。この順で考えると、候補が自然に絞れます。</p>
+  <table>
+    <tr><th>軸</th><th>見るポイント</th><th>なぜ大事か</th></tr>
+    <tr><td><b>① 決済手数料<br>（料率）</b></td><td>クレジット／QR／電子マネーの料率。下限だけでなく<b>自分の業種の実額</b>を確認。</td><td>売上に比例して毎月かかる最大のコスト。月商が大きいほど効きます。</td></tr>
+    <tr><td><b>② 入金サイクル</b></td><td>売上がいつ振り込まれるか（月1回／月2回／早期入金など）。</td><td>資金繰りに直結。仕入れや回転が多い店ほど入金の早さが効きます。</td></tr>
+    <tr><td><b>③ 端末タイプ</b></td><td>スマホ・iPadが必要か、端末1台で完結するか。据置か持ち運びか。</td><td>導入のしやすさ・運用の手間・屋外利用の可否が変わります。</td></tr>
+  </table>
+  <p class="note">この3軸に加えて、<strong>初期費用・月額・解約金</strong>と、<strong>使いたい決済手段（タッチ決済・QRの幅）</strong>を確認すれば十分です。「どれが一番」は店によって違うので、最後は自分の条件で比べるのが確実です。</p>
+
+  <h2>端末タイプで選ぶ（iPad要否がいちばんの分かれ目）</h2>
+  <p>端末は大きく3タイプ。<strong>スマホ・iPadを持っているか、屋外で使うか</strong>で選ぶと分かりやすいです。</p>
+  <div style="overflow-x:auto">
+  <table>
+    <tr><th>タイプ</th><th>特徴</th><th>スマホ/iPad</th><th>向いている店</th></tr>
+    <tr><td><b>オールインワン型</b><br>（端末1台完結）</td><td>画面・通信・レシート印刷が本体に内蔵。SIM内蔵なら屋外もOK。</td><td><b>不要</b></td><td>スマホ・iPadを使いたくない店／移動販売・イベント／レジ横をすっきりさせたい店</td></tr>
+    <tr><td><b>スマホ＋カードリーダー型</b></td><td>手持ちのスマホ・iPadにリーダーを接続。端末代が安い。</td><td><b>必要</b></td><td>すでにスマホ・iPadがある店／初期費用を最小にしたい店</td></tr>
+    <tr><td><b>据置（POS一体）型</b></td><td>レジ・POSと一体。多機能だが設置・費用は大きめ。</td><td>機種による</td><td>多店舗・在庫連携・本格的なレジ運用をしたい店</td></tr>
+  </table>
+  </div>
+  <p class="note">個人店・小規模店で「スマホやiPadを別に用意したくない」なら、<a href="all-in-one.html">iPad不要のオールインワン端末</a>が手軽です。SIM内蔵タイプなら、Wi-Fiのない場所や屋外イベント・キッチンカーでも使えます。</p>
+
+  <div class="diag-box">
+    <h3>結局どのタイプが合う？ 60秒で診断</h3>
+    <p>業種・月商・使いたい決済・iPadの有無を選ぶだけ。無料・登録不要で、あなたの店に合う端末と年間コストの目安が分かります。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'erabikata-mid'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>業種・シーン別の選び方</h2>
+  <p>同じ「端末選び」でも、業種によって効くポイントが変わります。代表的なケースを整理しました。</p>
+  <ul class="check">
+    <li><b>飲食店</b> — 回転・仕入れがあるため<b>入金の早さ</b>と、QR・電子マネーの幅が効きます。</li>
+    <li><b>小売・物販</b> — 客の決済手段が多様。<b>対応ブランド・タッチ決済の幅</b>とレジ連携が重要。</li>
+    <li><b>美容室・サロン／整体・治療院</b> — やや高単価。<b>予約・事前決済</b>や待たせない会計動線が効きます。</li>
+    <li><b>移動販売・キッチンカー・イベント出店</b> — <b>SIM内蔵・持ち運び可</b>のオールインワン型が便利。屋外でも決済できます。</li>
+    <li><b>夜間・接待飲食（キャバクラ・スナック等）</b> — 端末より先に<b>その業種を受けてくれるか（対応業種の幅）</b>が分かれ目。<a href="night-business.html">夜間・接待飲食の端末の選び方</a>を参照。</li>
+  </ul>
+  <p class="note">業種ごとの詳しい考え方は<a href="industry.html">業種別 おすすめ決済端末</a>にまとめています。</p>
+
+  <div class="line-cta">
+    <h3>LINEで相談する（かんたん・無料）</h3>
+    <p>「うちの業種だと何がいい？」をそのまま聞けます。友だち追加して、そのままトークで相談できます。<br><b>土日・時間帯を問わず、お問い合わせから原則24時間以内にご返信します。</b></p>
+    <a class="line-btn" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{page:location.pathname,ref:(window.KNAVI_REF||'')})">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C7 3 3 6.1 3 10c0 2.2 1.3 4.2 3.3 5.5-.1.5-.5 1.9-.6 2.2 0 .1-.2.6.3.4.4-.2 2.3-1.5 3.2-2.1.9.1 1.8.2 2.8.2 5 0 9-3.1 9-7C21 6.1 17 3 12 3z"/></svg>
+      LINEで相談する
+    </a>
+  </div>
+
+  <h2>費用の考え方（初期・月額・料率・入金）</h2>
+  <p>費用は<strong>「端末代（初期費用）＋月額＋決済手数料」</strong>の3つで見ます。売上規模が小さいうちは、次の考え方が失敗しにくいです。</p>
+  <ul class="check">
+    <li><b>端末代・月額は0円プランを軸に</b> — 固定費が0円なら、使った分の手数料だけで始められます。</li>
+    <li><b>年間コストは「月商 × 料率」が大半</b> — 月商が大きいほど、料率0.1%の差でも年間で効きます。</li>
+    <li><b>QR・電子マネーの追加費用を確認</b> — 追加で初期費用・月額がかかる場合があります。</li>
+    <li><b>解約金の有無</b> — 合わなかったときのために、解約条件も契約前に確認を。</li>
+  </ul>
+  <p class="note">年間コストは取扱高で大きく変わるため、<a href="shindan.html">60秒診断</a>に月商を入れると、各社の年間コストの目安を横並びで比較できます。</p>
+
+  <div class="diag-box">
+    <h3>自分の店の条件で、年間コストを比べてみる</h3>
+    <p>業種・月商・使いたい決済を選ぶだけ。無料・登録不要で、お店に合う候補と年間コストの目安が出ます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'erabikata'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>よくある失敗と、避け方</h2>
+  <ul class="check">
+    <li><b>料率の「下限」だけで決めてしまう</b> — 実際の料率は業種・売上で変わります。見積もりで実額を確認。</li>
+    <li><b>入金サイクルを見落とす</b> — 手数料は安くても入金が遅いと資金繰りが苦しくなることも。</li>
+    <li><b>スマホ・iPadが必要と後で気づく</b> — リーダー型は別途端末が必要。持っていないならオールインワン型を。</li>
+    <li><b>使いたい決済手段に非対応</b> — よく使われるQR・タッチ決済に対応しているか事前に確認。</li>
+  </ul>
+
+  <div class="next-steps">
+    <h3>次のステップ ― あなたの状況に合うページへ</h3>
+    <p>方向性が見えたら、下から進めます。</p>
+    <ul>
+      <li><b>何が合うか診断したい</b> → <a href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'shindan',page:location.pathname})">60秒の無料診断</a>で候補と年間コストを比較</li>
+      <li><b>スマホ・iPad不要の端末1台で始めたい</b> → <a href="all-in-one.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'all-in-one',page:location.pathname})">iPad不要のオールインワン端末</a>（<a href="alphanote.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'alphanote',page:location.pathname})">アルファポータブル</a>）</li>
+      <li><b>業種ごとの考え方を知りたい</b> → <a href="industry.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'industry',page:location.pathname})">業種別 おすすめ決済端末</a></li>
+      <li><b>移動販売・イベント・夜のお店</b> → <a href="night-business.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'night-business',page:location.pathname})">審査・持ち運びで選ぶ端末</a></li>
+    </ul>
+  </div>
+
+  <h2>よくある質問</h2>
+  <details><summary>決済端末は何を基準に選べばいいですか？</summary><div class="a">大きく3つの軸で選ぶと失敗が少なくなります。①決済手数料（クレジット・QR・電子マネーの料率）、②入金サイクル（売上がいつ振り込まれるか＝資金繰り）、③端末タイプ（スマホ・iPadが必要か、端末1台で完結するか）です。加えて、初期費用・月額・使いたい決済手段（タッチ決済やQRの幅）も確認します。最適な組み合わせは業種・客単価・月商で変わるため、条件を入れて比べられる<a href="shindan.html">60秒診断</a>が近道です。</div></details>
+  <details><summary>スマホやiPadを持っていなくても決済端末は導入できますか？</summary><div class="a">できます。画面・通信・レシートプリンターが本体に内蔵された「オールインワン型」なら、スマホ・iPadがなくても端末1台で決済が完結します。SIM内蔵タイプはWi-Fiがない場所や屋外イベント・移動販売でも使えます。逆に「スマホ＋カードリーダー型」は別途スマホ・iPadが必要です。</div></details>
+  <details><summary>個人事業主・小さな店でもカード決済は導入できますか？</summary><div class="a">はい。個人事業主・小規模店でも導入できるサービスは多く、初期費用・月額・解約金が0円のプランもあります。売上規模が小さいうちは、固定費（月額）が0円で、使った分の手数料だけがかかるタイプが始めやすい傾向です。審査はありますが、必要書類を整えればスムーズです。</div></details>
+  <details><summary>決済端末の費用はどれくらいかかりますか？</summary><div class="a">費用は「端末代（初期費用）＋月額＋決済手数料」で見ます。端末代・月額が0円のプランもあり、その場合は売上に対する決済手数料（目安3%前後〜）が主なコストです。QR・電子マネーを追加すると料率や費用が変わることがあります。年間コストは月商×料率が大きく効くため、取扱高を入れて試算するのが確実です。</div></details>
+
+  <div class="related">
+    <b>あわせて読みたい</b>
+    <ul>
+      <li><a href="all-in-one.html">iPad・スマホ不要ですぐ使える決済端末は？（オールインワン端末の解説）</a></li>
+      <li><a href="industry.html">業種別 おすすめ決済端末（飲食・小売・美容・クリニック・夜間飲食）</a></li>
+      <li><a href="night-business.html">夜間・接待飲食（キャバクラ・スナック等）の決済端末の選び方</a></li>
+      <li><a href="alphanote.html">アルファノート（アルファポータブル）とは？手数料・評判・申込の流れ</a></li>
+      <li><a href="shindan.html">60秒診断で、お店に合う決済と年間コストを自分で比べる</a></li>
+    </ul>
+  </div>
+
+  <p class="src">※本ページは一般的な決済端末選びの考え方をまとめたものです。料率・費用・入金条件は各社・プラン・業種により異なります。導入前に各社公式サイトで最新条件をご確認ください（2026年7月時点）。</p>
+
+  <footer>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
+  </footer>
+</div>
+  <div class="sticky-cta">
+    <a class="sc-main" style="background:#1a6bb8" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断</a>
+    <a class="sc-sub" href="all-in-one.html" onclick="window.gtag&amp;&amp;gtag('event','cta_internal_click',{to:'all-in-one',pos:'sticky',page:location.pathname})">iPad不要の端末</a>
+  </div>
+</body>
+</html>
