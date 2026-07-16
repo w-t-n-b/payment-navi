@@ -2070,7 +2070,9 @@ buildRibbon(); buildMarquee();
 const soudanForm=$("soudanForm"); if(soudanForm) soudanForm.onsubmit=submitSoudan;
 QUESTIONS=questionSet();   // 対面のみ公開時は初期からチャネル固定の設問セットに
 buildWizard();
-restoreState();   // リロード時、結果画面を保存状態から復元
+/* 記事のCTA(?start=1)から来たら着地即スタート＝「クリック→再度"始める"」の二度手間を無くし離脱を防ぐ */
+if(/[?&]start=1(&|$)/.test(location.search)){ startQuiz(); }
+else { restoreState(); }   // 通常/リロード時は結果画面を保存状態から復元
 </script>
 </body>
 </html>
