@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W0Y35XQ681"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-W0Y35XQ681');
+</script>
+<script>
+/* 流入・パートナー計測: ?ref/UTM/gclid・初回接触を保存し、GA4送信とリード付与に使用（決済ナビ） */
+(function(){try{
+  var qs=new URLSearchParams(location.search);
+  var pick=function(k){return (qs.get(k)||'').slice(0,120);};
+  var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
+  if(r)sessionStorage.setItem('knavi_ref',r);
+  window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
+  if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
+}catch(e){}})();
+</script>
+<title>全東信 乗り換え 完全チェックリスト（保存版）｜決済を止めない手順・確認事項【2026年7月】｜決済ナビ</title>
+<meta name="description" content="全東信の破産で決済の乗り換えが必要な加盟店様へ。決済を止めずに乗り換えるための手順を「今すぐ（今日〜3日）／1〜2週間／3〜4週間」の時系列チェックリストにまとめました。未入金売上金の確認、審査に必要な書類、乗り換え先の選び方まで。印刷・スマホ保存OK。LINE友達追加で保存版と個別サポートも無料。">
+<link rel="canonical" href="https://kessai-navi.com/norikae-checklist.html">
+<meta name="theme-color" content="#1a6bb8">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="全東信 乗り換え 完全チェックリスト（保存版）｜決済を止めない手順・確認事項">
+<meta property="og:description" content="全東信からの乗り換えを、決済を止めずに進める手順を時系列チェックリストに。未入金の確認・必要書類・乗り換え先の選び方まで。印刷・保存OK。">
+<meta property="og:url" content="https://kessai-navi.com/norikae-checklist.html">
+<meta property="og:site_name" content="決済ナビ">
+<meta property="og:locale" content="ja_JP">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"全東信 乗り換え 完全チェックリスト（保存版）｜決済を止めない手順・確認事項",
+  "description":"全東信の破産による決済の乗り換えを、決済を止めずに進めるための手順を時系列のチェックリストにまとめた保存版の解説記事。",
+  "datePublished":"2026-07-16",
+  "dateModified":"2026-07-16",
+  "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
+  "publisher":{"@type":"Organization","name":"決済ナビ"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/norikae-checklist.html"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"全東信の乗り換えで、まず今日やるべきことは何ですか？","acceptedAnswer":{"@type":"Answer","text":"決済を止めないことが最優先です。(1)申込当日〜数営業日で使える代替手段（即日つなぎ）を確保、(2)未入金の売上金の金額・期間を記録、(3)現在の契約先・入金サイクルを確認、の順で進めます。売上金の回収（破産債権の手続き）と、これからの決済再開は別の話なので、決済再開は待たずに動けます。"}},
+    {"@type":"Question","name":"乗り換えの審査に必要な書類は何ですか？","acceptedAnswer":{"@type":"Answer","text":"一般的には、本人確認書類、店舗の営業実態が分かる資料（店舗写真・メニュー・営業許可証など）、入金口座情報が必要です。業種によって追加書類を求められることがあります。あらかじめ揃えておくと審査がスムーズです。"}},
+    {"@type":"Question","name":"チェックリストはどこで受け取れますか？","acceptedAnswer":{"@type":"Answer","text":"このページをそのまま印刷・スマホ保存できます。さらにLINE友達追加をしていただくと、保存版に加えて、あなたの店舗の状況に合わせた乗り換えの進め方を無料でご案内します（土日・時間帯を問わず原則24時間以内にご返信）。"}}
+  ]
+}
+</script>
+<style>
+:root{--bg:#fff;--sub-bg:#f7f9fa;--blue:#1a6bb8;--blue-d:#155a9c;--navy:#20303f;--text:#333;--muted:#767676;--line:#ddd;--score:#eb6100;--blue-soft:#f0f6fb}
+*{box-sizing:border-box}html,body{margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}a:hover{text-decoration:underline}
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.site-inner{max-width:820px;margin:0 auto;padding:11px 16px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:16px;font-weight:700;color:var(--navy);text-decoration:none;cursor:pointer}.logo b{color:var(--blue)}
+.back{font-size:12px;color:var(--muted)}
+.er-banner{display:block;background:var(--score);color:#fff;text-align:center;font-size:13px;font-weight:700;padding:9px 16px;text-decoration:none}
+.er-banner:hover{background:#d55700;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
+.crumb{font-size:12px;color:var(--muted);margin:0 0 10px}
+h1{font-size:24px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
+.lead{color:var(--text);font-size:15px;margin:0 0 6px}
+.updated{color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
+h2{font-size:19px;font-weight:800;color:var(--navy);margin:32px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
+h3{font-size:15px;font-weight:700;color:var(--navy);margin:18px 0 6px}
+p{margin:0 0 12px}
+ul,ol{margin:0 0 14px;padding-left:22px}li{margin:6px 0}
+strong,b{color:var(--navy)}
+.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:14px 16px;margin:0 0 18px;font-size:14px;line-height:1.8}
+.note{font-size:13px;color:var(--muted);background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:6px 0 14px;line-height:1.75}
+/* チェックリスト */
+.phase{border:1px solid var(--line);border-radius:8px;padding:4px 18px 8px;margin:14px 0;background:#fff}
+.phase-h{display:flex;align-items:center;gap:10px;margin:14px 0 8px}
+.phase-tag{flex:none;font-size:12px;font-weight:800;color:#fff;background:var(--blue);border-radius:5px;padding:4px 10px}
+.phase-tag.now{background:var(--score)}
+.phase-h h3{margin:0;font-size:16px}
+.cl{list-style:none;padding:0;margin:0 0 8px}
+.cl li{position:relative;padding:8px 0 8px 34px;border-top:1px dashed var(--line);font-size:14px;line-height:1.7}
+.cl li:first-child{border-top:none}
+.cl li::before{content:"";position:absolute;left:2px;top:11px;width:18px;height:18px;border:2px solid var(--blue);border-radius:4px;background:#fff}
+.cl li b{color:var(--navy)}
+.cl li small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 20px}
+.btn-print{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--blue);color:var(--blue-d);font-weight:700;font-size:14px;padding:11px 18px;border-radius:6px;cursor:pointer;text-decoration:none}
+.btn-print:hover{background:var(--blue-soft)}
+.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.diag-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
+.diag-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
+.cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;text-decoration:none}
+.cta:hover{background:var(--blue-d);text-decoration:none}
+table{border-collapse:collapse;width:100%;font-size:14px;border:1px solid var(--line);margin:8px 0 16px}
+th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--sub-bg);font-weight:700;color:var(--navy);white-space:nowrap}
+details{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:0 14px}
+summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 0;font-size:14px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q ";color:var(--blue);font-weight:800}
+details[open] summary{border-bottom:1px solid var(--line)}
+details .a{padding:12px 0;font-size:14px;line-height:1.8}
+.related{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:22px 0 0;background:var(--sub-bg)}
+.related b{color:var(--navy)}.related ul{margin:8px 0 0}
+.src{font-size:13px;color:var(--muted);line-height:1.9}
+footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
+/* LINEマグネット（大） */
+.magnet{background:#eafaf1;border:1px solid #b8e6c6;border-top:3px solid #06C755;border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.magnet .gift{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:#06C755;border-radius:20px;padding:4px 14px;margin-bottom:8px}
+.magnet h3{margin:0 0 6px;font-size:17px;color:#20303f}
+.magnet p{font-size:13px;color:#557;margin:0 0 14px;line-height:1.7}
+.line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
+.line-btn:hover{background:#05b34c;text-decoration:none}
+.line-btn svg{width:24px;height:24px;flex:none}
+.sticky-cta{display:none}
+@media(max-width:768px){
+  body{padding-bottom:64px}
+  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
+  .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
+  .sc-line{background:#06C755}
+  .sticky-cta a.sc-sub{background:#eef2f5;color:#20303f;border:1px solid #cdd6dd;font-weight:700}
+}
+@media print{
+  header.site,.er-banner,.actions,.sticky-cta,.magnet .line-btn,.diag-box .cta,.crumb{display:none!important}
+  body{font-size:12px}
+  .wrap{max-width:none;padding:0}
+  .phase,.magnet,.diag-box,.note,.callout{break-inside:avoid}
+  a{color:#000;text-decoration:none}
+  .cl li::before{border-color:#000}
+}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="site-inner">
+    <a class="logo" href="index.html">決済<b>ナビ</b></a>
+    <a class="back" href="index.html">緊急相談窓口へ →</a>
+  </div>
+</header>
+<a class="er-banner" href="index.html#soudan">決済の停止・入金・乗り換えでお困りの方は、無料の緊急相談窓口へ<span aria-hidden="true"> →</span></a>
+
+<div class="wrap">
+  <p class="crumb"><a href="zentoshin.html">全東信の破産 総合ガイド</a> ＞ 乗り換え完全チェックリスト</p>
+  <h1>全東信 乗り換え 完全チェックリスト<br><span style="font-size:16px;color:var(--muted)">（保存版）― 決済を止めずに乗り換えるための手順</span></h1>
+  <p class="lead">全東信の破産で「何から手をつければいいか分からない」という加盟店様へ。<strong>決済を止めずに乗り換えるための手順</strong>を、<strong>時系列のチェックリスト</strong>にまとめました。上から順にチェックしていけば大丈夫です。<strong>印刷・スマホ保存OK</strong>。手が止まったら、いつでも無料でご相談ください。</p>
+  <div class="updated">最終更新：2026年7月16日 ／ 運営：決済ナビ運営事務局</div>
+
+  <div class="actions">
+    <a class="btn-print" href="javascript:void(0)" onclick="window.print();window.gtag&amp;&amp;gtag('event','checklist_print',{page:location.pathname})">🖨 印刷 / PDFで保存する</a>
+  </div>
+
+  <div class="magnet">
+    <span class="gift">無料プレゼント</span>
+    <h3>LINE友達追加で「保存版チェックリスト」＋個別サポート</h3>
+    <p>友だち追加した方に、このチェックリストの保存版と、<b>あなたの店舗に合わせた乗り換えの進め方</b>を無料でご案内します。<br>土日・時間帯を問わず、原則24時間以内にご返信します。</p>
+    <a class="line-btn" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'magnet',page:location.pathname,ref:(window.KNAVI_REF||'')})">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C7 3 3 6.1 3 10c0 2.2 1.3 4.2 3.3 5.5-.1.5-.5 1.9-.6 2.2 0 .1-.2.6.3.4.4-.2 2.3-1.5 3.2-2.1.9.1 1.8.2 2.8.2 5 0 9-3.1 9-7C21 6.1 17 3 12 3z"/></svg>
+      LINEで受け取る（無料）
+    </a>
+  </div>
+
+  <h2>STEP 1｜今すぐ（今日〜3日）決済を止めない</h2>
+  <p>まずは「売上を取りこぼさない」ことが最優先です。売上金の回収（後述）とは切り離して、決済の再開を先に進めます。</p>
+  <div class="phase">
+    <div class="phase-h"><span class="phase-tag now">今日〜3日</span><h3>止血：決済を止めない</h3></div>
+    <ul class="cl">
+      <li><b>即日つなぎの決済手段を確保する</b><small>申込当日〜数営業日で使えるサービスで、まず受付を再開。端末が届くまでの空白を作らない。</small></li>
+      <li><b>未入金の売上金の「金額・期間」を記録する</b><small>いつ分の売上がいくら未入金か、明細・入金履歴でメモ。後の債権届出で必要になります。</small></li>
+      <li><b>現在の契約先・入金サイクルを確認する</b><small>契約書・入金元の名義で、実際の決済代行会社と入金タイプ（立替型かどうか）を把握。</small></li>
+      <li><b>スタッフ・レジ運用の共有</b><small>「当面はこの決済で受ける」を店内で共有し、会計トラブルを防ぐ。</small></li>
+    </ul>
+  </div>
+
+  <h2>STEP 2｜1〜2週間：本命の乗り換え先を決める</h2>
+  <div class="phase">
+    <div class="phase-h"><span class="phase-tag">1〜2週間</span><h3>選定：自店に合う乗り換え先へ</h3></div>
+    <ul class="cl">
+      <li><b>「手数料・入金サイクル・端末タイプ」で候補を絞る</b><small>選び方の詳細は<a href="kessai-erabikata.html">決済端末の選び方</a>／自動で比べるなら<a href="shindan.html">60秒診断</a>。</small></li>
+      <li><b>スマホ・iPadの有無を確認</b><small>持っていないなら、端末1台で完結する<a href="all-in-one.html">オールインワン型</a>が導入もシンプル。</small></li>
+      <li><b>審査に必要な書類を揃える</b><small>本人確認書類／店舗の営業実態がわかる資料（店舗写真・メニュー・営業許可証）／入金口座情報。</small></li>
+      <li><b>業種特有の条件を確認する</b><small>夜間・接待飲食など審査が慎重になりやすい業種は、対応業種の幅が広い先を選ぶ（<a href="night-business.html">詳細</a>）。</small></li>
+      <li><b>申込〜審査〜端末到着の日数を確認</b><small>「即日発送でも到着は数日後」など、使えるまでの時間を見込んでおく。</small></li>
+    </ul>
+  </div>
+
+  <div class="diag-box">
+    <h3>どこに乗り換えるか、60秒で当たりをつける</h3>
+    <p>業種・月商・使いたい決済・iPadの有無を選ぶだけ。無料・登録不要で、お店に合う候補と年間コストの目安が出ます。</p>
+    <a class="cta" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'checklist-mid'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>STEP 3｜3〜4週間：入金確認と旧契約の整理</h2>
+  <div class="phase">
+    <div class="phase-h"><span class="phase-tag">3〜4週間</span><h3>仕上げ：新体制を安定させる</h3></div>
+    <ul class="cl">
+      <li><b>新しい決済の初回入金を確認する</b><small>入金サイクル・金額が想定どおりか通帳でチェック。</small></li>
+      <li><b>破産管財人からの通知（債権届出の案内）を確認・提出する</b><small>未入金の売上金は「破産債権」。案内に従い期限内に届出。手続きは弁護士等の専門家に確認を。</small></li>
+      <li><b>旧端末・旧契約の解約手続き</b><small>不要な費用が残らないよう、旧サービスの解約状況を確認。</small></li>
+      <li><b>決済手段を1社に依存しない（多重化）</b><small>今回の教訓。サブの決済手段を1つ持っておくと、次の万一でも止まらない。</small></li>
+    </ul>
+  </div>
+
+  <h2>準備書類チェック（審査をスムーズにする）</h2>
+  <table>
+    <tr><th>書類</th><th>備考</th></tr>
+    <tr><td>本人確認書類</td><td>運転免許証・マイナンバーカード等。法人は登記事項証明書。</td></tr>
+    <tr><td>店舗の営業実態がわかる資料</td><td>店舗外観・内観写真、メニュー、チラシ、Webサイト等。</td></tr>
+    <tr><td>営業許可証（該当業種）</td><td>飲食・夜間接待飲食など、業種により必須。</td></tr>
+    <tr><td>入金口座情報</td><td>屋号名義・法人名義の口座など。</td></tr>
+  </table>
+
+  <h2>よくある落とし穴</h2>
+  <ul>
+    <li><b>売上金の回収を待ってから乗り換えようとする</b> → 回収（債権届出）と決済再開は別。<strong>決済再開は待たずに動く</strong>のが正解。</li>
+    <li><b>料率の「下限」だけで決める</b> → 実際の料率は業種・売上で変わる。見積もりで実額を確認。</li>
+    <li><b>スマホ・iPadが必要と後で気づく</b> → 持っていないならオールインワン型を最初から選ぶ。</li>
+    <li><b>審査書類が揃わず時間切れ</b> → STEP2のうちに書類を先に準備しておく。</li>
+  </ul>
+
+  <div class="magnet">
+    <span class="gift">無料プレゼント</span>
+    <h3>迷ったら、LINEで「あなたの店の進め方」を無料相談</h3>
+    <p>このチェックリストの保存版＋、あなたの業種・状況に合わせた乗り換えの進め方を無料でご案内します。友だち追加して、そのままトークで送るだけ。</p>
+    <a class="line-btn" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'magnet-bottom',page:location.pathname,ref:(window.KNAVI_REF||'')})">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C7 3 3 6.1 3 10c0 2.2 1.3 4.2 3.3 5.5-.1.5-.5 1.9-.6 2.2 0 .1-.2.6.3.4.4-.2 2.3-1.5 3.2-2.1.9.1 1.8.2 2.8.2 5 0 9-3.1 9-7C21 6.1 17 3 12 3z"/></svg>
+      LINEで受け取る（無料）
+    </a>
+  </div>
+
+  <h2>よくある質問</h2>
+  <details><summary>全東信の乗り換えで、まず今日やるべきことは何ですか？</summary><div class="a">決済を止めないことが最優先です。(1)申込当日〜数営業日で使える代替手段（即日つなぎ）を確保、(2)未入金の売上金の金額・期間を記録、(3)現在の契約先・入金サイクルを確認、の順で進めます。売上金の回収（破産債権の手続き）と、これからの決済再開は別の話なので、決済再開は待たずに動けます。</div></details>
+  <details><summary>乗り換えの審査に必要な書類は何ですか？</summary><div class="a">一般的には、本人確認書類、店舗の営業実態が分かる資料（店舗写真・メニュー・営業許可証など）、入金口座情報が必要です。業種によって追加書類を求められることがあります。あらかじめ揃えておくと審査がスムーズです。</div></details>
+  <details><summary>チェックリストはどこで受け取れますか？</summary><div class="a">このページをそのまま印刷・スマホ保存できます。さらにLINE友達追加をしていただくと、保存版に加えて、あなたの店舗の状況に合わせた乗り換えの進め方を無料でご案内します（土日・時間帯を問わず原則24時間以内にご返信）。</div></details>
+
+  <div class="related">
+    <b>あわせて読みたい</b>
+    <ul>
+      <li><a href="zentoshin-norikae.html">全東信の乗り換え先 徹底比較（主要9社を手数料・入金で）</a></li>
+      <li><a href="kessai-erabikata.html">決済端末の選び方｜手数料・入金・端末タイプで失敗しない比較</a></li>
+      <li><a href="zentoshin-nyukin.html">全東信 破産で入金・売上金はどうなる？</a></li>
+      <li><a href="zentoshin.html">全東信の破産 加盟店の対処法｜総合ガイド</a></li>
+      <li><a href="shindan.html">60秒診断で、お店に合う決済を自分で比べる</a></li>
+    </ul>
+  </div>
+
+  <p class="src">※本チェックリストは一般的な進め方をまとめたものです。破産債権・債権届出など個別の手続きは、破産管財人の通知や弁護士等の専門家にご確認ください（2026年7月時点）。</p>
+
+  <footer>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
+    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="index.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
+  </footer>
+</div>
+  <div class="sticky-cta">
+    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで受け取る</a>
+    <a class="sc-sub" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断</a>
+  </div>
+</body>
+</html>
