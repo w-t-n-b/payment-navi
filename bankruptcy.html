@@ -160,10 +160,10 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 .cta.cta-apply{background:var(--score);font-size:16px;padding:14px 26px}
 .cta.cta-apply:hover{background:#d55700}
 .apply-note{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6}
-.line-cta{background:#f4faf6;border:1px solid #cfe8d7;border-radius:8px;padding:11px 14px;margin:18px 0;text-align:center}
-.line-cta h3{margin:0 0 3px;font-size:14px;color:#20303f}
-.line-cta p{font-size:12px;color:#777;margin:0 0 9px}
-.line-btn{display:inline-flex;align-items:center;gap:6px;background:#06C755;color:#fff;font-weight:700;font-size:13px;padding:8px 16px;border-radius:8px;text-decoration:none}
+.line-cta{background:#eafaf1;border:1px solid #b8e6c6;border-top:3px solid #06C755;border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.line-cta h3{margin:0 0 6px;font-size:17px;color:#20303f}
+.line-cta p{font-size:13px;color:#666;margin:0 0 14px}
+.line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
 .line-btn:hover{background:#05b34c;text-decoration:none}
 .line-btn svg{width:22px;height:22px;flex:none}
 .sticky-cta{display:none}
@@ -172,7 +172,6 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
   .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
   .sc-line{background:#06C755}
-  .sticky-cta a.sc-sub{background:#eef2f5;color:#20303f;border:1px solid #cdd6dd;font-weight:700}
 }
 .next-steps{background:#fff7ed;border:1px solid #f6d9b8;border-left:4px solid var(--score);border-radius:8px;padding:16px 18px;margin:24px 0}
 .next-steps h3{margin:0 0 4px;font-size:16px;color:var(--navy)}
@@ -199,7 +198,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   <div class="callout">
     <b>先に要点：</b>決済代行が倒産すると、①立替・早期入金が止まる／②未入金の売上金は「破産債権」の扱いになる／③端末が使えなくなり別の決済代行への切替が必要、という影響が起こり得ます。まず<strong>決済を止めないための代替確保</strong>が最優先です。何から手をつければよいか分からない場合は、<a href="shindan.html">60秒の無料診断</a>で、今の条件に合う乗り換え候補を整理できます。
   </div>
-  <p style="text-align:center;margin:2px 0 20px"><a class="cta" data-hero="1" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断を受ける →</a></p>
+  <p style="text-align:center;margin:2px 0 20px"><a class="cta" data-hero="1" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断 →</a></p>
 
   <h2>決済代行が倒産すると、加盟店に起こること</h2>
   <table>
@@ -307,6 +306,7 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
   </footer>
 </div>
   <div class="sticky-cta">
+    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで相談</a>
     <a class="sc-main" style="background:#1a6bb8" href="shindan.html" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒診断</a>
   </div>
 </body>
