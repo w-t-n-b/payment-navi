@@ -413,6 +413,8 @@ section{scroll-margin-top:60px}
 .save-tbl tr:last-child td{border-bottom:none}
 .save-tbl tr.save-diff td{color:var(--score);font-size:14px}
 .save-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
+.save-hero{background:#fff;border:1px solid var(--score);border-radius:6px;padding:12px 14px;margin:0 0 12px;font-size:16px;font-weight:800;color:var(--navy);text-align:center;line-height:1.5}
+.save-hero .save-n{color:var(--score);font-size:22px}
 .save-banner.consult-pitch{border-top-color:var(--blue)}
 .pitch-benefits{margin:10px 0 0;padding-left:20px;font-size:13px}
 .pitch-benefits li{margin:5px 0}
@@ -484,6 +486,17 @@ tr.hl td{background:var(--blue-soft)}
 .apply-cta p{font-size:13px;color:var(--muted);margin:3px 0 10px}
 .apply-cta .btn-primary{width:100%;justify-content:center}
 .restart{margin-top:16px;display:flex;gap:10px;justify-content:center}
+.result-actions{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.result-actions .btn{font-size:13px}
+.result-actions .ra-print{border-color:var(--blue);color:var(--blue-d)}
+@media print{
+  header.site,.er-banner,.sticky-cta,.hero,#heroSection,.lead-box,#leadBox,.result-actions,.apply-cta,.apply-hero,.diag-box{display:none!important}
+  body{background:#fff}
+  .lock-wrap.lock-locked .lock-body{filter:none!important;opacity:1!important;max-height:none!important;overflow:visible!important}
+  .lock-gate{display:none!important}
+  a{color:#000;text-decoration:none}
+  .result-head .eyebrow::after{content:" — 決済ナビ（kessai-navi.com）で診断";font-weight:400}
+}
 
 /* tease gate（機能的ブラー＝OpenWork同様。装飾ではない） */
 .lock-wrap{position:relative;margin-top:8px}
@@ -664,7 +677,7 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:16px 0 40px;colo
         <div class="hb-content">
           <div class="hb-eyebrow">広告なし・中立｜対面決済を同一基準で比較</div>
           <h1><span class="nb">お店に合う決済を、</span><br><span class="nb"><span class="hl">60秒で診断・年間コスト比較</span></span></h1>
-          <p class="hb-sub2">導入状況・取扱高・重視点に答えるだけ。対面決済を同一基準で採点し、「年間いくらかかるか」まで試算します。登録不要。</p>
+          <p class="hb-sub2">はじめての導入も、<b>今の決済の見直し（乗り換えでいくら下がるか）</b>も。対面決済を同一基準で採点し、「年間いくらかかるか・今より安くなるか」まで試算します。登録不要。</p>
           <div class="hb-cta">
             <button class="cta js-start" type="button">診断をはじめる<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
             <a class="btn btn-ghost" href="index.html">緊急のお問い合わせはこちら</a>
@@ -1705,6 +1718,7 @@ function compareVsCurrentShop(R){
   if(methDiff>0) bullets.push(`対応できる決済手段が <b>${methDiff}種類 増えます</b>`);
   else if(methDiff<0) bullets.push(`対応決済手段は ${-methDiff}種類 減ります`);
   return `<div class="save-banner">
+    ${costDiff<0 ? `<div class="save-hero">見直し結果：今の【${cur.name}】より <span class="save-n num">${yen(-costDiff)}</span> / 年 下げられます</div>` : ''}
     <div class="save-h">現状（${cur.name}）と おすすめ（${rec.name}）の比較</div>
     <div class="tbl-scroll"><table class="cmp-tbl">
       <thead><tr><th></th><th>現状<br><span class="cmp-nm">${cur.name}</span></th><th>おすすめ<br><span class="cmp-nm">${rec.name}</span></th></tr></thead>
@@ -1850,7 +1864,11 @@ function condTableHtml(ch){
 function discHtml(){
   return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
-function restartHtml(){ return `<div class="restart"><button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button></div>`; }
+function restartHtml(){ return `<div class="result-actions">
+    <button class="btn btn-ghost ra-print" onclick="window.print();window.gtag&amp;&amp;gtag('event','result_print',{page:location.pathname})">🖨 印刷 / PDFで保存</button>
+    <button class="btn btn-ghost" id="copyBtn" onclick="copyResult()">📋 結果をコピー</button>
+    <button class="btn btn-ghost" onclick="restart()">${ICON("i-arrow-l")}もう一度診断する</button>
+  </div>`; }
 /* 結果は無料開放。フォームは「任意の無料相談」として結果の下に置く（＝ゲート撤廃・完了率改善） */
 function leadBoxHtml(lead,cta){
   return `<div class="lead-box" id="leadBox"><div class="lock-card" style="max-width:none">
