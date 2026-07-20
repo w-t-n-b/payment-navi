@@ -761,13 +761,13 @@ const SERVICES = [
   },
   {
     id:"airpay", name:"Airペイ（リクルート）",
-    device:0, monthly:0, cardRate:0.0324, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.9,counter:.9,pos:1},
     payout:.6, brands:1, pos:.95, soloOk:true,
     devLabel:"カードリーダー0円貸与（要iPad/iPhone）",
-    pros:["対応92ブランドで交通系ICまで網羅","端末0円＋月額0円＋振込手数料0円","Airレジとシームレスに連携"],
-    cons:["iPad/iPhoneが別途必要","標準クレカ3.24%は高め（2.48%は条件付き審査）"],
+    pros:["中小事業者向けディスカウントプログラムでクレカ2.48%（月額0円のまま・審査あり）","対応92ブランドで交通系ICまで網羅","端末0円＋月額0円＋振込手数料0円／Airレジ連携"],
+    cons:["iPad/iPhoneが別途必要","2.48%はVisa/Master/JCB等のクレカのみ（QR・交通系・iD/QUICPayは3.24%）／ブランド別に審査・年間上限あり"],
     url:"https://airregi.jp/payment/"
   },
   {
@@ -827,13 +827,13 @@ const SERVICES = [
   },
   {
     id:"usen", name:"USEN PAY",
-    device:0, monthly:0, cardRate:0.0299, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0238, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.85,counter:.9,pos:.9}, soloOk:true,
     payout:.65, brands:.85, pos:.85,
     devLabel:"1台完結端末（3か月0円キャンペーン）",
-    pros:["プリンタ・バッテリー内蔵の1台完結","Visa/MC 2.99%＋約70ブランド対応","全国365日サポート・翌日入金あり"],
-    cons:["月額0円は取扱高の条件付き","翌日入金は住信SBIネット銀行が必須"],
+    pros:["中小事業者向け特別料率でクレカ2.38%〜（新規申込・中小・年3,000万円未満）","プリンタ・バッテリー内蔵の1台完結・約70ブランド対応","全国365日サポート・翌日入金あり"],
+    cons:["2.38%は新規申込の中小事業者の条件（年3,000万円未満）","月額0円は取扱高の条件付き／翌日入金は住信SBIネット銀行が必須"],
     url:"https://usen.com/service/payment/u-pay/"
   },
   {
@@ -848,14 +848,14 @@ const SERVICES = [
     url:"https://smaregi.jp/payment/"
   },
   {
-    id:"otegaru", name:"おてがるPay（JMS）",
+    id:"otegaru", name:"JMSおまかせサービス（旧おてがるPay）",
     device:0, monthly:0, cardRate:0.0248, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.4,counter:1,pos:.85}, soloOk:true,
     payout:.6, brands:.9, pos:.8,
     devLabel:"VEGA3000端末（0円キャンペーン）",
-    pros:["71ブランド超・分割/リボ/ボーナス払い対応","端末0円・月2回入金なら手数料0円","全国約23万店の導入実績"],
-    cons:["種別・ブランド別の詳細料率は非公開（要見積り）","最速の月6回入金は1回198円"],
+    pros:["JMS中小企業応援プログラムでクレカ2.48%（中小・個人事業主向け）","71ブランド超・分割/リボ/ボーナス払い対応","端末0円・月2回入金なら手数料0円／全国約23万店の実績"],
+    cons:["2.48%は中小企業応援プログラムの条件（年間取扱高の上限あり）","QR・電子マネー等は3.24%／最速の月6回入金は1回198円"],
     url:"https://www.japanmerchantservices.com/plan/otegaru/"
   },
   {
