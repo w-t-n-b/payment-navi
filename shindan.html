@@ -2132,8 +2132,18 @@ buildRibbon(); buildMarquee();
 const soudanForm=$("soudanForm"); if(soudanForm) soudanForm.onsubmit=submitSoudan;
 QUESTIONS=questionSet();   // 対面のみ公開時は初期からチャネル固定の設問セットに
 buildWizard();
+/* 業種プリフィル: 業種別ランディングから ?start=1&industry=food 等で来たら業種を埋めた状態で開始 */
+function prefillFromURL(){
+  const qs=new URLSearchParams(location.search); let set=false;
+  const ind=qs.get('industry');
+  if(ind && ['food','retail','beauty','health','mobile','other'].includes(ind)){ answers.channel='shop'; answers.industry=ind; set=true; }
+  return set;
+}
 /* 記事のCTA(?start=1)から来たら着地即スタート＝「クリック→再度"始める"」の二度手間を無くし離脱を防ぐ */
-if(/[?&]start=1(&|$)/.test(location.search)){ startQuiz(); }
+if(/[?&]start=1(&|$)/.test(location.search)){
+  startQuiz();                                             // diag_start発火＋リセット
+  if(prefillFromURL()){ QUESTIONS=questionSet(); buildWizard(); }  // 業種等を反映して再描画（残りの設問から続けられる）
+}
 else { restoreState(); }   // 通常/リロード時は結果画面を保存状態から復元
 </script>
 </body>
