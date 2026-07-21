@@ -1016,7 +1016,8 @@ function effRate(s){ if(s.cardRate==null) return s.qrRate; return (s.cap && shop
 const Q_industry = {
   key:"industry", section:"state", title:"どんな業種・商材ですか？", note:"診断の傾向づけに使います", type:"single",
   opts:[
-    {v:"food",ic:"i-food",l:"飲食",s:"居酒屋・カフェ・レストラン"},
+    {v:"food",ic:"i-food",l:"飲食（一般）",s:"居酒屋・カフェ・レストラン"},
+    {v:"nightlife",ic:"i-food",l:"特別飲食（接待・ナイト系）",s:"キャバクラ・スナック・ラウンジ・クラブ 等"},
     {v:"retail",ic:"i-retail",l:"小売・物販",s:"雑貨・アパレル・食品"},
     {v:"beauty",ic:"i-beauty",l:"美容・サロン",s:"美容室・ネイル・エステ"},
     {v:"health",ic:"i-health",l:"医療・治療院",s:"整体・接骨・クリニック"},
@@ -1344,8 +1345,13 @@ const INDUSTRY = {
   mobile: { label:"移動販売・イベント", w:{initial:.5,payout:.3}, axes:["初期費用の安さ","入金速度"],
             reason:"投資は最小・機動力が命。電源/通信の制約でQR併用が強く、売上の即入金も効きます。",
             avoid:"steraやTimes等の据置・月額固定型" },
+  nightlife:{ label:"特別飲食（接待・ナイト系）", w:{fee:-.5,payout:.2}, axes:["審査の通りやすさ","対応業種の幅"],
+            reason:"接待・ナイト系（キャバクラ・スナック・ラウンジ・クラブ等）は高リスク業種として審査が慎重になりやすく、料率より『まず通るか（対応業種の幅）』が最優先。料率は各社とも審査次第の要見積です。",
+            avoid:"高リスク業種を受けにくい標準サービス（まず対応業種の幅が広い先へ複数申込が定石）" },
   other:  { label:"その他",           w:{}, axes:[], reason:"", avoid:null }
 };
+/* 特別飲食（接待・ナイト系）の対応業種の幅＝審査の通りやすさ（0〜1）。アルファは対応業種が広いのが強み。 */
+const NIGHT_OK = {alpha:1.0, otegaru:.6, usen:.55, stera:.4, smaregi:.35, stores:.3, paypay:.3, square:.25, airpay:.25, rakuten:.25, timespay:.3};
 const SERVICE_CATCH = {
   square:"迷ったらこれ。最速で始めて、最速で入金",
   airpay:"ブランド網羅と予約・レジ連携の定番",
@@ -1398,8 +1404,10 @@ function scoreServices(){
     // スマホ/iPadが無い（端末単体希望）なら、別途スマホ・タブレットが必要な機種を減点
     const needsDevice = NEEDS_DEVICE[s.id];
     const deviceMult = (answers.ownDevice==="none" && needsDevice) ? 0.4 : 1;
+    // 特別飲食＝対応業種の幅（審査の通りやすさ）を強く反映。受けにくい標準サービスは下位に。
+    const nightMult = (answers.industry==="nightlife") ? (0.15 + 0.85*(NIGHT_OK[s.id] ?? 0.3)) : 1;
     const base = w.fee*feeS + w.initial*initS + w.payout*payS + w.brands*brandS + w.pos*posS;
-    const total = base * fitMult * deviceMult;
+    const total = base * fitMult * deviceMult * nightMult;
     return {...r, feeS, initS, cover, termFit, total};
   });
   const maxTotal = Math.max(...scored.map(x=>x.total));
@@ -1528,8 +1536,8 @@ function payoutTxt(p){
   if(p>=.55) return "月2回程度";
   return "月3〜6回";
 }
-function rateText(s){ const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? `カード ${(r*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
-function rateShort(s){ const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? (r*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
+function rateText(s){ if(answers.industry==='nightlife') return 'カード 要見積（審査次第）'; const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? `カード ${(r*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
+function rateShort(s){ if(answers.industry==='nightlife') return '要見積'; const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? (r*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
 
 /* 「なぜこの順位か」— ユーザー条件が効いた点を文章化（中立性の証明） */
 function whyBullets(x, R){
@@ -1705,6 +1713,7 @@ function compareTeaserShop(R){
 }
 /* 現状 vs おすすめ の比較（詳細・ゲート内）。コスト・入金・対応手段のトレードオフを横並びで提示。 */
 function compareVsCurrentShop(R){
+  if(answers.industry==="nightlife") return "";   // 特別飲食は料率が要見積のため節約比較は出さない
   const st=answers.status;
   if(st!=="exist_hokatsu" && st!=="exist_unknown") return "";   // 新規/直契約はここでは出さない
   const cur = SERVICES.find(s=>s.id===answers.curService);
@@ -1931,7 +1940,8 @@ function showResult(){
     ? {title:"あなたに合う契約を、専門家が無料でご提案します", sub:`診断結果をふまえ、最適な契約・乗り換えを無料でご案内します。まずはお気軽にご相談ください。`}
     : {title:"この結果について、無料で相談する（任意）", sub:`「うちの場合どれがいい？」「今より安くなる？」など、診断結果をもとに専門スタッフが無料でご案内します。ご自身で申し込みたい方は上のボタンからそのまま進めます。`};
   const ctaLabel=anyConsult?"無料で相談する":"無料で相談する";
-  rc.innerHTML = head + teasers +
+  const nightNote = answers.industry==='nightlife' ? `<div class="save-banner" style="border-top-color:var(--score)"><div class="save-h">特別飲食（接待・ナイト系）の診断について</div><p style="font-size:13px;margin:0;line-height:1.8">この業態は、料率より<b>「審査に通るか（対応業種の幅）」が最優先</b>です。各社とも料率は<b>審査次第の要見積</b>（一般飲食より高めが一般的）で、年間コストは一般料率での参考値です。下記は<b>対応業種の幅・通りやすさ</b>で並べています。まず決済を通すため、<b>複数社に申し込んで通った所から使う</b>のが定石です。</p></div>` : '';
+  rc.innerHTML = head + nightNote + teasers +
     `<div class="lock-wrap" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div></div>` +
     leadBoxHtml(lead,ctaLabel);
   const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
@@ -2136,7 +2146,7 @@ buildWizard();
 function prefillFromURL(){
   const qs=new URLSearchParams(location.search); let set=false;
   const ind=qs.get('industry');
-  if(ind && ['food','retail','beauty','health','mobile','other'].includes(ind)){ answers.channel='shop'; answers.industry=ind; set=true; }
+  if(ind && ['food','nightlife','retail','beauty','health','mobile','other'].includes(ind)){ answers.channel='shop'; answers.industry=ind; set=true; }
   return set;
 }
 /* 記事のCTA(?start=1)から来たら着地即スタート＝「クリック→再度"始める"」の二度手間を無くし離脱を防ぐ */
