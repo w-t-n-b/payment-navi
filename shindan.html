@@ -1903,7 +1903,7 @@ function renderMall(rc){
 }
 function showResult(){
   const ch=answers.channel;
-  if(window.gtag)gtag('event','diag_complete',{ref:(window.KNAVI_REF||'')});  // 全問回答＝結果到達（ゲート離脱と設問離脱の分離用）
+  // diag_complete は logDiagnosis() 内で内訳パラメータ付き・1セッション1回で発火（結果到達＝ゲート/設問離脱の分離用）
   $("heroSection").classList.add("hidden");   // 結果画面ではヒーロー（診断CTA・しくみ）を隠す
   $("quizCard").classList.add("hidden");
   $("shindan").classList.add("hidden");
@@ -1942,9 +1942,23 @@ function showResult(){
 /* 診断完了ログ（匿名・連絡先なし）をLEAD_ENDPOINTへ送信。1セッション1回。種別で相談リードと区別。
    フォーム送信しなかった人も含め「何を診断したか（業種/取扱高/現状/推奨1位）」を把握する。 */
 function logDiagnosis(){
-  if(!LEAD_ENDPOINT || !LAST) return;
+  if(!LAST) return;
   try{ if(sessionStorage.getItem('kessai_diaglog')) return; sessionStorage.setItem('kessai_diaglog','1'); }catch(e){}
   const b=(LAST.blocks||[]);
+  const shopTop=b.find(x=>x.kind==='shop'), ecTop=b.find(x=>x.kind==='ec');
+  /* GA4: 診断完了の内訳（英字キー・値はid等。GA4のカスタムディメンションで集計可能） */
+  if(window.gtag) gtag('event','diag_complete',{
+    ref:(window.KNAVI_REF||''),
+    channel: LAST.ch||'',
+    industry: answers.industry||'',
+    volume: shopVol()||0,
+    status: answers.status||'',
+    own_device: answers.ownDevice||'',
+    cur_service: answers.curService||'',
+    top_service: (shopTop&&shopTop.top)?shopTop.top.s.id:(shopTop&&shopTop.consulting?'consult':''),
+    top_service_ec: (ecTop&&ecTop.top)?ecTop.top.s.id:''
+  });
+  if(!LEAD_ENDPOINT) return;
   const payload={
     タイムスタンプ:new Date().toISOString(), 種別:"診断ログ(未送信)",
     チャネル: LAST.ch==='shop'?'店舗':LAST.ch==='ec'?'EC':'両方',
