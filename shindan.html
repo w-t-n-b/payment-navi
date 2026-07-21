@@ -763,7 +763,7 @@ const DATA_UPDATED = "2026年7月時点・参考値";
 const SERVICES = [
   {
     id:"square", name:"Square（スクエア）",
-    device:4980, monthly:0, cardRate:0.025, qrRate:0.0325,
+    device:4980, monthly:0, cardRate:0.025, qrRate:0.0325, cap:3000, stdRate:0.0325,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:1,counter:.9,pos:.9},
     payout:.9, brands:.9, pos:.95, soloOk:true,
@@ -774,7 +774,7 @@ const SERVICES = [
   },
   {
     id:"airpay", name:"Airペイ（リクルート）",
-    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324, cap:3000, stdRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.9,counter:.9,pos:1},
     payout:.6, brands:1, pos:.95, soloOk:true,
@@ -840,7 +840,7 @@ const SERVICES = [
   },
   {
     id:"usen", name:"USEN PAY",
-    device:0, monthly:0, cardRate:0.0238, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0238, qrRate:0.0324, cap:3000, stdRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.85,counter:.9,pos:.9}, soloOk:true,
     payout:.65, brands:.85, pos:.85,
@@ -851,18 +851,18 @@ const SERVICES = [
   },
   {
     id:"smaregi", name:"スマレジ・PAYGATE",
-    device:0, monthly:3300, cardRate:0.0198, qrRate:0.02,
+    device:0, monthly:3300, cardRate:0.0198, qrRate:0.02, cap:2500, stdRate:0.033,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.9,counter:.9,pos:1}, soloOk:true,
     payout:.7, brands:.9, pos:1,
     devLabel:"PAYGATE端末（0円CP／通常¥39,600）",
     pros:["スマレジPOSとネイティブ連携（会計を自動連携・二度打ち不要）","クレカ1.98%〜と低率","プリンタ・SIM内蔵で1台完結・屋外可"],
-    cons:["standalone構成は月3,300円","QRは入金が月1回","1.98%は中小事業者の条件付き"],
+    cons:["standalone構成は月3,300円","QRは入金が月1回","1.98%は中小事業者・対象業種・年2,500万円未満の条件（超過・対象外は標準料率）"],
     url:"https://smaregi.jp/payment/"
   },
   {
     id:"otegaru", name:"JMSおまかせサービス（旧おてがるPay）",
-    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324,
+    device:0, monthly:0, cardRate:0.0248, qrRate:0.0324, cap:3000, stdRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.4,counter:1,pos:.85}, soloOk:true,
     payout:.6, brands:.9, pos:.8,
@@ -996,14 +996,21 @@ const EC_SERVICES = [
 ];
 
 /* ===================== 診断質問（v2：状態/条件の2セクション＋ECトラック） ===================== */
+/* 取扱高の帯。2,500万/3,000万の境界は中小割引料率の適用上限（スマレジ1.98%=2,500万未満、Square/Airペイ/USEN 等の2.4%台=3,000万未満）に対応 */
 const VOL_OPTS=[
   {v:500,ic:"i-yen",l:"〜1,000万円",s:"年間の目安 約500万円で試算"},
-  {v:3000,ic:"i-yen",l:"1,000万〜5,000万円",s:"約3,000万円で試算"},
+  {v:1800,ic:"i-yen",l:"1,000万〜2,500万円",s:"約1,800万円で試算"},
+  {v:2800,ic:"i-yen",l:"2,500万〜3,000万円",s:"約2,800万円で試算"},
+  {v:4000,ic:"i-yen",l:"3,000万〜5,000万円",s:"約4,000万円で試算"},
   {v:7500,ic:"i-yen",l:"5,000万〜1億円",s:"約7,500万円で試算"},
   {v:15000,ic:"i-yen",l:"1億〜2億円",s:"約1.5億円で試算"},
   {v:35000,ic:"i-yen",l:"2億〜5億円",s:"約3.5億円で試算"},
   {v:70000,ic:"i-yen",l:"5億円以上",s:"約7億円で試算"}
 ];
+/* 取扱高→手数料重視度の係数（帯が増えても壊れないよう関数化） */
+function volFactor(v){ return v<=500?0 : v<=1800?.2 : v<=2800?.3 : v<=4000?.45 : v<=7500?.6 : v<=15000?.9 : v<=35000?1.2 : 1.6; }
+/* 取扱高に応じた実効カード料率：中小割引には取扱高の上限(cap万円)があり、超える場合は標準料率(stdRate)で試算 */
+function effRate(s){ if(s.cardRate==null) return s.qrRate; return (s.cap && shopVol()>s.cap && s.stdRate!=null) ? s.stdRate : s.cardRate; }
 
 /* 共通（現状） */
 const Q_industry = {
@@ -1360,7 +1367,7 @@ const NEEDS_DEVICE = { square:true, airpay:true, stores:true };
 function scoreServices(){
   const volume = shopVol(), methods = answers.methods||[], term = answers.terminal;
   const pris = answers.priorities||[], needPos = answers.pos==="yes";
-  const volFeeFactor = {500:0, 3000:.3, 7500:.5, 15000:.8, 35000:1.2, 70000:1.6}[volume] || 0;
+  const volFeeFactor = volFactor(volume);
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, pos:needPos?1.2:.5 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
   /* 層1: 業種→観点の初期重み（±0.6以内・本人重視点+1.5より小さく＝業種はヒント） */
@@ -1368,7 +1375,7 @@ function scoreServices(){
   if(ind) Object.entries(ind.w).forEach(([k,v])=>{ if(w[k]!==undefined) w[k]+=v; });
 
   const raw = SERVICES.map(s=>{
-    const rate = s.cardRate!=null ? s.cardRate : s.qrRate;
+    const rate = effRate(s);
     const annualFee = volume*10000*rate;   // volume は万円/年（年間取扱高）
     const annualCost = s.device + s.monthly*12 + annualFee;
     return {s, rate, annualFee, annualCost};
@@ -1441,7 +1448,7 @@ function scoreEC(){
   /* 事前決済（美容の前払い・回数券）を「定期課金/前払い」ニーズの実信号として使う。
      旧: answers.sub（設定する設問が無く常に false＝死にコード）を prepay に置換。 */
   const pris=answers.priorities||[], needSub = answers.prepay==="yes";
-  const volFeeFactor = {500:0,3000:.3,7500:.5,15000:.8,35000:1.2,70000:1.6}[volume]||0;
+  const volFeeFactor = volFactor(volume);
   const w = { fee:1+volFeeFactor, initial:1, payout:.8, brands:.8, ease:.6, sub: needSub?1.2:0 };
   pris.forEach(p=>{ if(w[p]!==undefined) w[p]+=1.5; });
   const usable = EC_SERVICES.filter(s=>{
@@ -1521,8 +1528,8 @@ function payoutTxt(p){
   if(p>=.55) return "月2回程度";
   return "月3〜6回";
 }
-function rateText(s){ const suf=s.id==='alpha'?'〜':''; return s.cardRate!=null ? `カード ${(s.cardRate*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
-function rateShort(s){ const suf=s.id==='alpha'?'〜':''; return s.cardRate!=null ? (s.cardRate*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
+function rateText(s){ const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? `カード ${(r*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
+function rateShort(s){ const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? (r*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
 
 /* 「なぜこの順位か」— ユーザー条件が効いた点を文章化（中立性の証明） */
 function whyBullets(x, R){
@@ -1703,7 +1710,7 @@ function compareVsCurrentShop(R){
   const cur = SERVICES.find(s=>s.id===answers.curService);
   if(!cur) return "";                                            // その他/不明 → 比較なし
   const top=R.scored[0], rec=top.s, volYen=R.volume*10000;
-  const curFee=volYen*(cur.cardRate ?? cur.qrRate), recFee=top.annualFee;
+  const curFee=volYen*effRate(cur), recFee=top.annualFee;
   const curCost=cur.monthly*12+curFee;              // 既存＝端末は保有済み（sunk）
   const recCost=rec.device+rec.monthly*12+recFee;   // 乗換＝新端末代を初年度計上
   if(cur.id===rec.id) return "";   // 現状=1位。teaser側で「最適」を伝えるので詳細比較は出さない
@@ -1862,7 +1869,7 @@ function condTableHtml(ch){
   return `<table class="cond-table">${grp("お店の現状",state)}${grp("ご希望",wish)}</table>`;
 }
 function discHtml(){
-  return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
+  return `<div class="disc"><b>診断の考え方：</b> 順位はあなたの入力条件のみで機械的に算出しています。<b>業種は観点の重み調整（±0.6以内）にのみ使用</b>し、特定サービスを直接ひいきしません（業種はヒント、主役はあなたが選んだ重視点です）。<b>年間コスト目安</b>は年間取扱高を基にした試算です（ECで料率非公開の事業者は「要見積」と表示）。<br><br>中小事業者向けの割引料率（例：2.4%台や1.98%）は<b>年間取扱高の上限（2,500万円／3,000万円 等）や対象業種の条件</b>があり、超える場合は標準料率で試算しています。料率・費用・キャンペーンは変動します（掲載データ：${DATA_UPDATED}）。実際の手数料は決済ブランド・契約プランで異なります。契約前に必ず各社公式でご確認ください。</div>`;
 }
 function restartHtml(){ return `<div class="result-actions">
     <button class="btn btn-ghost ra-print" onclick="window.print();window.gtag&amp;&amp;gtag('event','result_print',{page:location.pathname})">🖨 印刷 / PDFで保存</button>
@@ -1928,7 +1935,30 @@ function showResult(){
     `<div class="lock-wrap" id="lockWrap"><div class="lock-body" id="lockBody">${details}${discHtml()}${restartHtml()}</div></div>` +
     leadBoxHtml(lead,ctaLabel);
   const lf=$("leadForm"); if(lf) lf.onsubmit=submitLead;
+  logDiagnosis();   // 診断完了ログ（連絡先なし・匿名）をスプシへ記録（フォーム未送信でも傾向を把握）
   $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* 診断完了ログ（匿名・連絡先なし）をLEAD_ENDPOINTへ送信。1セッション1回。種別で相談リードと区別。
+   フォーム送信しなかった人も含め「何を診断したか（業種/取扱高/現状/推奨1位）」を把握する。 */
+function logDiagnosis(){
+  if(!LEAD_ENDPOINT || !LAST) return;
+  try{ if(sessionStorage.getItem('kessai_diaglog')) return; sessionStorage.setItem('kessai_diaglog','1'); }catch(e){}
+  const b=(LAST.blocks||[]);
+  const payload={
+    タイムスタンプ:new Date().toISOString(), 種別:"診断ログ(未送信)",
+    チャネル: LAST.ch==='shop'?'店舗':LAST.ch==='ec'?'EC':'両方',
+    業種:(Q_industry.opts.find(o=>o.v===answers.industry)||{}).l||"",
+    年間取扱高: answers.channel==="both" ? `店舗${scaleYen(answers.volumeShop)}/EC${scaleYen(answers.volumeEc)}` : scaleYen(answers.volume),
+    導入状況:[answers.status?('店舗:'+(STATUS_LABEL[answers.status]||'')):'', answers.ectrack?('EC:'+(ECTRACK_LABEL[answers.ectrack]||'')):''].filter(Boolean).join(' / '),
+    iPad有無: answers.ownDevice==='none'?'なし（端末単体希望）':answers.ownDevice==='have'?'あり':'',
+    現在の料率: answers.status==='exist_kobetsu'&&answers.curRate!==undefined ? (answers.curRate>0?(answers.curRate*100).toFixed(2)+'%':'不明') : '',
+    利用中サービス: answers.curService ? ((SERVICES.find(s=>s.id===answers.curService)||{}).name||(answers.curService==='other'?'その他・不明':'')) : '',
+    第1位: b.map(x=>`${x.kind==='shop'?'店舗':'EC'}=${x.consulting?'引き下げ相談':(x.top?x.top.s.name+'('+x.top.pct+'%)':'')}`).join(' / '),
+    提携元:(window.KNAVI_REF||''), 参照元:location.href
+  };
+  try{Object.assign(payload, window.KNAVI_META&&window.KNAVI_META());}catch(e){}
+  try{ fetch(LEAD_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)}); }catch(e){}
 }
 
 /* 連絡先送信 → 解除（GASへPOST、未設定なら送信スキップして解除） */
