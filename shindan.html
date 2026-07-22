@@ -873,13 +873,13 @@ const SERVICES = [
   },
   {
     id:"timespay", name:"Times PAY（パーク24）",
-    device:0, monthly:2500, cardRate:0.0248, qrRate:0.0324,
+    device:0, monthly:2500, cardRate:0.028, qrRate:0.0324,
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.6,counter:1,pos:.8}, soloOk:true,
     payout:.6, brands:.85, pos:.7,
-    devLabel:"オールインワン端末（導入0円）",
-    pros:["通信費・振込手数料までTimes PAY負担で0円","パーク24の全国サポート・分割/リボ対応","中小支援プランでクレカ2.48%"],
-    cons:["月額2,500円固定（低売上店に割高）","最安2.48%は中小支援プランの条件付き（通常2.8%〜）"],
+    devLabel:"オールインワン端末（導入0円キャンペーン／通常¥38,000）",
+    pros:["通信費・振込手数料までTimes PAY負担で0円","パーク24の全国サポート・分割/リボ対応","1台完結のオールインワン端末"],
+    cons:["月額2,500円固定（低売上店に割高）","2.48%は初めてカード決済を導入する中小事業者向け『中小支援プラン』限定（乗り換えは通常2.8%〜・要問い合わせ）"],
     url:"https://timespay.jp/"
   }
 ];
