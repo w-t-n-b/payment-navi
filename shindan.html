@@ -796,7 +796,7 @@ const SERVICES = [
   },
   {
     id:"stores", name:"STORES決済",
-    device:27720, monthly:0, cardRate:0.0248, qrRate:0.0324,
+    device:27720, monthly:0, cardRate:0.0248, qrRate:0.0324, plans:[{name:"フリー",rate:0.0248,monthly:0},{name:"スタンダード",rate:0.0198,monthly:3300}],
     methods:{credit:1,touch:1,qr:1,transit:1,emoney:1},
     terminal:{mobile:.95,counter:.85,pos:.8},
     payout:.7, brands:.85, pos:.85, soloOk:true,
@@ -1011,6 +1011,10 @@ const VOL_OPTS=[
 function volFactor(v){ return v<=500?0 : v<=1800?.2 : v<=2800?.3 : v<=4000?.45 : v<=7500?.6 : v<=15000?.9 : v<=35000?1.2 : 1.6; }
 /* 取扱高に応じた実効カード料率：中小割引には取扱高の上限(cap万円)があり、超える場合は標準料率(stdRate)で試算 */
 function effRate(s){ if(s.cardRate==null) return s.qrRate; return (s.cap && shopVol()>s.cap && s.stdRate!=null) ? s.stdRate : s.cardRate; }
+/* プラン制サービスの実効最安：取扱高で全プランの年間総額を比べ最安を採用（EC側 ecEff の店舗版） */
+function storeEff(s){ const volYen=shopVol()*10000;
+  if(s.plans && s.plans.length){ let best=null; for(const p of s.plans){ const cost=(s.device||0)+(p.monthly||0)*12+volYen*p.rate; if(best===null||cost<best.cost) best={rate:p.rate,monthly:(p.monthly||0),planName:p.name,cost}; } return {rate:best.rate,monthly:best.monthly,planName:best.name}; }
+  return {rate:effRate(s), monthly:(s.monthly||0), planName:null}; }
 
 /* 共通（現状） */
 const Q_industry = {
@@ -1381,20 +1385,21 @@ function scoreServices(){
   if(ind) Object.entries(ind.w).forEach(([k,v])=>{ if(w[k]!==undefined) w[k]+=v; });
 
   const raw = SERVICES.map(s=>{
-    const rate = effRate(s);
+    const eff = storeEff(s);
+    const rate = eff.rate, monthly = eff.monthly;
     const annualFee = volume*10000*rate;   // volume は万円/年（年間取扱高）
-    const annualCost = s.device + s.monthly*12 + annualFee;
-    return {s, rate, annualFee, annualCost};
+    const annualCost = s.device + monthly*12 + annualFee;
+    return {s, rate, monthly, planName:eff.planName, annualFee, annualCost};
   });
   const min=(f)=>Math.min(...raw.map(f)), max=(f)=>Math.max(...raw.map(f));
   const invnorm=(x,lo,hi)=> hi===lo?1:1-(x-lo)/(hi-lo);
   const feeLo=min(r=>r.rate), feeHi=max(r=>r.rate);
-  const initLo=min(r=>r.s.device+r.s.monthly*12), initHi=max(r=>r.s.device+r.s.monthly*12);
+  const initLo=min(r=>r.s.device+r.monthly*12), initHi=max(r=>r.s.device+r.monthly*12);
 
   const scored = raw.map(r=>{
     const s=r.s;
     const feeS = invnorm(r.rate, feeLo, feeHi);
-    const initS= invnorm(s.device+s.monthly*12, initLo, initHi);
+    const initS= invnorm(s.device+r.monthly*12, initLo, initHi);
     const payS=s.payout, brandS=s.brands, posS=s.pos;
     const termFit = s.terminal[term] ?? .5;
     let cover = 1;
@@ -1536,8 +1541,8 @@ function payoutTxt(p){
   if(p>=.55) return "月2回程度";
   return "月3〜6回";
 }
-function rateText(s){ if(answers.industry==='nightlife') return 'カード 要見積（審査次第）'; const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? `カード ${(r*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
-function rateShort(s){ if(answers.industry==='nightlife') return '要見積'; const suf=s.id==='alpha'?'〜':''; const r=effRate(s); return s.cardRate!=null ? (r*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
+function rateText(s){ if(answers.industry==='nightlife') return 'カード 要見積（審査次第）'; const suf=s.id==='alpha'?'〜':''; const r=storeEff(s).rate; return s.cardRate!=null ? `カード ${(r*100).toFixed(2)}%${suf}` : `QR ${(s.qrRate*100).toFixed(2)}%`; }
+function rateShort(s){ if(answers.industry==='nightlife') return '要見積'; const suf=s.id==='alpha'?'〜':''; const r=storeEff(s).rate; return s.cardRate!=null ? (r*100).toFixed(2)+"%"+suf : (s.qrRate*100).toFixed(2)+"%(QR)"; }
 
 /* 「なぜこの順位か」— ユーザー条件が効いた点を文章化（中立性の証明） */
 function whyBullets(x, R){
@@ -1546,7 +1551,7 @@ function whyBullets(x, R){
   if(R.pris.includes("fee")||R.volFeeFactor>0){
     out.push(`重視した<b>手数料</b>で有利（料率 ${rateText(s)}）`);
   }
-  if(R.pris.includes("initial")) out.push(`重視した<b>初期費用</b>が抑えめ（端末${yen(s.device)}／月額${s.monthly>0?yen(s.monthly):"0円"}）`);
+  if(R.pris.includes("initial")) out.push(`重視した<b>初期費用</b>が抑えめ（端末${yen(s.device)}／月額${x.monthly>0?yen(x.monthly):"0円"}）`);
   if(R.pris.includes("payout")) out.push(`重視した<b>入金速度</b>が速い（${payoutTxt(s.payout)}）`);
   if(R.pris.includes("brands")) out.push(`重視した<b>対応ブランド</b>が広い`);
   if(R.needPos) out.push(`<b>レジ連携</b>の要望に対応`);
@@ -1567,7 +1572,7 @@ function costChartSVG(R){
   rows.forEach((x,i)=>{
     const s=x.s, y=top+i*rowH;
     const barY=y+16, h=13;
-    const dev=s.device, mon=s.monthly*12, fee=x.annualFee;
+    const dev=s.device, mon=x.monthly*12, fee=x.annualFee;
     const wDev=dev/maxCost*barMax, wMon=mon/maxCost*barMax, wFee=fee/maxCost*barMax;
     const isTop=i===0;
     bars+=`<text class="cname${isTop?' top':''}" x="${padL}" y="${y+11}">${escapeXml(s.name)}</text>`;
@@ -1778,7 +1783,7 @@ function buildShopBlock(){
       ${catchLine}
       <div class="pick-cost"><table class="cost-table">
         <tr><td>端末代</td><td class="num">${yen(s0.device)}</td></tr>
-        <tr><td>月額（12ヶ月分）</td><td class="num">${yen(s0.monthly*12)}</td></tr>
+        <tr><td>月額（12ヶ月分）${top.planName?`（${top.planName}）`:""}</td><td class="num">${yen(top.monthly*12)}</td></tr>
         <tr><td>決済手数料（取扱高 ${scaleYen(R.volume)} × ${(top.rate*100).toFixed(2)}%）</td><td class="num">${yen(top.annualFee)}</td></tr>
         <tr class="total"><td>年間コスト合計</td><td class="num">${yen(top.annualCost)}</td></tr>
       </table></div>
@@ -1790,11 +1795,11 @@ function buildShopBlock(){
     ${isCurTop?"":applyBtnHero(s0.url,s0.name,s0.id)}
     ${compareVsCurrentShop(R)}
     ${indNote}
-    <div class="facts"><span>${s0.monthly>0?`月額 ${yen(s0.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
+    <div class="facts"><span>${top.monthly>0?`月額 ${yen(top.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     ${runnersShopHtml(R)}
     <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
-    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${s.monthly>0?yen(s.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
+    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${x.planName?` <span class="cur-tag">${x.planName}</span>`:''}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${x.monthly>0?yen(x.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'shop', R, rt, top, teaser, detail};
 }
 
