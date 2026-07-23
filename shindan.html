@@ -1534,6 +1534,22 @@ function decideRoute(status, volume, isEC){
     : {route:"aggregator", title:"お使いのサービスと各社を比較しました",
        desc:"手数料だけでなく、入金スピードや対応できる決済手段まで含めて比較しています。乗り換えると何がどう変わるかをご確認ください。"};
 }
+/* 入金サイクルの構造化：各社の実際の締め/回数/条件/振込手数料（2026年7月時点・目安）。数値スコア payout は採点用に残し、表示はこの実データを使う */
+const PAY = {
+  square:{t:"翌営業日〜週1回", n:"三井住友・みずほ銀行は翌営業日、その他の銀行は週1回（振込手数料0円）"},
+  airpay:{t:"月3〜6回", n:"自動入金。振込回数の多いコースあり（振込手数料0円）"},
+  alpha:{t:"月2回（半月締め）", n:"クレジット・QRは半月ごと（月2回）。電子マネーは種別により月1回"},
+  stores:{t:"月1回（翌月20日）", n:"自動入金は月1回（翌月20日）。手動入金は都度可（手数料あり）"},
+  stera:{t:"月2回〜", n:"三井住友銀行を振込先にすると最短翌々営業日"},
+  rakuten:{t:"翌日〜（楽天銀行）", n:"楽天銀行は最短翌日入金。その他の銀行は入金ごとに330円"},
+  paypay:{t:"翌日〜／月1回", n:"PayPay銀行は最短翌日。その他の銀行は月1回・振込手数料あり"},
+  usen:{t:"翌日〜（住信SBI）", n:"住信SBIネット銀行なら翌日入金。その他は月2回程度"},
+  smaregi:{t:"月2回〜", n:"クレジットは月2回。QRコード決済は月1回"},
+  otegaru:{t:"月2〜6回", n:"月2回入金なら振込手数料0円。最速の月6回は1回198円"},
+  timespay:{t:"月2回〜", n:"振込手数料はTimes PAY負担で0円"}
+};
+function payTxt(s){ return (PAY[s.id]&&PAY[s.id].t) || payoutTxt(s.payout); }
+function payNote(s){ return (PAY[s.id]&&PAY[s.id].n) || ""; }
 function payoutTxt(p){
   if(p>=.9) return "最短翌営業日";
   if(p>=.8) return "翌日〜";
@@ -1552,7 +1568,7 @@ function whyBullets(x, R){
     out.push(`重視した<b>手数料</b>で有利（料率 ${rateText(s)}）`);
   }
   if(R.pris.includes("initial")) out.push(`重視した<b>初期費用</b>が抑えめ（端末${yen(s.device)}／月額${x.monthly>0?yen(x.monthly):"0円"}）`);
-  if(R.pris.includes("payout")) out.push(`重視した<b>入金速度</b>が速い（${payoutTxt(s.payout)}）`);
+  if(R.pris.includes("payout")) out.push(`重視した<b>入金速度</b>が速い（${payTxt(s)}）`);
   if(R.pris.includes("brands")) out.push(`重視した<b>対応ブランド</b>が広い`);
   if(R.needPos) out.push(`<b>レジ連携</b>の要望に対応`);
   if(answers.ownDevice==="none" && !NEEDS_DEVICE[s.id]) out.push(`<b>スマホ・iPad不要</b>で端末だけで決済が完結`);
@@ -1603,7 +1619,7 @@ function applyBtnHero(url,name,id){
 }
 /* 2位以降のランキング＋各社への申込リンク（ゲート前に表示） */
 function runnersShopHtml(R){
-  return `<div class="rank-head">2位以降のおすすめ（各社の申込先へ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payoutTxt(s.payout)}・適合${x.pct}%</div></div>${isCur?'':`<a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">申込${ICON("i-ext")}</a>`}</div>`;}).join("")}</div>`;
+  return `<div class="rank-head">2位以降のおすすめ（各社の申込先へ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${isCur?' <span class="cur-tag">利用中</span>':''}</div><div class="rc">年間 <b class="num">${yen(x.annualCost)}</b>・${rateText(s)}・入金${payTxt(s)}・適合${x.pct}%</div></div>${isCur?'':`<a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">申込${ICON("i-ext")}</a>`}</div>`;}).join("")}</div>`;
 }
 function runnersEcHtml(R){
   return `<div class="rank-head">2位以降のおすすめ（各社の申込先へ）</div><div class="runners">${R.scored.slice(1).map((x,i)=>{const s=x.s;return `<div class="runner"><div class="rk">${i+2}</div><div class="rmain"><div class="rn">${s.name}${x.eff.planName?` <span class="cur-tag">${x.eff.planName}</span>`:''}</div><div class="rc">${x.annualCost!=null?`年間 <b class="num">${yen(x.annualCost)}</b>`:"年間 <b>要見積</b>"}・${rateTextEC(x)}・適合${x.pct}%</div></div><a class="btn sm runner-cta" href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">申込${ICON("i-ext")}</a></div>`;}).join("")}</div>`;
@@ -1734,8 +1750,8 @@ function compareVsCurrentShop(R){
   if(costDiff<0) bullets.push(`年間コストが <b>${yen(-costDiff)} 安く</b>なります`);
   else if(costDiff>0) bullets.push(`年間コストは <b>${yen(costDiff)} 高く</b>なります（初年度・端末代込み）`);
   else bullets.push(`年間コストはほぼ同額です`);
-  if(rec.payout>cur.payout) bullets.push(`入金が <b>速く</b>なります（${payoutTxt(cur.payout)} → ${payoutTxt(rec.payout)}）`);
-  else if(rec.payout<cur.payout) bullets.push(`入金はやや遅くなります（${payoutTxt(cur.payout)} → ${payoutTxt(rec.payout)}）`);
+  if(rec.payout>cur.payout) bullets.push(`入金が <b>速く</b>なります（${payTxt(cur)} → ${payTxt(rec)}）`);
+  else if(rec.payout<cur.payout) bullets.push(`入金はやや遅くなります（${payTxt(cur)} → ${payTxt(rec)}）`);
   if(methDiff>0) bullets.push(`対応できる決済手段が <b>${methDiff}種類 増えます</b>`);
   else if(methDiff<0) bullets.push(`対応決済手段は ${-methDiff}種類 減ります`);
   return `<div class="save-banner">
@@ -1746,7 +1762,7 @@ function compareVsCurrentShop(R){
       <tbody>
         <tr><td>カード料率</td><td class="num">${rateShort(cur)}</td><td class="num">${rateShort(rec)}</td></tr>
         <tr><td>年間コスト${(cur.device||rec.device)?"※":""}</td><td class="num">${yen(curCost)}</td><td class="num">${yen(recCost)}</td></tr>
-        <tr><td>入金スピード</td><td>${payoutTxt(cur.payout)}</td><td>${payoutTxt(rec.payout)}</td></tr>
+        <tr><td>入金スピード</td><td>${payTxt(cur)}</td><td>${payTxt(rec)}</td></tr>
         <tr><td>対応決済手段</td><td class="num">${methodCount(cur)}種類</td><td class="num">${methodCount(rec)}種類</td></tr>
       </tbody>
     </table></div>
@@ -1795,11 +1811,11 @@ function buildShopBlock(){
     ${isCurTop?"":applyBtnHero(s0.url,s0.name,s0.id)}
     ${compareVsCurrentShop(R)}
     ${indNote}
-    <div class="facts"><span>${top.monthly>0?`月額 ${yen(top.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payoutTxt(s0.payout)}</span></div>
+    <div class="facts"><span>${top.monthly>0?`月額 ${yen(top.monthly)}`:"月額 0円"}</span><span>${rateText(s0)}</span><span>入金 ${payTxt(s0)}</span></div>${payNote(s0)?`<p class="note" style="margin-top:8px">入金の詳細：${payNote(s0)}</p>`:""}
     <div class="pc-grid"><div class="pc pro"><div class="h">◎ 強み</div><ul>${s0.pros.map(p=>`<li>${p}</li>`).join("")}</ul></div><div class="pc con"><div class="h">△ 注意</div><ul>${consFor(s0,R).map(c=>`<li>${c}</li>`).join("")}</ul></div></div>
     ${runnersShopHtml(R)}
     <div class="chart-card card"><h3>年間コスト比較（年間取扱高 ${scaleYen(R.volume)}の場合）</h3><div class="chart-legend"><span><i class="lg-dev"></i>端末費用</span><span><i class="lg-mon"></i>月額×12</span><span><i class="lg-fee"></i>決済手数料</span></div>${costChartSVG(R)}</div>
-    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${x.planName?` <span class="cur-tag">${x.planName}</span>`:''}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${x.monthly>0?yen(x.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payoutTxt(s.payout)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
+    <div class="compare card"><h3>店舗端末 全${R.scored.length}社 比較表</h3><div class="tbl-scroll"><table><thead><tr><th>サービス</th><th>端末</th><th>月額</th><th>料率</th><th>年間コスト</th><th>入金</th><th>適合</th><th>申込</th></tr></thead><tbody>${R.scored.map((x,i)=>{const s=x.s;const isCur=s.id===answers.curService;return `<tr class="${i===0?'hl':''}"><td class="name">${s.name}${x.planName?` <span class="cur-tag">${x.planName}</span>`:''}${isCur?' <span class="cur-tag">利用中</span>':''}</td><td class="num">${yen(s.device)}</td><td class="num">${x.monthly>0?yen(x.monthly):"0"}</td><td class="num">${rateShort(s)}</td><td class="num">${yen(x.annualCost)}</td><td>${payTxt(s)}</td><td class="num">${x.pct}%</td><td>${isCur?'利用中':`<a href="${s.url}" target="_blank" rel="noopener" onclick="trackApply('${s.id}')">公式${ICON("i-ext")}</a>`}</td></tr>`;}).join("")}</tbody></table></div></div>`;
   return {kind:'shop', R, rt, top, teaser, detail};
 }
 
