@@ -19,11 +19,24 @@
   var r=pick('ref').replace(/[^0-9A-Za-z._-]/g,'').slice(0,40);
   if(r)sessionStorage.setItem('knavi_ref',r);
   window.KNAVI_REF=sessionStorage.getItem('knavi_ref')||'';
+  var A=null; try{A=JSON.parse(localStorage.getItem('knavi_attr')||'null');}catch(e){}
+  if(!A){
+    var ext=''; try{if(document.referrer&&document.referrer.indexOf(location.host)===-1)ext=document.referrer.slice(0,300);}catch(e){}
+    A={ref:window.KNAVI_REF||'',utm_source:pick('utm_source'),utm_medium:pick('utm_medium'),utm_campaign:pick('utm_campaign'),utm_content:pick('utm_content'),utm_term:pick('utm_term'),gclid:pick('gclid'),landing:(location.pathname+location.search).slice(0,300),referrer:ext,first_ts:new Date().toISOString()};
+    try{localStorage.setItem('knavi_attr',JSON.stringify(A));}catch(e){}
+  }
+  window.KNAVI_ATTR=A;
+  window.KNAVI_META=function(){
+    var a=window.KNAVI_ATTR||{},cid='';
+    try{var m=document.cookie.match(/_ga=GA\d\.\d\.(\d+\.\d+)/);cid=m?m[1]:'';}catch(e){}
+    var id=''; try{id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():('K-'+Date.now().toString(36)+'-'+Math.floor(Math.random()*100000).toString(36));}catch(e){id='K-'+Date.now();}
+    return {リードID:id,提携元:window.KNAVI_REF||'',流入元:a.utm_source||'',媒体:a.utm_medium||'',キャンペーン:a.utm_campaign||'',gclid:a.gclid||'',参照元サイト:a.referrer||'',初回LP:a.landing||'',初回接触:a.first_ts||'',GAクライアントID:cid,デバイス:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'モバイル':'PC'};
+  };
   if(window.KNAVI_REF&&window.gtag){gtag('event','partner_visit',{ref:window.KNAVI_REF,page:location.pathname});gtag('set','user_properties',{partner_ref:window.KNAVI_REF});}
 }catch(e){}})();
 </script>
-<title>Airペイ（エアペイ）は全東信と関係ある？影響と今すぐの対処・代替端末｜決済ナビ</title>
-<meta name="description" content="Airペイ（エアペイ）は全東信とは別の会社で、破産でAirペイの決済が止まるわけではありません。全東信との関係・影響を整理し、過度な不安が不要な理由と、この機会に見直したいこと、Airペイはスマホ・iPadが必要な点、iPad不要ですぐ使える代替端末・60秒の無料診断までご案内します。">
+<title>Airペイ（エアペイ）の手数料・評判・デメリットまで正直に｜他社比較と選び方【2026年最新】｜決済ナビ</title>
+<meta name="description" content="Airペイ（エアペイ）の手数料・入金サイクル・端末・評判を、デメリットまで正直に解説。クレカ2.48%（中小事業者・条件）／QR・交通系3.24%、端末0円だがiPad/iPhoneが必要な弱点、Square・STORES・stera・スマレジとの比較表まで。あなたの店での年間コストは60秒の無料診断で。">
 <link rel="canonical" href="https://kessai-navi.com/airpay.html">
 <meta name="theme-color" content="#1a6bb8">
 <link rel="icon" href="favicon.ico" sizes="any">
@@ -32,19 +45,17 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Airペイ（エアペイ）は全東信と関係ある？影響と今すぐの対処">
-<meta property="og:description" content="全東信の破産でAirペイが不安な方へ。Airペイの状況と、この機会に見直したいこと。iPad不要で使える端末や60秒診断も。">
+<meta property="og:title" content="Airペイ（エアペイ）の手数料・評判・デメリットまで正直に｜他社比較と選び方">
+<meta property="og:description" content="Airペイの手数料・入金・端末・評判を正直に解説。クレカ2.48%の条件、QR・交通系3.24%、iPadが必要な弱点、他社比較まで。年間コストは60秒診断で。">
 <meta property="og:url" content="https://kessai-navi.com/airpay.html">
 <meta property="og:site_name" content="決済ナビ">
 <meta property="og:locale" content="ja_JP">
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"Article",
-  "headline":"Airペイ（エアペイ）は大丈夫？全東信の破産を機にAirペイユーザーが考えるべきこと・対応策",
-  "description":"全東信の破産を受けて、Airペイを利用する加盟店向けに、Airペイの運営状況・仕組みの事実と、全東信の破産から学べること・対応策を整理した解説記事。",
-  "datePublished":"2026-07-09",
-  "dateModified":"2026-07-09",
+  "@context":"https://schema.org","@type":"Article",
+  "headline":"Airペイ（エアペイ）の手数料・評判・デメリットまで正直に｜他社比較と選び方",
+  "description":"Airペイ（エアペイ）の手数料・入金サイクル・端末・評判・デメリットと、Square・STORES・stera・スマレジとの比較を、中立の立場で整理した解説記事。",
+  "datePublished":"2026-06-18","dateModified":"2026-07-24",
   "author":{"@type":"Organization","name":"決済ナビ運営事務局"},
   "publisher":{"@type":"Organization","name":"決済ナビ"},
   "mainEntityOfPage":{"@type":"WebPage","@id":"https://kessai-navi.com/airpay.html"}
@@ -52,13 +63,13 @@
 </script>
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"FAQPage",
-  "mainEntity":[
-    {"@type":"Question","name":"Airペイは全東信のように倒産する心配はありますか？","acceptedAnswer":{"@type":"Answer","text":"Airペイ（エアペイ）は株式会社リクルートが提供する決済サービスで、飲食・小売・美容など幅広い業種で使われており、現時点で通常どおり稼働しています。特定のサービスの将来を保証するものではありませんが、公表されている経営不安のような情報は特にありません。なお全東信は「早期入金（立替）」を主とする決済代行で、Airペイとは仕組みが異なります。どの決済でも、入金サイクルの把握や決済手段の多重化といった備えをしておくと安心です。"}},
-    {"@type":"Question","name":"全東信とAirペイは関係がありますか？","acceptedAnswer":{"@type":"Answer","text":"別の会社・別のサービスです。全東信の破産手続きによって、Airペイの決済が止まるわけではありません。まずはご自身が実際にどの会社と契約しているか（明細・入金元の名義）を確認しておくと安心です。"}},
-    {"@type":"Question","name":"AirペイはiPadやスマホがないと使えませんか？","acceptedAnswer":{"@type":"Answer","text":"Airペイは「カードリーダー型」で、お手持ちのiPhone・iPad（またはAndroid端末）とペアリングして使うため、別途スマホ・タブレットが必要です。タブレットを持っていない・使いたくない場合は、画面・通信・レシートプリンターが本体に内蔵されたオールインワン端末（アルファポータブルなど）なら、端末だけで決済が完結します。"}},
-    {"@type":"Question","name":"全東信の破産を機に、Airペイから乗り換えたほうがいいですか？","acceptedAnswer":{"@type":"Answer","text":"必ず乗り換えるべき、というものではありません。今の手数料・入金サイクル・端末の使い勝手に不満がなければそのままで問題ありません。一方で、業種や取扱高、タブレットの有無によってはもっと合う選択肢がある場合もあります。60秒の無料診断で、今の条件と比べてみるのがおすすめです。"}}
+  "@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+    {"@type":"Question","name":"Airペイ（エアペイ）の決済手数料はいくらですか？","acceptedAnswer":{"@type":"Answer","text":"対面のクレジットカード（Visa・Mastercard・JCB・Amex・Diners・Discover）は、中小事業者向けのディスカウントプログラム（審査・ブランド別の年間上限などの条件）で2.48%、条件外は3.24%が目安です。QRコード決済・交通系IC・iD/QUICPayは3.24%です。月額固定費は0円で、コストは決済手数料のみです。正確な条件は公式でご確認ください。"}},
+    {"@type":"Question","name":"Airペイの入金サイクルは？入金は早いですか？","acceptedAnswer":{"@type":"Answer","text":"Airペイは月に3回または6回の自動入金で、振込手数料は0円です。締め日・入金日は登録した金融機関によって変わります（対応銀行なら月6回入金）。翌営業日入金ではないため、資金繰りで最短入金を重視する場合は、翌営業日入金の他サービスとも比較しておくと安心です。"}},
+    {"@type":"Question","name":"Airペイのデメリットは何ですか？","acceptedAnswer":{"@type":"Answer","text":"主なデメリットは、(1)iPadまたはiPhoneが別途必要（専用オールインワン端末はない）、(2)QR・交通系・iD/QUICPayが3.24%、(3)クレカ2.48%は中小事業者向けで審査・ブランド別上限などの条件付き、(4)入金は月3〜6回で翌営業日ではない、の4点です。iPad/iPhoneを用意したくない店や、取扱高が大きく1.98%系プランが有利な店では、他社の方が向く場合があります。"}},
+    {"@type":"Question","name":"AirペイとSquareはどちらがいいですか？","acceptedAnswer":{"@type":"Answer","text":"対面クレカはAirペイ2.48%・Square2.5%（ともに中小事業者向けの条件つき）でほぼ互角です。違いは端末で、AirペイはカードリーダーがiPad/iPhone前提（専用機なし）、SquareはターミナルなどスマホなしでOKな端末も選べます。すでにiPad/iPhoneがあればAirペイ、端末単体で完結させたいならSquareが向きます。年間総額は取扱高で変わるため、60秒診断で両社を横並び比較するのが確実です。"}},
+    {"@type":"Question","name":"Airペイの評判・口コミはどう見ればいいですか？","acceptedAnswer":{"@type":"Answer","text":"口コミの評価だけで判断せず、(1)自分の業種・取扱高での実際の年間コスト、(2)iPad/iPhoneを用意できるか、(3)使いたい決済（QR・交通系）の料率、の3点を自分の店に当てはめて確認するのが確実です。Airペイは対応ブランドの多さ・Airレジ連携・端末0円が高評価な一方、iPadが必要・入金が翌日ではない点に不満の声もあります。"}},
+    {"@type":"Question","name":"Airペイは全東信のように倒産する心配はありますか？","acceptedAnswer":{"@type":"Answer","text":"Airペイは株式会社リクルートが提供するサービスで、全東信とは別の会社です。全東信の破産でAirペイの決済が止まるわけではありません。全東信は「早期入金（立替）」を主とする決済代行で、Airペイとは仕組みが異なります。どの決済でも、入金サイクルの把握とサブ決済手段の用意（多重化）をしておくと安心です。"}}
   ]
 }
 </script>
@@ -75,32 +86,34 @@ header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;
 .er-banner:hover{background:#d55700;text-decoration:none}
 .wrap{max-width:820px;margin:0 auto;padding:22px 16px 60px}
 .crumb{font-size:12px;color:var(--muted);margin:0 0 10px}
-h1{font-size:24px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
+h1{font-size:25px;font-weight:800;color:var(--navy);margin:0 0 8px;line-height:1.45}
 .lead{color:var(--text);font-size:15px;margin:0 0 6px}
 .updated{color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:20px}
-h2{font-size:19px;font-weight:800;color:var(--navy);margin:32px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
+h2{font-size:20px;font-weight:800;color:var(--navy);margin:34px 0 10px;padding-top:6px;border-left:4px solid var(--blue);padding-left:10px}
 h3{font-size:16px;font-weight:800;color:var(--navy);margin:20px 0 6px}
 p{margin:0 0 12px}
 ul,ol{margin:0 0 14px;padding-left:22px}li{margin:6px 0}
 strong,b{color:var(--navy)}
-.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:14px 16px;margin:0 0 18px;font-size:14px;line-height:1.8}
+.callout{background:var(--blue-soft);border:1px solid #d6e6f4;border-left:4px solid var(--blue);border-radius:6px;padding:16px 18px;margin:0 0 20px;font-size:14px;line-height:1.85}
 .note{font-size:13px;color:var(--muted);background:var(--sub-bg);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin:6px 0 14px;line-height:1.75}
-.check{background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px 6px;margin:8px 0 16px}
-.check li{margin:0 0 8px}
+.toc{background:var(--sub-bg);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:0 0 24px}
+.toc b{color:var(--navy);font-size:13px}.toc ol{margin:8px 0 0;padding-left:20px;font-size:13.5px}.toc li{margin:4px 0}
 table{border-collapse:collapse;width:100%;font-size:14px;border:1px solid var(--line);margin:8px 0 16px}
 th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
 th{background:var(--sub-bg);font-weight:700;color:var(--navy);white-space:nowrap}
-.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
+.num{white-space:nowrap}
+.tbl-scroll{overflow-x:auto}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 16px}
+.cols .box{border:1px solid var(--line);border-radius:8px;padding:14px 16px 6px}
+.cols .box h3{margin:0 0 6px;font-size:15px}
+.cols .box.good{border-top:3px solid var(--blue)}
+.cols .box.care{border-top:3px solid var(--score)}
+@media(max-width:600px){.cols{grid-template-columns:1fr}}
+.diag-box{background:var(--blue-soft);border:1px solid #d6e6f4;border-top:3px solid var(--blue);border-radius:8px;padding:20px 18px;margin:24px 0;text-align:center}
 .diag-box h3{margin:0 0 6px;font-size:17px;color:var(--navy)}
 .diag-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
-.apply-box{background:#fff7ed;border:1px solid #f6d9b8;border-top:3px solid var(--score);border-radius:8px;padding:22px 18px;margin:22px 0;text-align:center}
-.apply-box h3{margin:0 0 6px;font-size:18px;color:var(--navy)}
-.apply-box p{font-size:13px;color:var(--muted);margin:0 0 14px}
 .cta{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;text-decoration:none}
 .cta:hover{background:var(--blue-d);text-decoration:none}
-.cta.cta-apply{background:var(--score);font-size:16px;padding:14px 26px}
-.cta.cta-apply:hover{background:#d55700}
-.apply-note{font-size:11px;color:var(--muted);margin:10px 0 0;line-height:1.6}
 details{border:1px solid var(--line);border-radius:6px;margin:8px 0;padding:0 14px}
 summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 0;font-size:14px;list-style:none}
 summary::-webkit-details-marker{display:none}
@@ -109,19 +122,25 @@ details[open] summary{border-bottom:1px solid var(--line)}
 details .a{padding:12px 0;font-size:14px;line-height:1.8}
 .related{border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin:22px 0 0;background:var(--sub-bg)}
 .related b{color:var(--navy)}.related ul{margin:8px 0 0}
+.src{font-size:13px;color:var(--muted);line-height:1.9}
 footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-size:12px;color:var(--muted)}
-.line-cta{background:#eafaf1;border:1px solid #b8e6c6;border-top:3px solid #06C755;border-radius:8px;padding:20px 18px;margin:22px 0;text-align:center}
-.line-cta h3{margin:0 0 6px;font-size:17px;color:#20303f}
-.line-cta p{font-size:13px;color:#666;margin:0 0 14px}
-.line-btn{display:inline-flex;align-items:center;gap:8px;background:#06C755;color:#fff;font-weight:700;font-size:16px;padding:13px 26px;border-radius:8px;text-decoration:none}
-.line-btn:hover{background:#05b34c;text-decoration:none}
-.line-btn svg{width:22px;height:22px;flex:none}
+.line-cta{background:#f4faf6;border:1px solid #cfe8d7;border-radius:8px;padding:11px 14px;margin:18px 0;text-align:center}
+.line-cta h3{margin:0 0 3px;font-size:14px;color:#20303f}
+.line-cta p{font-size:12px;color:#777;margin:0 0 9px}
+.line-btn{display:inline-flex;align-items:center;gap:6px;background:#06C755;color:#fff;font-weight:700;font-size:13px;padding:8px 16px;border-radius:8px;text-decoration:none}
+.line-btn:hover{background:#05b34c;text-decoration:none}.line-btn svg{width:22px;height:22px;flex:none}
+.verdict{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 16px}
+@media(max-width:600px){.verdict{grid-template-columns:1fr}}
+.vbox{border:1px solid var(--line);border-radius:8px;padding:14px 16px 8px}
+.vbox.fit{border-top:3px solid var(--blue);background:var(--blue-soft)}
+.vbox.unfit{border-top:3px solid var(--score);background:#fff7ed}
+.vbox .vt{font-weight:800;color:var(--navy);font-size:15px;margin-bottom:6px}
 .sticky-cta{display:none}
 @media(max-width:768px){
   body{padding-bottom:64px}
   .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:8px;padding:9px 10px;background:rgba(255,255,255,.97);border-top:1px solid #ddd;box-shadow:0 -2px 12px rgba(0,0,0,.12)}
   .sticky-cta a{flex:1;text-align:center;padding:12px 6px;border-radius:8px;font-weight:700;font-size:15px;color:#fff;text-decoration:none}
-  .sc-line{background:#06C755}
+  .sticky-cta .sc-diag{background:#1a6bb8}.sticky-cta .sc-line{background:#06C755}
 }
 </style>
 </head>
@@ -129,113 +148,186 @@ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:16px;font-si
 <header class="site">
   <div class="site-inner">
     <a class="logo" href="index.html" style="display:inline-flex;align-items:center;gap:6px"><img src="icon-192.png" alt="" style="height:26px;width:26px"><span>決済<b>ナビ</b></span></a>
-    <a class="back" href="index.html">緊急相談窓口へ →</a>
+    <a class="back" href="shindan.html?start=1">60秒診断 →</a>
   </div>
 </header>
-<a class="er-banner" href="soudan.html#soudan">全東信の決済停止・乗り換えでお困りの方は、無料の緊急相談窓口へ<span aria-hidden="true"> →</span></a>
+<a class="er-banner" href="soudan.html#soudan">決済の停止・入金・乗り換えでお困りの方は、無料の緊急相談窓口へ<span aria-hidden="true"> →</span></a>
 
 <div class="wrap">
-  <p class="crumb"><a href="kessai-check.html">自分の決済は大丈夫？</a> ＞ Airペイは大丈夫？</p>
-  <h1>Airペイ（エアペイ）は大丈夫？<br>全東信の破産を機に、Airペイユーザーが考えるべきことと対応策</h1>
-  <p class="lead">決済代行「全東信」の破産のニュースで、「自分が使っているAirペイ（エアペイ）も大丈夫だろうか？」と不安になった方へ。まず結論と、この機会に見直しておきたいことを整理しました。特定の会社を不安に思わせる意図はなく、<strong>自分の決済を把握し、より良い条件を選ぶ</strong>ための考え方です。</p>
-  <div class="updated">最終更新：2026年7月9日 ／ 運営：決済ナビ運営事務局</div>
+  <p class="crumb"><a href="kessai-erabikata.html">決済端末の選び方</a> ＞ Airペイ（エアペイ）</p>
+  <h1>Airペイ（エアペイ）の手数料・評判・比較<br>― デメリットまで正直に【2026年最新】</h1>
+  <p class="lead">Airペイ（エアペイ）は<strong>リクルートが提供・月額0円・カードリーダー0円・対応ブランドが豊富</strong>な、定番のキャッシュレス決済サービスです。この記事では、<strong>手数料・入金サイクル・端末・評判・デメリット</strong>を包み隠さず整理し、Square・STORES・stera・スマレジとの<strong>比較表</strong>まで載せます。読み終えたら、<strong>あなたの店での年間コストは60秒診断</strong>で確かめられます。</p>
+  <div class="updated">最終更新：2026年7月24日 ／ 運営：決済ナビ運営事務局</div>
 
   <div class="callout">
-    <b>先に結論：</b>Airペイは<strong>株式会社リクルートが提供し、幅広い業種で使われている大手サービス</strong>で、現時点では通常どおり稼働しています。過度に不安になる必要はありません。ただし、全東信の破産が教えてくれる「<strong>入金サイクルの把握・1社に依存しない・条件を定期的に見直す</strong>」はAirペイユーザーにも有効です。まずは<a href="#diag">60秒の無料診断</a>で今の条件をチェックしてみましょう。
+    <b>先に結論：</b>Airペイは<strong>「すでにiPad/iPhoneがある」「対応ブランドの多さ重視」「Airレジと揃えたい」店に最適</strong>（月0円・端末0円・交通系まで網羅）。一方で<strong>iPad/iPhoneが別途必要（専用オールインワン端末はない）／QR・交通系が3.24%／入金は月3〜6回で翌営業日ではない</strong>のが弱点。<strong>端末1台で完結させたい</strong>店は<a href="all-in-one.html">オールインワン型</a>、<strong>取扱高が大きい</strong>店は料率1.98%系（スマレジ・STORES・stera）の方が<strong>総額で安くなる</strong>こともあります。どれが得かは<a href="shindan.html?start=1">60秒診断</a>であなたの取扱高を入れて比べるのが確実です。
   </div>
-  <p style="text-align:center;margin:2px 0 20px"><a class="cta cta-apply" data-hero="1" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{pos:'hero',page:location.pathname,ref:(window.KNAVI_REF||'')})">申し込む →</a></p>
+  <div class="toc"><b>この記事でわかること</b><ol>
+    <li>Airペイとは（運営・特徴）</li><li>手数料の詳細（クレカ2.48%の条件・QR/交通系）</li><li>入金サイクル</li><li>端末・必要なもの（iPadが要る点）</li><li>メリット・デメリット（正直に）</li><li>評判・口コミの見方</li><li>倒産の心配・全東信との関係</li><li>向く店／向かない店</li><li>他社比較表（Squareとの違い）</li><li>導入の流れ・FAQ</li>
+  </ol></div>
 
-  <h2>Airペイはどんなサービス？（事実の整理）</h2>
-  <table>
-    <tr><th>運営</th><td>株式会社リクルート。飲食・小売・美容など幅広い業種で普及。</td></tr>
-    <tr><th>決済手数料（目安）</th><td>3.24%（主要ブランド）。</td></tr>
-    <tr><th>入金サイクル</th><td>三井住友・みずほ・三菱UFJ銀行は月6回、その他は月3回。QRは月1回。</td></tr>
-    <tr><th>端末のタイプ</th><td><strong>カードリーダー型</strong>。カードリーダーを<strong>お手持ちのiPhone・iPad（またはAndroid）とペアリング</strong>して使うため、スマホ・タブレットが別途必要。</td></tr>
-    <tr><th>仕組み</th><td>受け取る売上を規定サイクルで入金。<strong>全東信のような「早期入金（立替）」を主軸にしたモデルとは異なります。</strong></td></tr>
-  </table>
-  <p class="note">※数値は公表・案内されている目安です（2026年7月時点）。最新の条件はAirペイ公式サイトでご確認ください。</p>
-
-  <h2>全東信の破産から、Airペイユーザーが学べること</h2>
-  <p>全東信は「カード会社より先に売上を立て替えて入金する（早期入金）」を主とする決済代行で、破産によりその立替入金や決済の継続が難しくなりました。Airペイは仕組みが異なりますが、この出来事から<strong>どの決済ユーザーにも共通する教訓</strong>が得られます。</p>
-  <ul class="check">
-    <li><b>入金サイクルを把握しておく</b> — Airペイは利用する銀行口座によって入金頻度（月6回／月3回）が変わります。自店の条件を確認しておきましょう。</li>
-    <li><b>決済手段を1社に依存しない</b> — メインに加えて、すぐ使えるサブを1つ持っておくと、万一のトラブル時も決済を止めずに済みます。</li>
-    <li><b>条件を定期的に見直す</b> — 手数料・入金・対応ブランド・端末は、業種や取扱高によって“もっと合う選択肢”が見つかることがあります。</li>
+  <h2>Airペイ（エアペイ）とは？</h2>
+  <p>Airペイは、<strong>株式会社リクルート</strong>が提供するキャッシュレス決済サービスです。同社の<strong>Airレジ（無料POSレジアプリ）</strong>をはじめとする「Airビジネスツールズ」の一つで、飲食店・小売・サロンなど幅広い業種で使われています。特徴は次の3つ。</p>
+  <ul>
+    <li><b>月額固定費0円・カードリーダー0円</b>：0円キャンペーンでリーダーが実質0円。使った分の決済手数料だけで維持できます。</li>
+    <li><b>対応ブランド・決済手段が豊富</b>：主要クレジットカードに加え、交通系IC・iD/QUICPay・QRコード決済まで幅広く1台で対応します。</li>
+    <li><b>Airレジ・Airペイ QR と連携</b>：無料POSレジ「Airレジ」やQR専用の「Airペイ QR」と組み合わせて、会計まわりをまとめて整えられます。</li>
   </ul>
+  <p class="note">※Airペイは<b>iPadまたはiPhoneにカードリーダーを接続して使う</b>方式です。専用のオールインワン端末（端末単体で完結する機種）はありません。この点はSquareターミナルや他社の1台完結型と異なるので、後述の「端末・必要なもの」で詳しく触れます。</p>
+
+  <h2>Airペイの決済手数料【いちばん大事】</h2>
+  <p>Airペイの手数料は<strong>決済の種類</strong>で変わります。月額は0円で、コストは基本的に<strong>決済手数料のみ</strong>です。</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>決済の種類</th><th>手数料（目安）</th><th>補足</th></tr>
+    <tr><td>対面クレジット<br>（Visa/Master/JCB/Amex/Diners/Discover）</td><td class="num"><b>2.48%</b>／3.24%</td><td><b>中小事業者向けディスカウントプログラムで2.48%</b>（審査・ブランド別の年間上限などの条件つき）。条件外は3.24%。</td></tr>
+    <tr><td>QRコード決済（PayPay 等）</td><td class="num">3.24%</td><td>Airペイ QR での対応。タッチ決済・交通系と同水準。</td></tr>
+    <tr><td>交通系IC（Suica 等）・iD・QUICPay</td><td class="num">3.24%</td><td>電子マネー系は一律の目安。正確な率は公式でご確認ください。</td></tr>
+  </table></div>
+  <p class="note">※<b>クレカ2.48%は「中小事業者向けディスカウントプログラム」の優遇料率</b>で、審査・対象ブランド・年間上限などの条件があります（条件外・上限超は3.24%）。<b>2.48%はクレジットカードのみ</b>で、QR・交通系・iD/QUICPayは対象外（3.24%）です。数値は2026年7月時点の目安で、最新・正確な条件は各社公式でご確認ください。</p>
+
+  <h2>Airペイの入金サイクル</h2>
+  <p>Airペイは<strong>月3〜6回の自動入金・振込手数料0円</strong>です。締め日と入金日は、登録した金融機関によって変わります。</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>項目</th><th>内容</th></tr>
+    <tr><td>入金回数</td><td><b>月3回または月6回</b>（対応銀行は月6回）</td></tr>
+    <tr><td>入金タイミング</td><td>締め日ごとに<b>自動入金</b>（翌営業日入金ではない）</td></tr>
+    <tr><td>振込手数料</td><td><b>0円</b></td></tr>
+  </table></div>
+  <p class="note">Airペイは月6回入金なら比較的こまめに入りますが、<b>「売上の翌営業日にすぐ入る」タイプではありません</b>。資金繰りで最短入金を最優先するなら、翌営業日入金のサービス（Square×三井住友/みずほ、楽天ペイ×楽天銀行 等）とも比べておくと安心です。<a href="shindan.html?start=1">診断</a>で入金の速さも条件に入れて比較できます。</p>
+
+  <h2>Airペイの端末・必要なもの（ここが分かれ目）</h2>
+  <p>Airペイは<strong>カードリーダー本体は0円</strong>（キャンペーン）ですが、<strong>会計に使うiPadまたはiPhoneは自分で用意</strong>する必要があります。ここがSquareや1台完結型との一番の違いです。</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>必要なもの</th><th>費用（目安）</th><th>補足</th></tr>
+    <tr><td><b>Airペイ カードリーダー</b></td><td class="num">0円</td><td>0円キャンペーンで実質0円の貸与/提供。Bluetoothでタブレットに接続。</td></tr>
+    <tr><td><b>iPad または iPhone</b></td><td class="num">別途必要</td><td>会計アプリ（Airペイ／Airレジ）を動かす端末。<b>持っていなければ購入が必要</b>。</td></tr>
+    <tr><td>プリンター・キャッシュドロア</td><td class="num">任意</td><td>レシート印刷・現金管理をする場合のみ。</td></tr>
+  </table></div>
+  <p class="note">「iPad/iPhoneを用意したくない」「レジ横に端末を1台だけ置きたい」なら、<b>端末単体で完結する</b><a href="all-in-one.html">オールインワン型</a>（Squareターミナル、アルファポータブル、stera 等）の方が手軽です。逆に<b>すでにiPad/iPhoneがある</b>店なら、Airペイは追加の端末費用ほぼ0で始められます。</p>
+
+  <h2>Airペイのメリット・デメリット（正直に）</h2>
+  <div class="cols">
+    <div class="box good"><h3>◎ メリット</h3><ul>
+      <li><b>月額0円・カードリーダー0円</b>で維持コスト最小。</li>
+      <li>対面クレカ<b>2.48%は業界最安水準</b>（中小事業者・条件つき）。</li>
+      <li><b>対応ブランド・決済手段が豊富</b>（交通系ICまで網羅）。</li>
+      <li><b>Airレジ（無料POS）と連携</b>、予約・レジまわりを揃えやすい。</li>
+      <li>すでにiPad/iPhoneがあれば<b>追加端末費ほぼ0</b>。</li>
+      <li>振込手数料0円・月最大6回入金。</li>
+    </ul></div>
+    <div class="box care"><h3>△ デメリット・注意点</h3><ul>
+      <li><b>iPad/iPhoneが別途必要</b>（専用オールインワン端末はない）。</li>
+      <li><b>QR・交通系・iD/QUICPayが3.24%</b>。</li>
+      <li>2.48%は<b>クレカのみ・審査/年間上限</b>等の条件付き。</li>
+      <li><b>入金は月3〜6回</b>で翌営業日ではない。</li>
+      <li>QRは「Airペイ QR」での対応（申込・運用が別枠）。</li>
+      <li>取扱高が大きい店は<b>1.98%系プランの方が総額安い</b>ことも。</li>
+    </ul></div>
+  </div>
+
+  <div class="diag-box">
+    <h3>Airペイが自分の店で"いくら"になるか、60秒で試算</h3>
+    <p>業種・年間の決済額・使いたい決済を選ぶだけ。Airペイと他社の<b>年間コストを横並び</b>で比較できます。無料・登録不要。</p>
+    <a class="cta" href="shindan.html?start=1" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'airpay-mid'})">60秒の無料診断をする →</a>
+  </div>
+
+  <h2>Airペイの評判・口コミの"見方"</h2>
+  <p>Airペイは利用者が多く口コミも豊富ですが、<strong>★の数だけで判断しない</strong>のが失敗しないコツです。決済は店ごとに条件が変わるため、口コミは次の観点で「自分の店に当てはめて」読みます。</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>チェックしたい点</th><th>見方</th></tr>
+    <tr><td>手数料は結局いくらか</td><td>口コミの料率は「その店の条件」。自店は<b>取扱高を入れて年間総額</b>で比べる（下の診断が確実）。</td></tr>
+    <tr><td>端末（iPad）の用意</td><td>「思ったより初期費用がかかった」の声は<b>iPad/iPhoneの購入</b>が原因のことが多い。手持ちがあれば解消。</td></tr>
+    <tr><td>入金の速さ</td><td>「入金が翌日じゃない」の声は<b>月3〜6回入金</b>の仕様。翌営業日入金が要るかで評価が変わる。</td></tr>
+    <tr><td>使いたい決済の料率</td><td>QR・交通系中心の店は3.24%が効く。クレカ中心なら2.48%が効く。</td></tr>
+  </table></div>
+  <p class="note">傾向として、<b>対応ブランドの多さ・Airレジ連携・端末0円</b>は高評価が多く、<b>iPadが必要・入金が翌日ではない</b>点に不満の声が見られます。良い点も注意点も両方を、自分の使い方で確かめるのがおすすめです。</p>
+
+  <h2>Airペイは倒産の心配はない？全東信との関係は？</h2>
+  <p>「決済会社の破産」のニュースを見て不安な方へ。<strong>Airペイは全東信とは別の会社</strong>で、全東信の破産でAirペイの決済が止まるわけではありません。Airペイは<strong>株式会社リクルート</strong>が提供し、日本で広く使われ、現時点で通常どおり稼働しています。</p>
+  <p>ただし、どの決済サービスでも「1社に依存しない」備えは有効です。<b>入金サイクルの把握</b>と、<b>サブの決済手段を1つ持っておく（多重化）</b>ことで、万一のときも決済を止めずに済みます。詳しくは<a href="kessai-check.html">自分の決済は大丈夫？の点検</a>をご覧ください。</p>
+
+  <h2>Airペイが向く店／向かない店</h2>
+  <div class="verdict">
+    <div class="vbox fit"><div class="vt">◎ Airペイが向く店</div><ul>
+      <li>すでにiPad/iPhoneを持っている</li>
+      <li>対応ブランドの多さを重視（交通系まで使いたい）</li>
+      <li>Airレジ（無料POS）と揃えたい</li>
+      <li>維持費0円・端末0円で始めたい</li>
+      <li>対面クレカ中心（2.48%が効く）</li>
+    </ul></div>
+    <div class="vbox unfit"><div class="vt">△ 他社が向くかも</div><ul>
+      <li><b>iPad/iPhoneを用意したくない</b> → <a href="all-in-one.html">オールインワン型</a></li>
+      <li><b>入金の速さ</b>が最優先（翌営業日入金なら他社）</li>
+      <li><b>取扱高が大きい</b>（1.98%系が総額で有利）</li>
+      <li><b>端末単体で完結</b>させたい（Squareターミナル等）</li>
+    </ul></div>
+  </div>
+
+  <h2>Airペイ vs 他社 比較表</h2>
+  <p>店舗の主要な決済端末を、<strong>料率・月額・端末・入金</strong>で並べました（2026年7月時点の目安）。<strong>年間の総額は「料率×取扱高＋月額」で決まる</strong>ので、料率だけでなく月額・取扱高・端末条件もあわせて見てください。</p>
+  <div class="tbl-scroll"><table>
+    <tr><th>サービス</th><th>カード料率</th><th>月額</th><th>端末</th><th>入金</th><th>ひとこと</th></tr>
+    <tr><td><b>Airペイ</b></td><td>2.48%〜</td><td>0円</td><td>0円（要iPad/iPhone）</td><td>月3〜6回</td><td>ブランド網羅・要タブレット</td></tr>
+    <tr><td>Square</td><td>2.5%〜</td><td>0円</td><td>¥4,980〜</td><td>翌営業日〜週1</td><td>端末単体で完結も可</td></tr>
+    <tr><td>STORES</td><td>1.98%〜（標準）／2.48%（無料）</td><td>0〜3,300円</td><td>0〜¥27,720</td><td>月1回</td><td>低率だが上位プランは月額</td></tr>
+    <tr><td>stera pack</td><td>1.98%〜（小規模）</td><td>0〜3,300円</td><td>0円</td><td>月2回</td><td>1台完結・条件付き低率</td></tr>
+    <tr><td>スマレジ PAYGATE</td><td>1.98%〜</td><td>0〜3,300円</td><td>0円CP</td><td>月2回〜</td><td>POS連携・条件付き低率</td></tr>
+  </table></div>
+  <p class="note">※<b>AirペイとSquareは対面クレカ2.48%／2.5%でほぼ互角</b>。分かれ目は端末で、Airペイは<b>iPad/iPhoneが前提</b>、Squareは<b>端末単体で完結する機種も選べる</b>点が違います。1.98%系（STORES・stera・スマレジ）は月額やプラン加入・取扱高の条件があり、売上が小さいうちは月0円のAir/Squareが総額で安いことも。<b>自分の取扱高での総額</b>は<a href="shindan.html?start=1">診断</a>で確認できます。</p>
+
+  <h2>Airペイの導入の流れ</h2>
+  <ol>
+    <li><b>Webから申し込み</b>（Airビジネスツールズのアカウント作成）。</li>
+    <li><b>審査</b>（決済ブランドごとに審査。承認まで数日〜が目安）。</li>
+    <li><b>カードリーダーを受け取り</b>（0円キャンペーン）。</li>
+    <li><b>iPad/iPhoneにアプリを設定 → 利用開始</b>。振込先の口座を登録。</li>
+  </ol>
+  <p class="note">iPad/iPhoneを持っていない場合は、この段階で端末の用意（購入）が必要です。端末費用も含めた総額で他社と比べたいときは、下の診断で「端末あり／なし」を条件に入れて試算してください。</p>
 
   <div class="line-cta">
     <h3>【無料】LINEで乗り換え無料診断（業種を送るだけ）</h3>
-    <p>お店の業種をトークで送るだけで、あなたに合う乗り換え先と「今より安くなるか」の目安を無料でご提案します。<br><b>土日・時間帯を問わず、原則24時間以内にご返信します。</b></p>
+    <p>お店の業種をトークで送るだけで、あなたに合う決済端末と「今より安くなるか」の目安を無料でご提案します。<br><b>土日・時間帯を問わず、原則24時間以内にご返信します。</b></p>
     <a class="line-btn" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{page:location.pathname,ref:(window.KNAVI_REF||'')})">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C7 3 3 6.1 3 10c0 2.2 1.3 4.2 3.3 5.5-.1.5-.5 1.9-.6 2.2 0 .1-.2.6.3.4.4-.2 2.3-1.5 3.2-2.1.9.1 1.8.2 2.8.2 5 0 9-3.1 9-7C21 6.1 17 3 12 3z"/></svg>
       LINEで無料相談する
     </a>
   </div>
-  <div id="diag" class="diag-box">
-    <h3>今のAirペイの条件、あなたのお店に最適？ 60秒で診断</h3>
-    <p>業種・取扱高・使いたい決済を選ぶだけ。無料・登録不要で、今の条件と比べた候補・年間コストの目安が分かります。乗り換えなくても、現状把握に使えます。</p>
-    <a class="cta" href="shindan.html?start=1" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'airpay'})">60秒の無料診断をする →</a>
-  </div>
-
-  <h2>Airペイの注意点：スマホ・iPad（タブレット）が必要</h2>
-  <p>Airペイはカードリーダー型のため、<strong>決済にはお手持ちのiPhone・iPad（またはAndroid端末）が必要</strong>です。タブレットを持っていない、レジ横に端末を置きたくない、操作を覚えるのが不安——という場合は、<strong>端末だけで決済が完結するオールインワン端末</strong>のほうが導入がシンプルです。</p>
-  <p>代表的なのが<strong>アルファポータブル</strong>。画面・通信（SIM）・レシートプリンターが本体に内蔵されており、<strong>スマホ・iPad が無くても端末だけで決済が完結</strong>します。最短即日で発送され、届いたその日から使えます（お申し込み当日から使えるわけではありません）。</p>
-
-  <div class="apply-box">
-    <h3>スマホ・iPad なしで使いたいなら</h3>
-    <p>端末だけで決済が完結するアルファポータブル。70種類の決済に対応、初期費用・月額・解約金0円のプランもあります。</p>
-    <a class="cta cta-apply" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{from:'airpay'})">アルファポータブルを申し込む →</a>
-    <p class="apply-note">お申し込み・審査後、最短即日で発送。数日でお手元に届き、届いたその日から使えます。<a href="all-in-one.html">iPad不要ですぐ使える決済端末の詳しい解説はこちら</a>。</p>
-  </div>
-
-  <h2>Airペイユーザーの対応策（まとめ）</h2>
-  <table>
-    <tr><th>こんな場合</th><th>おすすめの動き</th></tr>
-    <tr><td>今の手数料・入金・端末に満足している</td><td>基本はそのままでOK。入金サイクルの把握と、サブ決済の用意だけしておくと安心。</td></tr>
-    <tr><td>iPad・スマホを用意するのが手間／持っていない</td><td>端末だけで完結するアルファポータブル等のオールインワン端末を検討。</td></tr>
-    <tr><td>手数料が高い気がする／入金が遅い</td><td>業種・取扱高によっては条件の良い選択肢があるかも。診断で比較を。</td></tr>
-    <tr><td>売上が伸びてコスト最適化したい</td><td>取扱高が増えると最適な料率帯も変わります。定期的な見直しを。</td></tr>
-  </table>
-  <p class="note">「今のままでOK」も立派な結論です。無理に乗り換える必要はありません。<a href="kessai-check.html">自分の決済代行は大丈夫？（全般の確認ポイント）</a>もあわせてご覧ください。</p>
 
   <div class="diag-box">
-    <h3>迷ったら、まず60秒の無料診断</h3>
-    <p>業種・取扱高・使いたい決済を選ぶだけ。お店に合う決済と年間コストの目安が分かります。無料・登録不要。</p>
-    <a class="cta" href="shindan.html?start=1" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'airpay-bottom'})">60秒の無料診断をする →</a>
+    <h3>結局、あなたの店に一番合うのは？ 60秒で診断</h3>
+    <p>業種・取扱高・使いたい決済を選ぶだけで、Airペイを含む20社を同一基準で採点し、年間コストと「今より安くなるか」を出します。無料・登録不要。</p>
+    <a class="cta" href="shindan.html?start=1" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{from:'airpay-end'})">60秒の無料診断をする →</a>
   </div>
 
   <h2>よくある質問</h2>
-  <details><summary>Airペイは全東信のように倒産する心配はありますか？</summary><div class="a">Airペイ（エアペイ）は株式会社リクルートが提供する決済サービスで、飲食・小売・美容など幅広い業種で使われており、現時点で通常どおり稼働しています。特定のサービスの将来を保証するものではありませんが、公表されている経営不安のような情報は特にありません。なお全東信は「早期入金（立替）」を主とする決済代行で、Airペイとは仕組みが異なります。どの決済でも、入金サイクルの把握や決済手段の多重化といった備えをしておくと安心です。</div></details>
-  <details><summary>全東信とAirペイは関係がありますか？</summary><div class="a">別の会社・別のサービスです。全東信の破産手続きによって、Airペイの決済が止まるわけではありません。まずはご自身が実際にどの会社と契約しているか（明細・入金元の名義）を確認しておくと安心です。</div></details>
-  <details><summary>AirペイはiPadやスマホがないと使えませんか？</summary><div class="a">Airペイは「カードリーダー型」で、お手持ちのiPhone・iPad（またはAndroid端末）とペアリングして使うため、別途スマホ・タブレットが必要です。タブレットを持っていない・使いたくない場合は、画面・通信・レシートプリンターが本体に内蔵されたオールインワン端末（アルファポータブルなど）なら、端末だけで決済が完結します。</div></details>
-  <details><summary>全東信の破産を機に、Airペイから乗り換えたほうがいいですか？</summary><div class="a">必ず乗り換えるべき、というものではありません。今の手数料・入金サイクル・端末の使い勝手に不満がなければそのままで問題ありません。一方で、業種や取扱高、タブレットの有無によってはもっと合う選択肢がある場合もあります。60秒の無料診断で、今の条件と比べてみるのがおすすめです。</div></details>
-
-  <div class="apply-box">
-    <h3>iPad・スマホ なしで、端末1台で使いたいなら</h3>
-    <p>端末だけで決済が完結するアルファポータブル。約70種類の決済に対応、初期費用・月額・解約金0円のプランもあります。最短即日発送で、届いたその日から使えます。</p>
-    <a class="cta cta-apply" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{from:'airpay-bottom'})">アルファポータブルを申し込む →</a>
-    <p class="apply-note"><a href="all-in-one.html">iPad不要ですぐ使える決済端末の詳しい解説はこちら</a>。</p>
-  </div>
+  <details><summary>Airペイ（エアペイ）の決済手数料はいくらですか？</summary><div class="a">対面のクレジットカード（Visa・Mastercard・JCB・Amex・Diners・Discover）は、中小事業者向けのディスカウントプログラム（審査・ブランド別の年間上限などの条件）で2.48%、条件外は3.24%が目安です。QRコード決済・交通系IC・iD/QUICPayは3.24%です。月額固定費は0円で、コストは決済手数料のみです。正確な条件は公式でご確認ください。</div></details>
+  <details><summary>Airペイの入金サイクルは？入金は早いですか？</summary><div class="a">Airペイは月に3回または6回の自動入金で、振込手数料は0円です。締め日・入金日は登録した金融機関によって変わります（対応銀行なら月6回入金）。翌営業日入金ではないため、資金繰りで最短入金を重視する場合は、翌営業日入金の他サービスとも比較しておくと安心です。</div></details>
+  <details><summary>Airペイのデメリットは何ですか？</summary><div class="a">主なデメリットは、(1)iPadまたはiPhoneが別途必要（専用オールインワン端末はない）、(2)QR・交通系・iD/QUICPayが3.24%、(3)クレカ2.48%は中小事業者向けで審査・ブランド別上限などの条件付き、(4)入金は月3〜6回で翌営業日ではない、の4点です。iPad/iPhoneを用意したくない店や、取扱高が大きく1.98%系プランが有利な店では、他社の方が向く場合があります。</div></details>
+  <details><summary>AirペイとSquareはどちらがいいですか？</summary><div class="a">対面クレカはAirペイ2.48%・Square2.5%（ともに中小事業者向けの条件つき）でほぼ互角です。違いは端末で、AirペイはカードリーダーがiPad/iPhone前提（専用機なし）、SquareはターミナルなどスマホなしでOKな端末も選べます。すでにiPad/iPhoneがあればAirペイ、端末単体で完結させたいならSquareが向きます。年間総額は取扱高で変わるため、<a href="shindan.html?start=1">60秒診断</a>で両社を横並び比較するのが確実です。（<a href="square.html">Squareの詳細レビューはこちら</a>）</div></details>
+  <details><summary>Airペイの評判・口コミはどう見ればいいですか？</summary><div class="a">口コミの評価だけで判断せず、(1)自分の業種・取扱高での実際の年間コスト、(2)iPad/iPhoneを用意できるか、(3)使いたい決済（QR・交通系）の料率、の3点を自分の店に当てはめて確認するのが確実です。Airペイは対応ブランドの多さ・Airレジ連携・端末0円が高評価な一方、iPadが必要・入金が翌日ではない点に不満の声もあります。</div></details>
+  <details><summary>Airペイは全東信のように倒産する心配はありますか？</summary><div class="a">Airペイは株式会社リクルートが提供するサービスで、全東信とは別の会社です。全東信の破産でAirペイの決済が止まるわけではありません。全東信は「早期入金（立替）」を主とする決済代行で、Airペイとは仕組みが異なります。どの決済でも、入金サイクルの把握とサブ決済手段の用意（多重化）をしておくと安心です。</div></details>
 
   <div class="related">
     <b>あわせて読みたい</b>
     <ul>
-      <li><a href="all-in-one.html">iPad・スマホ不要ですぐ使える決済端末は？（オールインワン端末）</a></li>
-      <li><a href="square.html">Squareは大丈夫？全東信の破産を機に考えるべきこと・対応策</a></li>
-      <li><a href="kessai-check.html">自分の決済代行・端末は大丈夫？確認ポイントと備え</a></li>
+      <li><a href="square.html">Square（スクエア）の手数料・評判・デメリットまで正直に</a></li>
       <li><a href="kessai-erabikata.html">決済端末の選び方｜手数料・入金・端末タイプで失敗しない比較</a></li>
-      <li><a href="shindan.html">60秒診断で、お店に合う決済と年間コストを自分で比べる</a></li>
+      <li><a href="all-in-one.html">iPad・スマホ不要ですぐ使えるオールインワン端末</a></li>
+      <li><a href="industry.html">業種別 おすすめ決済端末</a></li>
+      <li><a href="shindan.html?start=1">60秒診断で、お店に合う決済と年間コストを比べる</a></li>
     </ul>
   </div>
 
+  <p class="src">※本ページのAirペイに関する料率・費用・入金条件は、公表情報等を参照した2026年7月時点の目安です。手数料・キャンペーン・条件は変動します。最新かつ正確な条件は、Airペイ（Airビジネスツールズ）公式サイト・各社公式でご確認ください。</p>
+
   <footer>
-    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。<br>
-    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="soudan.html">緊急相談窓口</a>　／　<a href="shindan.html">60秒診断</a>
+    決済ナビ ｜ 掲載の料率・費用は参考値です。契約前に各社公式サイトで最新条件をご確認ください。掲載順は入力条件にもとづく採点スコア順で、一部に提携先を含みます。<br>
+    運営：決済ナビ運営事務局　／　<a href="privacy.html">プライバシーポリシー</a>　／　<a href="soudan.html">相談窓口</a>　／　<a href="shindan.html?start=1">60秒診断</a>
   </footer>
 </div>
-  <div class="sticky-cta">
-    <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINEで無料相談</a>
-    <a class="sc-main" style="background:#eb6100" href="https://sales.alpha-note.co.jp/service/entry/campaign/KGNeutral" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_apply_alphanote',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">申し込む</a>
-  </div>
+<div class="sticky-cta">
+  <a class="sc-diag" href="shindan.html?start=1" onclick="window.gtag&amp;&amp;gtag('event','cta_diag_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">60秒で見直す</a>
+  <a class="sc-line" href="https://lin.ee/7EbS1aN" target="_blank" rel="noopener" onclick="window.gtag&amp;&amp;gtag('event','cta_line_click',{pos:'sticky',page:location.pathname,ref:(window.KNAVI_REF||'')})">LINE</a>
+</div>
 </body>
 </html>
