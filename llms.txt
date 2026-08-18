@@ -20,6 +20,7 @@
 - [JMS（ジェイエムエス）は全東信と関係ある？](https://kessai-navi.com/jms.html): カード会社系決済代行JMSおまかせサービス（旧おてがるPay）の信頼性・手数料・入金と、乗り換え先としての実力
 - [全東信 破産の影響](https://kessai-navi.com/zentoshin-eikyou.html): 加盟店・利用者への影響、いつから使えなくなるか
 - [全東信 破産で入金・売上金はどうなる](https://kessai-navi.com/zentoshin-nyukin.html): 未入金売上金・破産債権・債権届出の一般的な流れ
+- [決済が止まった・入金されない・端末が使えない時にやること](https://kessai-navi.com/zentoshin-trouble.html): 症状別の初動と、「即日つなぎ」に何を選べるかは手元の機材（iPhone/iPad/Androidスマホの有無）で決まるという判断軸
 - [全東信はなぜ破産したのか](https://kessai-navi.com/zentoshin-reason.html): 早期入金（立替）モデルの資金構造・粉飾決算報道など理由の整理
 - [60秒診断](https://kessai-navi.com/shindan.html): 業種・月商・使いたい決済・iPad有無から合う決済端末と年間コスト目安を無料算出
 
