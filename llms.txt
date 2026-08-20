@@ -17,6 +17,7 @@
 - [キャバクラ・スナック等ナイト系の決済端末](https://kessai-navi.com/night-business.html): 夜間・接待飲食で加盟店審査に不安がある店の端末選びと乗り換え先
 - [Square（スクエア）徹底レビュー](https://kessai-navi.com/square.html): 手数料・入金サイクル・端末・評判・向く店をデメリットまで正直に解説（端末単体で完結する機種も選べる）
 - [Airペイ（エアペイ）徹底レビュー](https://kessai-navi.com/airpay.html): 手数料・入金・端末・評判をデメリットまで正直に解説。カードリーダーはiPad/iPhoneが前提（専用機なし）な点が分かれ目
+- [アルファノート（アルファポータブル）とは](https://kessai-navi.com/alphanote.html): iPad・スマホ不要のオールインワン端末の基本スペック・入金サイクル（クレジット・QRは半月ごと＝月2回）・申し込みの流れと、注意点／他のタイプも並べて比べたほうがいいケース。※当サイトの提携先（上記の開示のとおり）
 - [JMS（ジェイエムエス）は全東信と関係ある？](https://kessai-navi.com/jms.html): カード会社系決済代行JMSおまかせサービス（旧おてがるPay）の信頼性・手数料・入金と、乗り換え先としての実力
 - [全東信 破産の影響](https://kessai-navi.com/zentoshin-eikyou.html): 加盟店・利用者への影響、いつから使えなくなるか
 - [全東信 破産で入金・売上金はどうなる](https://kessai-navi.com/zentoshin-nyukin.html): 未入金売上金・破産債権・債権届出の一般的な流れ
