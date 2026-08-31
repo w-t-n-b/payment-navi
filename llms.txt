@@ -6,6 +6,7 @@
 
 ## 主要ページ
 
+- [決済ナビ トップ](https://kessai-navi.com/): サイトの入口。手数料・入金サイクル・端末タイプ（iPad要否）・業種適性の観点で店舗向けの決済サービスを比較し、いま払っている決済手数料と乗り換え後の年間コスト差を無料診断で試算する導線をまとめている
 - [全東信の破産 総合ガイド](https://kessai-navi.com/zentoshin.html): 全東信破産の概要・加盟店の対処法・乗り換えの全体像
 - [全東信 乗り換え 完全チェックリスト](https://kessai-navi.com/norikae-checklist.html): 決済を止めずに乗り換える手順（今すぐ／1〜2週／3〜4週）と必要書類、および各社の導入スピード（申込当日〜審査2週間）の目安
 - [全東信の乗り換え先 9社比較](https://kessai-navi.com/zentoshin-norikae.html): Square・Airペイ・アルファ・STORES・スマレジ・楽天ペイ・JMS・stera・USENを手数料/入金/最短導入/iPad要否で比較
@@ -24,6 +25,7 @@
 - [決済が止まった・入金されない・端末が使えない時にやること](https://kessai-navi.com/zentoshin-trouble.html): 症状別の初動と、「即日つなぎ」に何を選べるかは手元の機材（iPhone/iPad/Androidスマホの有無）で決まるという判断軸
 - [全東信はなぜ破産したのか](https://kessai-navi.com/zentoshin-reason.html): 早期入金（立替）モデルの資金構造・粉飾決算報道など理由の整理
 - [60秒診断](https://kessai-navi.com/shindan.html): 業種・月商・使いたい決済・iPad有無から合う決済端末と年間コスト目安を無料算出
+- [無料相談窓口（LINE・フォーム）](https://kessai-navi.com/soudan.html): 決済が止まった・入金が遅れている・端末を乗り換えたいときの無料相談窓口。業種を送るだけのLINE無料診断と、担当者が折り返すフォーム（原則24時間以内に返信）
 
 ## 事実の要点（引用可）
 
